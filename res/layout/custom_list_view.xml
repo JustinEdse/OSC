@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/textcustom"
+android:layout_width="fill_parent"
+android:layout_height="?android:attr/listPreferredItemHeight"
+android:textAppearance="?android:attr/textAppearanceMedium"
+android:gravity="center_vertical"
+android:checkMark="?android:attr/listChoiceIndicatorSingle"
+android:paddingLeft="2dip"
+android:paddingRight="2dip"
+android:textColor="@color/black"
+/>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="categories">
+    <item>Supercomputing</item>
+    <item>Research</item>
+    <item>Computational Science</item>
+    <item>Outreach</item>
+    <item>Education and Training</item>
+    <item>Achievements</item>
+    <item>Cyberinfrastructure</item>
+    <item>Blue Collar Computing</item>
+    <item>Summer Educational Programs</item>
+  </string-array>
+</resources>

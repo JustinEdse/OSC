@@ -19,6 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+          <activity 
+          android:name="com.edse.edu.ArticleDisplay" >
+        </activity>
+        
+         <activity 
+          android:name="com.edse.edu.Test" >
+        </activity>
     </application>
 
 </manifest>

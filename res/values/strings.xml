@@ -9,6 +9,7 @@
     <string name="FragmentTab2">This is ViewPager Fragment Tab 2</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="preview_text">On this screen there would be a list of article preview objects</string>
     <color name="gray">#D8D8D8</color>
     <color name="black">#000000</color>
     <color name="scarlet">#D10232</color>
