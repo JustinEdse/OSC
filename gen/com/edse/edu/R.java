@@ -1024,10 +1024,9 @@ containing a value of this type.
         public static final int fragmenttab1cat=0x7f03001c;
         public static final int fragmenttab2=0x7f03001d;
         public static final int fragmenttab3=0x7f03001e;
-        public static final int mylayout=0x7f03001f;
-        public static final int sherlock_spinner_dropdown_item=0x7f030020;
-        public static final int sherlock_spinner_item=0x7f030021;
-        public static final int viewpager_main=0x7f030022;
+        public static final int sherlock_spinner_dropdown_item=0x7f03001f;
+        public static final int sherlock_spinner_item=0x7f030020;
+        public static final int viewpager_main=0x7f030021;
     }
     public static final class string {
         public static final int Fragment1=0x7f090010;

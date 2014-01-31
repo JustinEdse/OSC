@@ -1,13 +1,13 @@
 package com.edse.edu;
 
 import java.util.Date;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.imageio.ImageIO;
+//import javax.imageio.ImageIO;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -88,7 +88,7 @@ public class Article implements Parcelable
 	//This method may be handy depending on the format in which images
 	//are stored on the server or in code. Again since we will be working
 	//with small images I don't think memory should be an issue.
-	
+	/*
 	public BufferedImage convertToBuffImage(byte[] image)
 	{
 		//declaring variables to work with.
@@ -107,7 +107,7 @@ public class Article implements Parcelable
 		return buffImage;
 	
 	}
-
+*/
 	@Override
 	public int describeContents()
 	{

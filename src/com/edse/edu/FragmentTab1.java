@@ -147,13 +147,6 @@ public class FragmentTab1 extends SherlockFragment
 				 
 				categoryChosen = type;
 				
-				
-				
-				
-				Intent goToArticleDisplay = new Intent(view.getContext(), ArticleDisplay.class);
-				goToArticleDisplay.putParcelableArrayListExtra("catArticle", articlesInList);
-
-			    
 
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				// Locate Position

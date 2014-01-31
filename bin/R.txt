@@ -347,10 +347,9 @@ int layout fragmenttab1 0x7f03001b
 int layout fragmenttab1cat 0x7f03001c
 int layout fragmenttab2 0x7f03001d
 int layout fragmenttab3 0x7f03001e
-int layout mylayout 0x7f03001f
-int layout sherlock_spinner_dropdown_item 0x7f030020
-int layout sherlock_spinner_item 0x7f030021
-int layout viewpager_main 0x7f030022
+int layout sherlock_spinner_dropdown_item 0x7f03001f
+int layout sherlock_spinner_item 0x7f030020
+int layout viewpager_main 0x7f030021
 int string Fragment1 0x7f090010
 int string FragmentTab1 0x7f090011
 int string FragmentTab2 0x7f090012
