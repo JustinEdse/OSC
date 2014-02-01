@@ -1,30 +1,32 @@
 package com.edse.edu;
  
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebViewFragment;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
  
 public class DisplayFragment extends SherlockFragment {
  
 	    //declare variables for custom list view and article previews.
 		static int selectedFrag = 0;
+	
 		
-		ListView mDrawerList;
-		
-		MenuListAdapter mMenuAdapter;
-		String[] title;
-		int[] icon;
+		ListView displayListView;
 
 		
     @Override
@@ -41,30 +43,78 @@ public class DisplayFragment extends SherlockFragment {
      	
         //SET LIST LAYOUT WITH MENU LIST ADAPTER. PUT ARTICLE OBJECT INFORMATION INTO THE LIST.
 
-     		// Generate title
-     		title = new String[] { "News", "Calendar" };
-
-     		// Generate icon
-     		icon = new int[] { R.drawable.newsicon, R.drawable.calendaricon };
-
-     		// Locate DrawerLayout in drawer_main.xml
-     		//mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-
-     		// Locate ListView in drawer_main.xml
-     		//mDrawerList = (ListView) findViewById(R.id.listview_drawer);
-
-     		// Set a custom shadow that overlays the main content when the drawer
-     		// opens
-     		//mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-     			//	GravityCompat.START);
-
-     		// Pass string arrays to MenuListAdapter
-     		//mMenuAdapter = new MenuListAdapter(MainActivity.this, title, icon);
-
-     		// Set the MenuListAdapter to the ListView
-     		//mDrawerList.setAdapter(mMenuAdapter);
-
+        	//in the future an arraylist of article objects will be passed to this class. It should be iterated
+        	//through and the individual attributes need to be put into arrays so they can be passed as parameters
+        	//to the ArticleAdapter class. This arrays below were when I hard coded with arrays but I thought it
+        	//if I actually worked with an array list of Articles it would be closer to what we're actually going
+        	// to experience.
+            
+        	int[] hardCodedImages = new int[]{R.drawable.articcyclones, R.drawable.nioshlogo};
+        	
+        	String[] hardCodedTitles = new String[]{"Arctic cyclones more common than previously thought", "UC's Sousa to leverage OSC to simulate neutrino behavior"};
+        	String[] hardCodedDesc = new String[]{"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection","DoE experiment to detect particles; provide clues to universe evolution"};
+        	
+        	ArrayList<Article> test = new ArrayList<Article>();
+            Article one = new Article("Arctic cyclones more common than previously thought",
+            		"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10/14/2013");
+            
+            Article two = new Article("UC's Sousa to leverage OSC to simulate neutrino behavior",
+            		"DoE experiment to detect particles; provide clues to universe evolution", "supercomputer", R.drawable.novalogo, "01/10/2014");
+            
+            //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
+            //myself to simulate what we might have...
+            test.add(one);
+            test.add(two);
+            ArrayList<String> testTitle = new ArrayList<String>();
+            ArrayList<String> testDesc = new ArrayList<String>();
+            ArrayList<Integer> img = new ArrayList<Integer>();
+            
+            for(Article art : test)
+            {
+            	testTitle.add(art.getTitle());
+            	testDesc.add(art.getsubDesc());
+            	img.add(art.getPreviewImage());
+            }
+            
+            String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
+            String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
+            Integer[] specImg = img.toArray(new Integer[img.size()]);
+            
+            
+        	
+        	
+     		displayListView = (ListView) view.findViewById(R.id.listview);
+     		displayListView.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
+     				specImg,specTitle, specDesc));
         
+     		displayListView.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id)
+				{
+					
+					
+					
+					
+					// Replace whatever is in the fragment_container view with this fragment,
+					// and add the transaction to the back stack
+					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+					WebFragment webFrag = new WebFragment();
+					switch(position)
+					{
+					case 0:
+						ft.replace(R.id.content_frame, webFrag);
+						ft.addToBackStack(null);
+						
+						ft.commit();
+					
+						
+					}
+					
+				}
+     			
+     		});
         return view;
     }
  

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/item_shape"
+    android:padding="5dip" >
+    <!--   android:shape="rectangle" -->
+   
+    
+    
+ 
+    <!--  image -->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip">
+ 
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="60dip"
+            android:layout_height="60dip"/>
+ 
+    </LinearLayout>
+ 
+    <!-- title of article-->
+    <TextView
+        android:id="@+id/articletitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+ 
+    <!-- article description -->
+    <TextView
+        android:id="@+id/articldesc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/articletitle"
+        android:textColor="#343434"
+        android:textSize="13sp"
+        android:textStyle="italic"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+   />
+ 
+ 
+</RelativeLayout>

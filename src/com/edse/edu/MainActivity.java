@@ -43,6 +43,7 @@ public class MainActivity extends SherlockFragmentActivity
 
 		// Generate title
 		title = new String[] { "News", "Calendar" };
+		
 
 		// Generate icon
 		icon = new int[] { R.drawable.newsicon, R.drawable.calendaricon };
@@ -59,7 +60,7 @@ public class MainActivity extends SherlockFragmentActivity
 				GravityCompat.START);
 
 		// Pass string arrays to MenuListAdapter
-		mMenuAdapter = new MenuListAdapter(MainActivity.this, title, icon);
+		mMenuAdapter = new MenuListAdapter(MainActivity.this, title,icon);
 
 		// Set the MenuListAdapter to the ListView
 		mDrawerList.setAdapter(mMenuAdapter);

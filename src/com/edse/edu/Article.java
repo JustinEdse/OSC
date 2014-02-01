@@ -18,7 +18,7 @@ public class Article implements Parcelable
 	private String title;
 	private String subDesc;
 	private String type;
-	private byte[] previewImage;
+	private int previewImage;
 	//these images will be small and so we don't have to worry about them taking up
 	//huge amounts of memory/space. They will be to the left of the article title and description on
 	//the article previews.
@@ -27,11 +27,12 @@ public class Article implements Parcelable
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
 	
-	public Article(String title, String subDesc, String type, String text, String date)
+	public Article(String title, String subDesc, String type, int previewImage, String date)
 	{
 		this.title = title;
 		this.subDesc = subDesc;
 		this.type = type;
+		this.previewImage = previewImage;
 		
 		
 		//format of date coming from article???
@@ -66,11 +67,11 @@ public class Article implements Parcelable
 		this.type = type;
 	}
 	
-	public byte[] getPreviewImage()
+	public int getPreviewImage()
 	{
 		return this.previewImage;
 	}
-	public void setPreviewImage(byte[] previewImage)
+	public void setPreviewImage(int previewImage)
 	{
 		this.previewImage = previewImage;
 	}
@@ -122,7 +123,7 @@ public class Article implements Parcelable
 		dest.writeString(title);
 		dest.writeString(subDesc);
 		dest.writeString(type);
-		dest.writeByteArray(previewImage);
+		dest.writeInt(previewImage);
 		dest.writeString(date);
 		
 	}
@@ -131,7 +132,7 @@ public class Article implements Parcelable
 		this.title = in.readString();
 		this.subDesc = in.readString();
 		this.type = in.readString();
-		in.readByteArray(this.previewImage);
+		this.previewImage = in.readInt();
 		this.date = in.readString();
 	}
 	

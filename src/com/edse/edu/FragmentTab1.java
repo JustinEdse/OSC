@@ -40,7 +40,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 public class FragmentTab1 extends SherlockFragment
 {
 	private ListView listView = null;
-	int CASE_FOR_DISPLAY = 1;
 	static String categoryChosen = "";
     View view = null;
 	@Override
