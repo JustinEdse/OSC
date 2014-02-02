@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativerow"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/item_shape"
     android:padding="5dip" >
-    <!--   android:shape="rectangle" -->
+    
    
-    
-    
- 
-    <!--  image -->
     <LinearLayout android:id="@+id/thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +22,7 @@
  
     </LinearLayout>
  
-    <!-- title of article-->
+
     <TextView
         android:id="@+id/articletitle"
         android:layout_width="wrap_content"
@@ -37,7 +34,7 @@
         android:textSize="16sp"
         android:textStyle="bold"/>
  
-    <!-- article description -->
+    
     <TextView
         android:id="@+id/articldesc"
         android:layout_width="fill_parent"

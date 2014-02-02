@@ -19,6 +19,7 @@ import android.webkit.WebViewFragment;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
  
 public class DisplayFragment extends SherlockFragment {
  
@@ -95,8 +96,6 @@ public class DisplayFragment extends SherlockFragment {
 				{
 					
 					
-					
-					
 					// Replace whatever is in the fragment_container view with this fragment,
 					// and add the transaction to the back stack
 					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -110,6 +109,9 @@ public class DisplayFragment extends SherlockFragment {
 					case 1:
 						url = "https://www.osc.edu/press/ucs_sousa_to_leverage_osc_to_simulate_neutrino_behavior";
 						break;
+					default:
+						url = "http://www.google.com";
+					    break;
 						
 					}
 					

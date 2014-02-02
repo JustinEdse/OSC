@@ -11,7 +11,9 @@
         android:background="@color/gray"
         android:divider="@color/transparent"
         android:dividerHeight="10dp"
+        android:paddingTop="10dp"
         >
+        
     </ListView>
 
 </LinearLayout>

@@ -1,8 +1,11 @@
 package com.edse.edu;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,15 +87,43 @@ public class FragmentTab2 extends SherlockFragment
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
+				
+				// Replace whatever is in the fragment_container view with this fragment,
+				// and add the transaction to the back stack
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				WebFragment webFrag = new WebFragment();
+				String url = "";
 				switch(position)
 				{
-				  
+				case 0:
+					url = "https://www.osc.edu/press/arctic_cyclones_more_common_than_previously_thought";
+				    break;
+				case 1:
+					url = "https://www.osc.edu/press/simulation_experts_creating_virtual_house_for_healthcare_training";
+					break;
+				default:
+					url = "http://www.google.com";
+					break;
+					
 				}
+				
+				Bundle urlExtras = new Bundle();
+				urlExtras.putString("url", url);
+				webFrag.setArguments(urlExtras);
+				
+				ft.replace(R.id.content_frame, webFrag);
+				ft.addToBackStack(null);
+				
+				ft.commit();
+				
+				
 				
 			}
  			
  		});
    
 	}
+	 
+	
 	
 }

@@ -141,13 +141,26 @@ public class MainActivity extends SherlockFragmentActivity
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		// Locate Position
+		FragmentManager manager = getSupportFragmentManager();
 		// new fragment replaces older material.
 		switch (position)
 		{
+		
+		
+		
 		case 0: // news
+			manager = this.getSupportFragmentManager();
+			for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+			    manager.popBackStack();
+			}
 			ft.replace(R.id.content_frame, fragment1);
+			
 			break;
 		case 1:// calendar
+			manager = this.getSupportFragmentManager();
+			for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+			    manager.popBackStack();
+			}
 			ft.replace(R.id.content_frame, fragment2);
 			break;
 		}
@@ -192,13 +205,15 @@ public class MainActivity extends SherlockFragmentActivity
 		{
 			// If there are back-stack entries, leave the FragmentActivity
 			// implementation take care of them.
+			
 			manager.popBackStack();
-
 		}
+		
 		else
 		{
 
 			super.onBackPressed();
+			
 		}
 	}
 }
