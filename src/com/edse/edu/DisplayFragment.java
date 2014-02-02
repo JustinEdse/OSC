@@ -101,16 +101,26 @@ public class DisplayFragment extends SherlockFragment {
 					// and add the transaction to the back stack
 					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 					WebFragment webFrag = new WebFragment();
+					String url = "";
 					switch(position)
 					{
 					case 0:
-						ft.replace(R.id.content_frame, webFrag);
-						ft.addToBackStack(null);
-						
-						ft.commit();
-					
+						url = "https://www.osc.edu/press/arctic_cyclones_more_common_than_previously_thought";
+					    break;
+					case 1:
+						url = "https://www.osc.edu/press/ucs_sousa_to_leverage_osc_to_simulate_neutrino_behavior";
+						break;
 						
 					}
+					
+					Bundle urlExtras = new Bundle();
+					urlExtras.putString("url", url);
+					webFrag.setArguments(urlExtras);
+					
+					ft.replace(R.id.content_frame, webFrag);
+					ft.addToBackStack(null);
+					
+					ft.commit();
 					
 				}
      			

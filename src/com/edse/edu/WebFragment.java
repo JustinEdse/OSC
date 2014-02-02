@@ -11,22 +11,23 @@ public class WebFragment extends Fragment
 {
 	View view = null;
 	private WebView webView;
-	 @Override
-	  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                            Bundle savedInstanceState) {
-		 View view = inflater.inflate(R.layout.details_fragment, container, false);
-		 
-		 String url = "http://www.google.com";
-		 loadUrl(url);
-		 
-		 return view;
-	  }
 
-	  public void loadUrl(String url) {
-		  
-		  webView = (WebView) view.findViewById(R.id.webview);
-		  webView.getSettings().setJavaScriptEnabled(true);
-		  webView.loadUrl(url);
-		  
-	  }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		// "url" is the key for receiving the string from the bundle.
+		Bundle bundle = getArguments();
+		String url = bundle.getString("url");
+		
+		View view = (View) inflater.inflate(R.layout.details_fragment,
+				container, false);
+
+		webView = (WebView) view.findViewById(R.id.webview);
+
+		webView.loadUrl(url);
+
+		return view;
+	}
+
 }
