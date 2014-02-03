@@ -253,10 +253,12 @@ int drawable drawer_shadow 0x7f020073
 int drawable ic_drawer 0x7f020074
 int drawable ic_launcher 0x7f020075
 int drawable item_shape 0x7f020076
-int drawable newsicon 0x7f020077
-int drawable nioshlogo 0x7f020078
-int drawable novalogo 0x7f020079
-int drawable osclogo 0x7f02007a
+int drawable item_shape_pressed 0x7f020077
+int drawable newsicon 0x7f020078
+int drawable nioshlogo 0x7f020079
+int drawable novalogo 0x7f02007a
+int drawable osclogo 0x7f02007b
+int drawable selector 0x7f02007c
 int id abs__action_bar 0x7f040020
 int id abs__action_bar_container 0x7f04001f
 int id abs__action_bar_subtitle 0x7f040011
@@ -305,6 +307,7 @@ int id edit_query 0x7f040026
 int id homeAsUp 0x7f040006
 int id icon 0x7f04003a
 int id item_shape 0x7f040043
+int id item_shape_pressed 0x7f040044
 int id listMode 0x7f040002
 int id listViewCategories 0x7f040040
 int id list_image 0x7f040035

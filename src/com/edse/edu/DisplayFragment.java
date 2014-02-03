@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +15,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.webkit.WebViewFragment;
 import android.widget.AdapterView;
@@ -33,6 +37,9 @@ public class DisplayFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	
+    	((MainActivity) getActivity()).setTitle(FragmentTab1.categoryChosen);
+    	
         View view = inflater.inflate(R.layout.article_display, container, false);
         // Locate the ViewPager in viewpager_main.xml
        // ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
@@ -88,6 +95,7 @@ public class DisplayFragment extends SherlockFragment {
      		displayListView.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
      				specImg,specTitle, specDesc));
         
+     		
      		displayListView.setOnItemClickListener(new OnItemClickListener(){
 
 				@Override
@@ -104,6 +112,8 @@ public class DisplayFragment extends SherlockFragment {
 					switch(position)
 					{
 					case 0:
+						
+						
 						url = "https://www.osc.edu/press/arctic_cyclones_more_common_than_previously_thought";
 					    break;
 					case 1:

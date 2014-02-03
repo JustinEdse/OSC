@@ -924,10 +924,12 @@ containing a value of this type.
         public static final int ic_drawer=0x7f020074;
         public static final int ic_launcher=0x7f020075;
         public static final int item_shape=0x7f020076;
-        public static final int newsicon=0x7f020077;
-        public static final int nioshlogo=0x7f020078;
-        public static final int novalogo=0x7f020079;
-        public static final int osclogo=0x7f02007a;
+        public static final int item_shape_pressed=0x7f020077;
+        public static final int newsicon=0x7f020078;
+        public static final int nioshlogo=0x7f020079;
+        public static final int novalogo=0x7f02007a;
+        public static final int osclogo=0x7f02007b;
+        public static final int selector=0x7f02007c;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f040020;
@@ -978,6 +980,7 @@ containing a value of this type.
         public static final int homeAsUp=0x7f040006;
         public static final int icon=0x7f04003a;
         public static final int item_shape=0x7f040043;
+        public static final int item_shape_pressed=0x7f040044;
         public static final int listMode=0x7f040002;
         public static final int listViewCategories=0x7f040040;
         public static final int list_image=0x7f040035;

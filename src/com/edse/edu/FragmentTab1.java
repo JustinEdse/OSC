@@ -100,40 +100,40 @@ public class FragmentTab1 extends SherlockFragment
 				
 				case 0:
 				//supercomputing
-					type = "supercomputing";
+					type = "Supercomputing";
 					break;
 					
 				case 1:
 				//research
-					type = "research";
+					type = "Research";
 					break;
 				case 2:
 				// computational science
-					type = "computational scicence";
+					type = "Computational Scicence";
 					break;
 				case 3:
 				// outreach
-					type = "outreach";
+					type = "Outreach";
 					break;
 				case 4:
 				// education and training
-					type = "education and training";
+					type = "Education and Training";
 					break;
 				case 5:
 				// achievements
-					type = "achievements";
+					type = "Achievements";
 					break;
 				case 6:
 				// cyber infrastructure
-					type = "infrastructure";
+					type = "Cyberinfrastructure";
 					break;
 				case 7:
 				//blue collar computing
-					type = "blue collar computing";
+					type = "Blue Collar Computing";
 					break;
 				case 8:
 				// summer educational programs
-					type = "summer educational programs";
+					type = "Summer Educational Programs";
 					break;
 				default:
 					break;
