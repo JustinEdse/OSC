@@ -137,6 +137,7 @@ public class MainActivity extends SherlockFragmentActivity
 	private void selectItem(int position)
 	{
 
+		//setting of a global variable here to carry the selection into other fragments easily.
 		selectedFrag = position;
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -146,7 +147,10 @@ public class MainActivity extends SherlockFragmentActivity
 		switch (position)
 		{
 		
-		
+		   // Each time there is a change to another selection in the navigation drawer remaining
+		   // fragments need to be popped off the backstack. This solves the problem of a fragment
+		   // already existing on the backstack and trying to be added again when the back button is
+		   // pressed.
 		
 		case 0: // news
 			manager = this.getSupportFragmentManager();
@@ -169,6 +173,7 @@ public class MainActivity extends SherlockFragmentActivity
 
 		// Get the title followed by the position
 		setTitle(title[position]);
+		
 		// Close drawer
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
@@ -212,8 +217,20 @@ public class MainActivity extends SherlockFragmentActivity
 		else
 		{
 
+			// If already in a fragment then the back button should be able to be
+			// pressed freely and work as expected provided a change in the navigation
+			// drawer doesn't take place.
 			super.onBackPressed();
 			
 		}
+	}
+	
+	@Override
+	public void onStart()
+	{
+		// This just makes the navigation drawer appear open by default when the app starts.
+		// This is similar to many apps already on the market.
+		super.onStart();
+		mDrawerLayout.openDrawer(mDrawerList);
 	}
 }

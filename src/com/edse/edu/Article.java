@@ -109,6 +109,8 @@ public class Article implements Parcelable
 	
 	}
 */
+	// These methods below help implement the parcelable class. It just allows the 
+	// bundling and passing of custom objects to activites or fragments.
 	@Override
 	public int describeContents()
 	{
@@ -148,4 +150,11 @@ public class Article implements Parcelable
 		}
 
 	};
+	
+	// standard overriding of the toString() method.
+	@Override
+	public String toString()
+	{
+		return this.title + " " + this.type + " " + this.date;
+	}
 }

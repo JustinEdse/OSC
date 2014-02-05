@@ -25,6 +25,9 @@ public class WebFragment extends Fragment
 		View view = (View) inflater.inflate(R.layout.details_fragment,
 				container, false);
 
+		// getting the web view XML layout. The XML mostly has nothing in it
+		// just a blank page with full parent so the web browser content can
+		// be displayed.
 		webView = (WebView) view.findViewById(R.id.webview);
 
 		webView.loadUrl(url);

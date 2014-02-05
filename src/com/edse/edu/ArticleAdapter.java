@@ -18,6 +18,7 @@ public class ArticleAdapter extends BaseAdapter
 	
 	private static LayoutInflater inflater = null;
 	
+	// this ArticleAdapter constructor contains pieces of an Article object.
 	public ArticleAdapter(Context context, Integer[] specImg, String[] artTitles, String[] artDesc)
 	{
 		this.context = context;
@@ -50,7 +51,7 @@ public class ArticleAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		// TODO Auto-generated method stub
+		// Sets a view with the article's information and returns it.
 		View view = convertView;
 		 
 		if(view == null)

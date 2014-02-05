@@ -107,6 +107,9 @@ public class FragmentTab2 extends SherlockFragment
 					
 				}
 				
+				// making a bundle and passing setting these arguments so another fragment can recieve them.
+				// This is very similar with making a bundle and passing it to another activity via an
+				// intent.
 				Bundle urlExtras = new Bundle();
 				urlExtras.putString("url", url);
 				webFrag.setArguments(urlExtras);
