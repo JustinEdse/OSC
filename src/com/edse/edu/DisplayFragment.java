@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.webkit.WebViewFragment;
@@ -128,7 +129,15 @@ public class DisplayFragment extends SherlockFragment {
 					Bundle urlExtras = new Bundle();
 					urlExtras.putString("url", url);
 					webFrag.setArguments(urlExtras);
+
 					
+					
+					
+					//setContentView(R.layout.drawer_main);
+					
+					
+			        
+			        
 					ft.replace(R.id.content_frame, webFrag);
 					ft.addToBackStack(null);
 					

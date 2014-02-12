@@ -1,21 +1,26 @@
 package com.edse.edu;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
+import android.app.ActionBar;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.v4.view.GravityCompat;
 
-public class MainActivity extends SherlockFragmentActivity
+public class MainActivity extends SherlockFragmentActivity 
 {
 
 	// Declare Variables
@@ -30,21 +35,33 @@ public class MainActivity extends SherlockFragmentActivity
 	Fragment fragment2 = new CalendarFragment();
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-
+	
+	
+	//action bar
+	ActionBar actionBar;
+	private MenuItem loader;
+	
+	
+	 
+	 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		// Get the view from drawer_main.xml
+		
+		//this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
 		setContentView(R.layout.drawer_main);
-
+        
+		
 		// Get the Title
 		mTitle = mDrawerTitle = getTitle();
 
 		// Generate title
 		title = new String[] { "News", "Calendar" };
 		
-
+        
 		// Generate icon
 		icon = new int[] { R.drawable.newsicon, R.drawable.calendaricon };
 
@@ -111,7 +128,7 @@ public class MainActivity extends SherlockFragmentActivity
 
 			if (mDrawerLayout.isDrawerOpen(mDrawerList))
 			{
-				mDrawerLayout.closeDrawer(mDrawerList);
+			mDrawerLayout.closeDrawer(mDrawerList);
 			}
 			else
 			{
@@ -233,4 +250,12 @@ public class MainActivity extends SherlockFragmentActivity
 		super.onStart();
 		mDrawerLayout.openDrawer(mDrawerList);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

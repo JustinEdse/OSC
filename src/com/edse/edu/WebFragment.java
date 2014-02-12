@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 public class WebFragment extends Fragment
@@ -21,7 +23,7 @@ public class WebFragment extends Fragment
 		// "url" is the key for receiving the string from the bundle.
 		Bundle bundle = getArguments();
 		String url = bundle.getString("url");
-		
+		//getActivity().setProgressBarIndeterminateVisibility(true);
 		View view = (View) inflater.inflate(R.layout.details_fragment,
 				container, false);
 
@@ -30,7 +32,13 @@ public class WebFragment extends Fragment
 		// be displayed.
 		webView = (WebView) view.findViewById(R.id.webview);
 
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.getSettings().setUseWideViewPort(true);
+		
+		webView.setWebChromeClient(new WebChromeClient());
 		webView.loadUrl(url);
+		
+        
 
 		return view;
 	}
