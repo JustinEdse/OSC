@@ -1,5 +1,6 @@
 package com.edse.edu;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -96,25 +97,35 @@ public class StorageChecker
 		}
 	}
 
+	@SuppressWarnings("null")
 	public void writeImages(ArrayList<byte[]> images, Context context)
 	{
-		FileOutputStream outStream = null;
-		File dir = null;
+
+		File dirPrev = null;
+		File dirCurr = null;
 
 		// 1. When writing of images is to take place we first check if
 		// an SD card is available. If it is then that's where we
-		// write. If it is not available then store the images in internal storage private to our app.
-		
+		// write. If it is not available then store the images in internal
+		// storage private to our app.
+
 		// 2. Next we need to check if there are already 4 system status images
-		// in place that need to be updated with the new four or there aren't any at all. First we need
-		// to read from either the SD card or internal storage and see if we in fact
-		// have 4 images already in the directory. If we do then replace them with the fresh
-		// images (CHECK THAT WE DEFINITIVELY HAVE THESE IMAGES BEFORE OVERWRITING). If not then just
+		// in place that need to be updated with the new four or there aren't
+		// any at all. First we need
+		// to read from either the SD card or internal storage and see if we in
+		// fact
+		// have 4 images already in the directory. If we do then replace them
+		// with the fresh
+		// images (CHECK THAT WE DEFINITIVELY HAVE THESE IMAGES BEFORE
+		// OVERWRITING). If not then just
 		// write the four images.
-		
-		// 3. For reading our preferences are the same as before. First try to read from the SD card and if
-		// it's not there then go ahead and read from internal storage. At this point the BitmapFactory
-		// class is used to decode each byte array into a bitmap image. Theses bitmap images are added to
+
+		// 3. For reading our preferences are the same as before. First try to
+		// read from the SD card and if
+		// it's not there then go ahead and read from internal storage. At this
+		// point the BitmapFactory
+		// class is used to decode each byte array into a bitmap image. Theses
+		// bitmap images are added to
 		// an array list and ultimately returned.
 
 		try
@@ -122,51 +133,84 @@ public class StorageChecker
 			if (isExternalStorageAvailableAndWriteable())
 			{
 				File deviceSDCard = Environment.getExternalStorageDirectory();
-				dir = new File(deviceSDCard.getAbsolutePath() + "/sysimg");
-				dir.mkdirs();
+				dirPrev = new File(deviceSDCard.getAbsolutePath() + "/previmgs");
+				dirCurr = new File(deviceSDCard.getAbsolutePath()
+						+ "/currentimgs");
+
+				dirPrev.mkdirs();
+				dirCurr.mkdirs();
+
 			}
 			else
 			{
-				dir = context.getDir("sysimg", Context.MODE_PRIVATE);
-				Log.d("INTERNAL STORAGE DIRECTORY.", dir.toString());
+				dirPrev = context.getDir("previmgs", Context.MODE_PRIVATE);
+				dirCurr = context.getDir("currentimgs", Context.MODE_PRIVATE);
+				Log.d("INTERNAL STORAGE DIRECTORY PREVIOUS.",
+						dirPrev.toString());
+				Log.d("INTERNAL STORAGE DIRECTORY CURRENT.", dirCurr.toString());
 			}
 
 			// count images already in directory of internal storage or the SD
 			// card.
-			// filesAlreadySaved = StorageChecker.countImagesInDir(dir);
-			File[] filesInDir = dir.listFiles();
-
-			// Not sure if I need to check for last modified times with these
-			// files....
-			// int modifiedCount = 0;
-			// for(int i =0; i < filesInDir.length; i++)
-			// {
-			// if(filesInDir[i].lastModified() > System.currentTimeMillis())
-			// {
-			// modifiedCount++;
-			// }
-			// }
-			// if(filesInDir.length == 4 && modifiedCount == 4)
+			String[] files = null;
+			if(dirCurr.isDirectory())
+			{
+				files = dirCurr.list();
+			}
+			File[] filesInDir = dirCurr.listFiles();
+			ArrayList<byte[]> imgArgs = new ArrayList<byte[]>();
 
 			// If four images are in the file directory and four images are
 			// being passed in to replace them.
 			// The images.size() == 4 guarantees that images are actually there
 			// to replace the ones already in the system/SDcard.
-			if (filesInDir != null)
+			if (files.length > 0)
 			{
 				if (filesInDir.length == 4 && images.size() == 4)
 				{
 					// using apache commons libs to easily delete all previous
 					// files
 					// from the directory.
-					FileUtils.cleanDirectory(dir);
+					for (File file : filesInDir)
+					{
+						byte[] addedImg = file.toString().getBytes();
+						imgArgs.add(addedImg);
+
+					}
+					FileUtils.cleanDirectory(dirPrev); // clean files from prev
+														// directory.
+					writeToFolder(dirPrev, imgArgs); // write current images to
+														// previous directory.
+					FileUtils.cleanDirectory(dirCurr);// clean current directory
+					writeToFolder(dirCurr, images); // write the 4 new images to
+													// the current directory.
+													// These are the latest.
 				}
+			}
+			else
+			{
+				writeToFolder(dirCurr, images); // if there are no files in the
+												// current directory then just
+												// write.
 			}
 			// So either way this part of code should be writing images to the
 			// directory whether its on the
 			// SD card or internal storage.
 
-			int imgCount = 1;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void writeToFolder(File dir, ArrayList<byte[]> images)
+	{
+		FileOutputStream outStream = null;
+		int imgCount = 1;
+
+		try
+		{
 			for (byte[] img : images)
 			{
 				File imgFile = new File(dir, "sysimg" + imgCount);
@@ -177,6 +221,7 @@ public class StorageChecker
 				// already dealing with Bytes then the img variable is left as
 				// is.
 				outStream.write(img);
+				
 
 				imgCount++;
 			}
@@ -184,13 +229,13 @@ public class StorageChecker
 			outStream.flush();
 			outStream.close();
 		}
-		catch (IOException e)
+		catch (IOException ioe)
 		{
-			e.printStackTrace();
+			ioe.printStackTrace();
 		}
 	}
 
-	public static ArrayList<Bitmap> readImages(Context context)
+	public static ArrayList<byte[]> readImages(Context context)
 			throws Exception
 	{
 		// would there be an event where images would be stored on both the sd
@@ -202,14 +247,14 @@ public class StorageChecker
 		if (checkWR.isExternalStorageAvailableAndWriteable())
 		{
 			File deviceSDCard = Environment.getExternalStorageDirectory();
-			dir = new File(deviceSDCard.getAbsolutePath() + "/sysimg");
+			dir = new File(deviceSDCard.getAbsolutePath() + "/currentimgs");
 		}
 		else
 		{
-			dir = context.getDir("sysimg", Context.MODE_PRIVATE);
+			dir = context.getDir("currentimgs", Context.MODE_PRIVATE);
 		}
 
-		ArrayList<Bitmap> images = new ArrayList<Bitmap>(); // arraylist to
+		ArrayList<byte[]> images = new ArrayList<byte[]>(); // arraylist to
 															// return images.
 		File[] imgFiles = dir.listFiles();
 
@@ -225,11 +270,12 @@ public class StorageChecker
 			byte[] imgBytes = FileUtils.readFileToByteArray(imgFiles[i]);
 
 			// convert from array of bytes to a bitmap.
-			Bitmap img = BitmapFactory.decodeByteArray(imgBytes, 0,
-					imgBytes.length);
+			//Bitmap img = BitmapFactory.decodeByteArray(imgBytes, 0,
+				//	imgBytes.length);
 
+			
 			// add each bitmap image to the images arraylist.
-			images.add(img);
+			images.add(imgBytes);
 		}
 		return images;
 
