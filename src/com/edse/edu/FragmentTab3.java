@@ -34,10 +34,10 @@ public class FragmentTab3 extends SherlockFragment {
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
-			//call method to handle actions when Calendar fragment 1st tab
+			//call method to handle actions when Calendar fragment 3rd tab: Full calendar fragment
 			
+			//launchCalendarView(view, inflater, container);
 			view = inflater.inflate(R.layout.fragmenttab1, container, false);
-			
 		}
 		return view;
       
@@ -119,6 +119,5 @@ public class FragmentTab3 extends SherlockFragment {
    
 	}
     
-  
 	
 }

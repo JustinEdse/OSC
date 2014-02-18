@@ -63,8 +63,10 @@ public class FragmentTab1 extends SherlockFragment
 		else if(MainActivity.selectedFrag == 1)
 		{
 			//call method to handle actions when Calendar fragment 1st tab
+			launchCalendarView(view, inflater, container);
+			//view = inflater.inflate(R.layout.fragmenttab1, container, false);
 			
-			view = inflater.inflate(R.layout.fragmenttab1, container, false);
+		    
 			
 		}
 		return view;
@@ -164,6 +166,16 @@ public class FragmentTab1 extends SherlockFragment
 		});
 
 }
+	
+	public void launchCalendarView(View view, LayoutInflater inflater, ViewGroup container)
+    {
+    	FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+    	CalendarViewFragment calendarView = new CalendarViewFragment();
+    	ft.replace(R.id.content_frame, calendarView);
+    	ft.addToBackStack(null);
+    	ft.commit();
+    }
+    
 	
 	 
 	 
