@@ -9,7 +9,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
  
     // Declare the number of ViewPager pages or tabs.
     final int PAGE_COUNT = 3;
-    private String titles[] = new String[] { "CATEGORIES", "RECENT", "UPCOMING" };
+    private String newstitles[] = new String[] { "CATEGORIES", "RECENT", "UPCOMING" };
+    private String calendartitles[] = new String [] {"FULL CALENDAR", "RECENT", "UPCOMING"};
  
     public ViewPagerAdapter(FragmentManager fm) 
     {
