@@ -17,12 +17,12 @@ public class CalendarFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.viewpager_main, container, false);
+        View view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
         // Locate the ViewPager in viewpager_main.xml
-        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        mViewPager.setBackgroundColor(getResources().getColor(R.color.gray));
+        //ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        //mViewPager.setBackgroundColor(getResources().getColor(R.color.gray));
         // Set the ViewPagerAdapter into ViewPager
-        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
+        //mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         return view;
     }
  
