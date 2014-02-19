@@ -39,7 +39,7 @@ public class MainActivity extends SherlockFragmentActivity
 	
 	//action bar
 	ActionBar actionBar;
-	private MenuItem loader;
+	
 	
 	
 	 
