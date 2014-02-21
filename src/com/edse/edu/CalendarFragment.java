@@ -17,7 +17,7 @@ public class CalendarFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
+        View view = inflater.inflate(R.layout.viewpager_main, container, false);
       
          ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
          // Set the ViewPagerAdapter into ViewPager

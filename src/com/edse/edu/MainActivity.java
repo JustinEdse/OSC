@@ -1,5 +1,8 @@
 package com.edse.edu;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -22,8 +25,9 @@ import android.support.v4.view.GravityCompat;
 
 public class MainActivity extends SherlockFragmentActivity 
 {
-
+	
 	// Declare Variables
+	static Map<String , Event> calendarMap = new HashMap<String, Event>();
 	static int selectedFrag = 0;
 	DrawerLayout mDrawerLayout;
 	ListView mDrawerList;

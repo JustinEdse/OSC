@@ -8,6 +8,7 @@ import com.edse.network.*;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CalendarView.OnDateChangeListener;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.res.Configuration;
@@ -48,8 +51,6 @@ public class FragmentTab1 extends SherlockFragment
 			Bundle savedInstanceState)
 	{
 		// Get the view from fragmenttab1.xml
-
-		
 		
 		if(MainActivity.selectedFrag == 0)
 		{
@@ -63,12 +64,37 @@ public class FragmentTab1 extends SherlockFragment
 		else if(MainActivity.selectedFrag == 1)
 		{
 			//call method to handle actions when Calendar fragment 1st tab
-			view = inflater.inflate(R.layout.fragmenttab1, container, false);
-			
-			launchCalendarView(view, inflater, container);
-			
-			
-		    
+			view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
+			CalendarView calendar;
+			calendar = (CalendarView)view.findViewById(R.id.calendar);
+			calendar.setOnDateChangeListener(new OnDateChangeListener() {
+		
+				
+				@Override
+				public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) 
+				{
+					String key = Integer.toString(month) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year);
+					if (MainActivity.calendarMap.containsKey(key))
+					{
+						//prepareDisplayview(key, MainActivity.calendarMap);
+						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+						// new fragment replaces older material.
+						//EventDisplayFragment newFrag = new EventDisplayFragment();
+						
+							//ft.replace(R.id.calendar, newFrag);
+						    ft.addToBackStack(null);
+						
+						ft.commit();
+					}
+					else 
+					{
+						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_LONG).show();
+					}
+					//Toast.makeText(getActivity().getApplicationContext(), dayOfMonth+ "/"+month+"/"+year, Toast.LENGTH_LONG).show();
+					
+				}
+			});
+			//view = inflater.inflate(R.layout.fragment1, container, false);
 			
 		}
 		return view;
@@ -169,16 +195,16 @@ public class FragmentTab1 extends SherlockFragment
 
 }
 	
-	public void launchCalendarView(View view, LayoutInflater inflater, ViewGroup container)
-    {
-    	FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-    	CalendarFragment calendarView = new CalendarFragment();
-    	ft.replace(R.id.content_frame, calendarView);
-    	ft.addToBackStack(null);
-    	ft.commit();
-    }
-    
-	
+//	public void launchCalendarView(View view, LayoutInflater inflater, ViewGroup container)
+//	{
+//		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//    	CalendarFragment calendarView = new CalendarFragment();
+//    	ft.replace(R.id.content_frame, calendarView);
+//    	ft.addToBackStack(null);
+//    	ft.commit();
+//    }
+//    
+//	
 	 
 	 
 	
