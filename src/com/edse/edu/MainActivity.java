@@ -1,5 +1,6 @@
 package com.edse.edu;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +14,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.app.ActionBar;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerTabStrip;
 
 public class MainActivity extends SherlockFragmentActivity 
 {
@@ -53,8 +58,14 @@ public class MainActivity extends SherlockFragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		// Get the view from drawer_main.xml
+	
 		
 		//this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		
+		FontsOverride.setDefaultFont(this, "MONOSPACE", "Roboto-Light.ttf");
+;
+		
 		
 		setContentView(R.layout.drawer_main);
         
@@ -67,7 +78,7 @@ public class MainActivity extends SherlockFragmentActivity
 		
         
 		// Generate icon
-		icon = new int[] { R.drawable.newsicon, R.drawable.calendaricon };
+		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2 };
 
 		// Locate DrawerLayout in drawer_main.xml
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -86,7 +97,8 @@ public class MainActivity extends SherlockFragmentActivity
 		// Set the MenuListAdapter to the ListView
 		mDrawerList.setAdapter(mMenuAdapter);
 
-		// Capture listview menu item click
+		
+		
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// Enable ActionBar app icon to behave as action to toggle nav drawer
@@ -103,6 +115,7 @@ public class MainActivity extends SherlockFragmentActivity
 			public void onDrawerClosed(View view)
 			{
 				// TODO Auto-generated method stub
+				setTitle(title[selectedFrag]);
 				super.onDrawerClosed(view);
 			}
 
@@ -110,7 +123,7 @@ public class MainActivity extends SherlockFragmentActivity
 			{
 				// TODO Auto-generated method stub
 				// Set the title on the action when drawer open
-				getSupportActionBar().setTitle(mDrawerTitle);
+				getSupportActionBar().setTitle(R.string.app_name);
 				super.onDrawerOpened(drawerView);
 			}
 		};
@@ -190,6 +203,7 @@ public class MainActivity extends SherlockFragmentActivity
 			break;
 		}
 		ft.commit();
+		
 		mDrawerList.setItemChecked(position, true);
 
 		// Get the title followed by the position
@@ -251,10 +265,10 @@ public class MainActivity extends SherlockFragmentActivity
 	{
 		// This just makes the navigation drawer appear open by default when the app starts.
 		// This is similar to many apps already on the market.
+		 
 		super.onStart();
 		mDrawerLayout.openDrawer(mDrawerList);
 	}
-	
 	
 	
 	

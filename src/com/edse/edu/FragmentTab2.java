@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerTabStrip;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,9 @@ public class FragmentTab2 extends SherlockFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
+        pagerTabStrip.setDrawFullUnderline(true);
+        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.scarlet));
 		// Get the view from fragmenttab2.xml
 		View view = inflater.inflate(R.layout.article_display, container, false);
 		

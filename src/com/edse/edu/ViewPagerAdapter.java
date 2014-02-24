@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerTabStrip;
+import android.widget.TabWidget;
  
 public class ViewPagerAdapter extends FragmentPagerAdapter {
  
@@ -11,7 +13,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
     private String newstitles[] = new String[] { "CATEGORIES", "RECENT", "UPCOMING" };
     private String calendartitles[] = new String[] {"FULL CALENDAR", "RECENT", "UPCOMING"};
- 
+    
+   
     public ViewPagerAdapter(FragmentManager fm) 
     {
     	
@@ -38,6 +41,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         	FragmentTab3 fragmenttab3 = new FragmentTab3();
         	return fragmenttab3;
         }
+        
+        
+        
         return null;
     }
  
@@ -59,5 +65,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return PAGE_COUNT;
     }
+
+
+    
  
 }

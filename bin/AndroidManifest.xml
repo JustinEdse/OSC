@@ -15,8 +15,11 @@
         android:icon="@drawable/osclogo"
         android:label="@string/app_name"
         android:noHistory="true"
-        android:theme="@style/Theme.Sherlock" >
-        <activity android:name="com.edse.edu.MainActivity" >
+      android:theme="@style/Theme.MyTheme"
+   
+        >
+        <activity android:name="com.edse.edu.MainActivity" 
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

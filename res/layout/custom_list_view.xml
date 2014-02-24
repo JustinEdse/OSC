@@ -7,6 +7,7 @@ android:textAppearance="?android:attr/textAppearanceMedium"
 android:gravity="center_vertical"
 android:checkMark="?android:attr/listChoiceIndicatorSingle"
 android:paddingLeft="2dip"
+android:background="@color/white"
 android:paddingRight="2dip"
 android:textColor="@color/black"
 />

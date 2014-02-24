@@ -37,6 +37,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerTabStrip;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -51,7 +52,9 @@ public class FragmentTab1 extends SherlockFragment
 			Bundle savedInstanceState)
 	{
 		// Get the view from fragmenttab1.xml
-		
+		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
+        pagerTabStrip.setDrawFullUnderline(true);
+        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.scarlet));
 		if(MainActivity.selectedFrag == 0)
 		{
 		  //should call a method to handle News fragment 1st tab
@@ -73,6 +76,7 @@ public class FragmentTab1 extends SherlockFragment
 				@Override
 				public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) 
 				{
+					
 					String key = Integer.toString(month) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year);
 					if (MainActivity.calendarMap.containsKey(key))
 					{

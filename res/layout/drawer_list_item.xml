@@ -23,18 +23,13 @@
             style="?attr/spinnerDropDownItemStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
+            android:textSize="22sp"
             android:ellipsize="end"
+            android:gravity="center_vertical|bottom"
             android:singleLine="true" />
             
-        <TextView
-            android:id="@+id/subtitle"
-            style="?attr/spinnerDropDownItemStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:ellipsize="end"
-            android:singleLine="false" />
+        
  
     </LinearLayout>
  

@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,8 @@ public class NewsFragment extends SherlockFragment {
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
         // Set the ViewPagerAdapter into ViewPager
         mViewPager.setBackgroundColor(getResources().getColor(R.color.gray));
+      ;
+		// Capture listview menu item click
     
         mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         

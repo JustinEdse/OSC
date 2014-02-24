@@ -4,13 +4,17 @@ import java.lang.reflect.Field;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
  
 public class CalendarFragment extends SherlockFragment {
  
@@ -24,6 +28,10 @@ public class CalendarFragment extends SherlockFragment {
          mViewPager.setBackgroundColor(getResources().getColor(R.color.gray));
      
          mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
+         
+        
+         
+      
         return view;
     }
  
