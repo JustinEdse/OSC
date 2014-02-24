@@ -927,15 +927,18 @@ containing a value of this type.
         public static final int collections_cloud=0x7f020073;
         public static final int doc_lines_stright=0x7f020074;
         public static final int drawer_shadow=0x7f020075;
-        public static final int ic_drawer=0x7f020076;
-        public static final int ic_launcher=0x7f020077;
-        public static final int item_shape=0x7f020078;
-        public static final int item_shape_pressed=0x7f020079;
-        public static final int newsicon=0x7f02007a;
-        public static final int nioshlogo=0x7f02007b;
-        public static final int novalogo=0x7f02007c;
-        public static final int osclogo=0x7f02007d;
-        public static final int selector=0x7f02007e;
+        public static final int dritem_nonpressed=0x7f020076;
+        public static final int dritempressed=0x7f020077;
+        public static final int ic_drawer=0x7f020078;
+        public static final int ic_launcher=0x7f020079;
+        public static final int item_shape=0x7f02007a;
+        public static final int item_shape_pressed=0x7f02007b;
+        public static final int newsicon=0x7f02007c;
+        public static final int nioshlogo=0x7f02007d;
+        public static final int novalogo=0x7f02007e;
+        public static final int osclogo=0x7f02007f;
+        public static final int selector=0x7f020080;
+        public static final int selectordrawer=0x7f020081;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f040020;

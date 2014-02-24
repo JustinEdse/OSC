@@ -205,7 +205,7 @@ public class MainActivity extends SherlockFragmentActivity
 		ft.commit();
 		
 		mDrawerList.setItemChecked(position, true);
-
+		
 		// Get the title followed by the position
 		setTitle(title[position]);
 		
@@ -267,7 +267,10 @@ public class MainActivity extends SherlockFragmentActivity
 		// This is similar to many apps already on the market.
 		 
 		super.onStart();
+		ListView lv = (ListView)findViewById(R.id.listview_drawer);
+		lv.setItemChecked(0, false);
 		mDrawerLayout.openDrawer(mDrawerList);
+		
 	}
 	
 	
