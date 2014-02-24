@@ -980,7 +980,7 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int action_settings=0x7f040046;
+        public static final int action_settings=0x7f04004c;
         public static final int articldesc=0x7f040039;
         public static final int articletitle=0x7f040038;
         public static final int calendar=0x7f040033;
@@ -988,17 +988,23 @@ containing a value of this type.
         public static final int disableHome=0x7f040009;
         public static final int drawer_layout=0x7f04003e;
         public static final int edit_query=0x7f040026;
+        public static final int event_date_time=0x7f040046;
+        public static final int event_detailed_date_time=0x7f040043;
+        public static final int event_detailed_desc=0x7f040042;
+        public static final int event_detailed_location=0x7f040044;
+        public static final int event_detailed_title=0x7f040041;
+        public static final int eventtitle=0x7f040045;
         public static final int homeAsUp=0x7f040006;
         public static final int icon=0x7f04003c;
-        public static final int item_shape=0x7f040044;
-        public static final int item_shape_pressed=0x7f040045;
+        public static final int item_shape=0x7f04004a;
+        public static final int item_shape_pressed=0x7f04004b;
         public static final int listMode=0x7f040002;
-        public static final int listViewCategories=0x7f040041;
+        public static final int listViewCategories=0x7f040047;
         public static final int list_image=0x7f040037;
         public static final int listview=0x7f040034;
         public static final int listview_drawer=0x7f040040;
         public static final int normal=0x7f040001;
-        public static final int pagerTabStrip=0x7f040043;
+        public static final int pagerTabStrip=0x7f040049;
         public static final int progressBar=0x7f040032;
         public static final int relativerow=0x7f040035;
         public static final int showCustom=0x7f040008;
@@ -1009,7 +1015,7 @@ containing a value of this type.
         public static final int thumbnail=0x7f040036;
         public static final int title=0x7f04003d;
         public static final int useLogo=0x7f040004;
-        public static final int viewPager=0x7f040042;
+        public static final int viewPager=0x7f040048;
         public static final int webview=0x7f04003b;
         public static final int wrap_content=0x7f040000;
     }
@@ -1047,14 +1053,16 @@ containing a value of this type.
         public static final int details_fragment=0x7f03001b;
         public static final int drawer_list_item=0x7f03001c;
         public static final int drawer_main=0x7f03001d;
-        public static final int fragment1=0x7f03001e;
-        public static final int fragmenttab1=0x7f03001f;
-        public static final int fragmenttab1cat=0x7f030020;
-        public static final int fragmenttab2=0x7f030021;
-        public static final int fragmenttab3=0x7f030022;
-        public static final int sherlock_spinner_dropdown_item=0x7f030023;
-        public static final int sherlock_spinner_item=0x7f030024;
-        public static final int viewpager_main=0x7f030025;
+        public static final int event_detailed_row=0x7f03001e;
+        public static final int event_row=0x7f03001f;
+        public static final int fragment1=0x7f030020;
+        public static final int fragmenttab1=0x7f030021;
+        public static final int fragmenttab1cat=0x7f030022;
+        public static final int fragmenttab2=0x7f030023;
+        public static final int fragmenttab3=0x7f030024;
+        public static final int sherlock_spinner_dropdown_item=0x7f030025;
+        public static final int sherlock_spinner_item=0x7f030026;
+        public static final int viewpager_main=0x7f030027;
     }
     public static final class menu {
         public static final int calendar_view=0x7f0c0000;

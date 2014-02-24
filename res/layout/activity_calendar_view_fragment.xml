@@ -13,9 +13,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    
    <CalendarView
         android:id ="@+id/calendar"
+        android:layout_centerInParent="true"
+        android:unfocusedMonthDateColor="@color/white" 
+        android:showWeekNumber="false"
+        android:selectedDateVerticalBar="@color/gray"
+ 		android:selectedWeekBackgroundColor="@color/gray"
+        android:focusedMonthDateColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
   	/>
