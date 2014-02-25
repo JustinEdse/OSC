@@ -40,6 +40,7 @@ public class EventAdapter extends BaseAdapter
 		this.eventTimes = eventTimes;
 		this.eventDates = eventDates;
 		this.eventLocations = eventLocations;
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	@Override
 	public int getCount()
@@ -63,28 +64,28 @@ public class EventAdapter extends BaseAdapter
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		// Sets a view with the article's information and returns it.
-		View view = convertView;
-		 
-		if(view == null)
-		{
-			view = inflater.inflate(R.layout.event_row, null);
-			TextView title = (TextView) view.findViewById(R.id.eventtitle);
-			TextView date_time = (TextView) view.findViewById(R.id.event_date_time);
-			
-			
-			//image.setImageResource(artImages[position]);
-			title.setText(eventTitles[position]);
-			date_time.setText(eventDates[position] + " - " + eventTimes[position]);
-		
-		}
-		
-		return view;
-	}
+//	public View getView(int position, View convertView, ViewGroup parent)
+//	{
+//		// Sets a view with the article's information and returns it.
+//		View view = convertView;
+//		 
+//		if(view == null)
+//		{
+//			view = inflater.inflate(R.layout.event_row, null);
+//			TextView title = (TextView) view.findViewById(R.id.eventtitle);
+//			TextView date_time = (TextView) view.findViewById(R.id.event_date_time);
+//			
+//			
+//			//image.setImageResource(artImages[position]);
+//			title.setText(eventTitles[position]);
+//			date_time.setText(eventDates[position] + " - " + eventTimes[position]);
+//		
+//		}
+//		
+//		return view;
+//	}
 	
-	public View getDetailedView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		// Sets a view with the article's information and returns it.
 			View view = convertView;
