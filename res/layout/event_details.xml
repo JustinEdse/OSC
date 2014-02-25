@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/eventdetailedview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    
+     >
+     <!-- android:background="@drawable/selector" -->
+    <!-- Title, Desc, Date, Time, Location -->
+
+    <TextView
+        android:id="@+id/event_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:typeface="sans"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+ 
+    <TextView
+        android:id="@+id/event_detail_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_detail_title"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:layout_marginTop="1dip"
+
+   />
+    
+    <TextView
+        android:id="@+id/event_detail_date_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_detail_desc"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        android:layout_marginTop="1dip"
+        android:focusable="false"
+   />
+    
+    <TextView 
+        android:id="@+id/event_detail_location"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_detail_date_time"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:focusable="false"
+        />
+ 
+ 
+</RelativeLayout>

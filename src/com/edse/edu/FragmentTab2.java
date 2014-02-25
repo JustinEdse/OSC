@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerTabStrip;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,19 +80,24 @@ public class FragmentTab2 extends SherlockFragment
 	    			public void onItemClick(AdapterView<?> parent, View view,
 	    					int position, long id)
 	    			{
-	    				//NOT WORKING. The idea is to show a more detailed view of event in this onclick event. 
-	    				view = inflater.inflate(R.layout.event_detailed_row, null);
-//	    				TextView title = (TextView) view.findViewById(R.id.event_detailed_title);
-//	    				TextView date_time = (TextView) view.findViewById(R.id.event_detailed_date_time);
-//	    				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
-//	    				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
-//	    				
-//	    				Event tempAdapter = (Event) parent.getItemAtPosition(position);
-//	    				title.setText(evdispTitles[position]);
-//	    				date_time.setText(evdispDates[position] + " - " + evdispTimes[position]);
-//	    				desc.setText(evdispDescs[position]);
-//	    				location.setText(evdispLocs[position]);    		
+	    				//NOT WORKING. The idea is to show a more detailed view of event in this onclick event. 	
 	    				
+	    				//Create a fragment to show more detailed event information
+	    				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+	    				EventDetailFragment fragment = new EventDetailFragment();
+	    				Bundle bunds = new Bundle();
+	    				//Pass title, description, date, time and location to the fragment
+	    				bunds.putString("title", evdispTitles[position]);
+	    				bunds.putString("desc", evdispDescs[position]);
+	    				bunds.putString("date", evdispDates[position]);
+	    				bunds.putString("time", evdispTimes[position]);
+	    				bunds.putString("loc", evdispLocs[position]);
+	    				fragment.setArguments(bunds);
+	    				
+	    				ft.replace(R.id.content_frame, fragment);
+	    				ft.addToBackStack(null);
+	   
+	    				ft.commit();
 	    				
 	    			}
 	     			
