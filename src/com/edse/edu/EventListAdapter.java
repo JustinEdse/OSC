@@ -32,16 +32,16 @@ public class EventListAdapter extends BaseAdapter
 		this.eventTimes = eventTimes;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	public EventListAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventTimes, String[] eventLocations)
-	{
-		this.context = context;
-		this.eventTitles = eventTitles;
-		this.eventDescriptions = eventDescs;
-		this.eventTimes = eventTimes;
-		this.eventDates = eventDates;
-		this.eventLocations = eventLocations;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+//	public EventListAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventTimes, String[] eventLocations)
+//	{
+//		this.context = context;
+//		this.eventTitles = eventTitles;
+//		this.eventDescriptions = eventDescs;
+//		this.eventTimes = eventTimes;
+//		this.eventDates = eventDates;
+//		this.eventLocations = eventLocations;
+//		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//	}
 	@Override
 	public int getCount()
 	{

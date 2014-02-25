@@ -46,7 +46,6 @@ public class MainActivity extends SherlockFragmentActivity
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	
-	
 	//action bar
 	ActionBar actionBar;
 	
@@ -57,6 +56,37 @@ public class MainActivity extends SherlockFragmentActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		//Hardcoded events for calendar testing
+        Event test1 = new Event();   
+        test1.addTitle("Monthly HPC Tech Talk");
+        test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
+		test1.addDate("2/18/2014");
+		test1.addLocation("WebEX");
+		test1.addTime("4:00pm to 5:00pm");
+		Event test2 = new Event();
+		test2.addTitle("HPC System Downtime");
+		test2.addDate("2/11/2014");
+		test2.addTime("(All Day)");
+		Event test3 = new Event();
+		test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
+		test3.addTime("11:00am to 5:00pm");
+		test3.addDate("2/4/2014");
+		test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
+		test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
+		
+		/**In the future, we check to see if the date of the event already exists in the map.
+		 * If so, we add the event to the list of events for the date.
+		 * If not, we create a new array list, throw the event into the list and then add the list to the map.
+		 */
+		ArrayList<Event>temp = new ArrayList<Event>();
+		temp.add(test1);
+		MainActivity.calendarMap.put(test1.getDate(), temp);
+		temp = new ArrayList<Event>();
+		temp.add(test2);
+		MainActivity.calendarMap.put(test2.getDate(), temp);
+		temp = new ArrayList<Event>();
+		temp.add(test3);
+		MainActivity.calendarMap.put(test3.getDate(), temp);
 		super.onCreate(savedInstanceState);
 		// Get the view from drawer_main.xml
 	

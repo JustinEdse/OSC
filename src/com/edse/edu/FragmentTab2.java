@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -21,7 +22,7 @@ public class FragmentTab2 extends SherlockFragment
 	ListView listViewRecent;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
@@ -40,7 +41,61 @@ public class FragmentTab2 extends SherlockFragment
 		{
 			//call method to handle actions when Calendar fragment 1st tab
 			
-			view = inflater.inflate(R.layout.fragmenttab1, container, false);
+			view = inflater.inflate(R.layout.article_display, container, false);
+			 ArrayList<String> eventTitles = new ArrayList<String>();
+	            ArrayList<String> eventDates = new ArrayList<String>();
+	            ArrayList<String> eventDescs = new ArrayList<String>();
+	            ArrayList<String> eventTimes = new ArrayList<String>();
+	            ArrayList<String> eventLocations = new ArrayList<String>();
+	            
+	            //Get all events stored in all arraylists in the map
+	            for (String date : MainActivity.calendarMap.keySet())
+	            {
+		            for(Event ev : MainActivity.calendarMap.get(date))
+		            {
+		            	eventTitles.add(ev.getEventName());
+		            	eventDates.add(ev.getDate());
+		            	eventTimes.add(ev.getTime());
+		            	eventDescs.add(ev.getEventDetails());
+		            	eventLocations.add(ev.getLocation());
+		            }
+	            }
+	            
+	            final String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
+	            final String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
+	            final String[] evdispDates = eventDates.toArray(new String [eventDates.size()]);
+	            final String[] evdispTimes = eventTimes.toArray(new String [eventTimes.size()]);
+	            final String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
+	            
+	            
+	        	
+	        	
+	     		ListView displayListView = (ListView) view.findViewById(R.id.listview);
+	     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), 
+	     				evdispTitles, evdispDates, evdispTimes));
+	     		displayListView.setOnItemClickListener(new OnItemClickListener(){
+
+	    			@Override
+	    			public void onItemClick(AdapterView<?> parent, View view,
+	    					int position, long id)
+	    			{
+	    				//NOT WORKING. The idea is to show a more detailed view of event in this onclick event. 
+	    				view = inflater.inflate(R.layout.event_detailed_row, null);
+//	    				TextView title = (TextView) view.findViewById(R.id.event_detailed_title);
+//	    				TextView date_time = (TextView) view.findViewById(R.id.event_detailed_date_time);
+//	    				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
+//	    				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
+//	    				
+//	    				Event tempAdapter = (Event) parent.getItemAtPosition(position);
+//	    				title.setText(evdispTitles[position]);
+//	    				date_time.setText(evdispDates[position] + " - " + evdispTimes[position]);
+//	    				desc.setText(evdispDescs[position]);
+//	    				location.setText(evdispLocs[position]);    		
+	    				
+	    				
+	    			}
+	     			
+	     		});
 			
 		}
 		return view;
