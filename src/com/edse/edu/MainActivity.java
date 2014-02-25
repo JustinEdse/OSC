@@ -1,6 +1,7 @@
 package com.edse.edu;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class MainActivity extends SherlockFragmentActivity
 {
 	
 	// Declare Variables
-	static Map<String , Event> calendarMap = new HashMap<String, Event>();
+	static Map<String , ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
 	static int selectedFrag = 0;
 	DrawerLayout mDrawerLayout;
 	ListView mDrawerList;
