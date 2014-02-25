@@ -80,7 +80,7 @@ public class FragmentTab2 extends SherlockFragment
 	    			public void onItemClick(AdapterView<?> parent, View view,
 	    					int position, long id)
 	    			{
-	    				//NOT WORKING. The idea is to show a more detailed view of event in this onclick event. 	
+	    				//The idea is to show a more detailed view of event in this onclick event. 	
 	    				
 	    				//Create a fragment to show more detailed event information
 	    				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();

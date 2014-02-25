@@ -41,7 +41,6 @@ public class EventDetailFragment extends SherlockFragment {
 	    	String evdate = b.getString("date");
 	    	String evtime = b.getString("time");
 	    	String evlocation = b.getString("loc");
-	    	Log.d("EventDetail", "Event title is " + evtitle);
 	    	View view = inflater.inflate(R.layout.event_details, null);
 			TextView title = (TextView) view.findViewById(R.id.event_detail_title);
 			TextView date_time = (TextView) view.findViewById(R.id.event_detail_date_time);
