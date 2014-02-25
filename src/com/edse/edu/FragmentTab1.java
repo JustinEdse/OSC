@@ -66,39 +66,71 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
+			//Hardcoded events for calendar testing
+	        Event test1 = new Event();   
+	        test1.addTitle("Monthly HPC Tech Talk");
+	        test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
+			test1.addDate("2/18/2014");
+			test1.addLocation("WebEX");
+			test1.addTime("4:00pm to 5:00pm");
+			Event test2 = new Event();
+			test2.addTitle("HPC System Downtime");
+			test2.addDate("2/11/2014");
+			test2.addTime("(All Day)");
+			Event test3 = new Event();
+			test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
+			test3.addTime("11:00am to 5:00pm");
+			test3.addDate("2/4/2014");
+			test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
+			test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
+			
+			/**In the future, we check to see if the date of the event already exists in the map.
+			 * If so, we add the event to the list of events for the date.
+			 * If not, we create a new array list, throw the event into the list and then add the list to the map.
+			 */
+			ArrayList<Event>temp = new ArrayList<Event>();
+			temp.add(test1);
+			MainActivity.calendarMap.put(test1.getDate(), temp);
+			temp = new ArrayList<Event>();
+			temp.add(test2);
+			MainActivity.calendarMap.put(test2.getDate(), temp);
+			temp = new ArrayList<Event>();
+			temp.add(test3);
+			MainActivity.calendarMap.put(test3.getDate(), temp);
 			//call method to handle actions when Calendar fragment 1st tab
 			view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
 			CalendarView calendar;
 			calendar = (CalendarView)view.findViewById(R.id.calendar);
+			//calendar.setWeekNumberColor(R.color.black);
 			calendar.setOnDateChangeListener(new OnDateChangeListener() {
-		
-				
+			
 				@Override
 				public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) 
 				{
 					
-					String key = Integer.toString(month) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year);
+					String key = Integer.toString(month+1) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year);
 					if (MainActivity.calendarMap.containsKey(key))
 					{
-						//prepareDisplayview(key, MainActivity.calendarMap);
+						//Log.d("Selected Day", "Map isnt empty");
+						//DO Fragment transaction to to show detailed list of events
 						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-						// new fragment replaces older material.
-						//EventDisplayFragment newFrag = new EventDisplayFragment();
-						
-							//ft.replace(R.id.calendar, newFrag);
-						    ft.addToBackStack(null);
+						Bundle bunds = new Bundle();
+						bunds.putString("date", key);
+						EventDisplayFragment newFragment = new EventDisplayFragment();
+						newFragment.setArguments(bunds);
+						ft.replace(R.id.calendar, newFragment);
+						ft.addToBackStack(null);
 						
 						ft.commit();
 					}
 					else 
 					{
-						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 					}
-					//Toast.makeText(getActivity().getApplicationContext(), dayOfMonth+ "/"+month+"/"+year, Toast.LENGTH_LONG).show();
+					//Toast.makeText(getActivity().getApplicationContext(), (month+1)+ "/"+dayOfMonth+"/"+year, Toast.LENGTH_SHORT).show();
 					
 				}
 			});
-			//view = inflater.inflate(R.layout.fragment1, container, false);
 			
 		}
 		return view;
@@ -199,16 +231,6 @@ public class FragmentTab1 extends SherlockFragment
 
 }
 	
-//	public void launchCalendarView(View view, LayoutInflater inflater, ViewGroup container)
-//	{
-//		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//    	CalendarFragment calendarView = new CalendarFragment();
-//    	ft.replace(R.id.content_frame, calendarView);
-//    	ft.addToBackStack(null);
-//    	ft.commit();
-//    }
-//    
-//	
 	 
 	 
 	
