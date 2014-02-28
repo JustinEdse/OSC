@@ -91,6 +91,8 @@ public class FragmentTab1 extends SherlockFragment
 						ft.replace(R.id.calendar, newFragment);
 						ft.addToBackStack(null);
 						
+						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+						MainActivity.movesCount++;
 						ft.commit();
 					}
 					else 
@@ -183,10 +185,14 @@ public class FragmentTab1 extends SherlockFragment
 				 
 				categoryChosen = type;
 				
-
+				
+				////////////CHANGES HERE////////////////////////////////
+				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				// Locate Position
 				// new fragment replaces older material.
+				
+				MainActivity.movesCount++;
 				DisplayFragment newFrag = new DisplayFragment();
 				
 					ft.replace(R.id.content_frame, newFrag);

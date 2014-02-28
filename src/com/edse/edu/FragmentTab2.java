@@ -94,9 +94,12 @@ public class FragmentTab2 extends SherlockFragment
 	    				bunds.putString("loc", evdispLocs[position]);
 	    				fragment.setArguments(bunds);
 	    				
+	    				
+	    				MainActivity.movesCount++;
 	    				ft.replace(R.id.content_frame, fragment);
 	    				ft.addToBackStack(null);
 	   
+	    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 	    				ft.commit();
 	    				
 	    			}
@@ -175,13 +178,14 @@ public class FragmentTab2 extends SherlockFragment
 				// making a bundle and passing setting these arguments so another fragment can recieve them.
 				// This is very similar with making a bundle and passing it to another activity via an
 				// intent.
+				 MainActivity.movesCount++;
 				Bundle urlExtras = new Bundle();
 				urlExtras.putString("url", url);
 				webFrag.setArguments(urlExtras);
 				
 				ft.replace(R.id.content_frame, webFrag);
 				ft.addToBackStack(null);
-				
+				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 				ft.commit();
 				
 				

@@ -137,7 +137,8 @@ public class DisplayFragment extends SherlockFragment {
 					
 					
 			        
-			        
+					MainActivity.movesCount++;
+					
 					ft.replace(R.id.content_frame, webFrag);
 					ft.addToBackStack(null);
 					
@@ -146,6 +147,13 @@ public class DisplayFragment extends SherlockFragment {
 				}
      			
      		});
+     		
+     		setHasOptionsMenu(true);
+            
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            
+           
+            
         return view;
     }
  
@@ -164,4 +172,6 @@ public class DisplayFragment extends SherlockFragment {
             throw new RuntimeException(e);
         }
     }
+    
+  
 }

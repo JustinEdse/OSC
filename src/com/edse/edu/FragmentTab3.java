@@ -110,13 +110,14 @@ public class FragmentTab3 extends SherlockFragment {
 					
 				}
 				
+				 MainActivity.movesCount++;
 				Bundle urlExtras = new Bundle();
 				urlExtras.putString("url", url);
 				webFrag.setArguments(urlExtras);
 				
 				ft.replace(R.id.content_frame, webFrag);
 				ft.addToBackStack(null);
-				
+				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 				ft.commit();
 				
 				

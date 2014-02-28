@@ -36,6 +36,10 @@ public class CalendarViewFragment extends SherlockFragment {
 				
 			}
 		});
+		
+		setHasOptionsMenu(true);
+        
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		return view;
 	}
 

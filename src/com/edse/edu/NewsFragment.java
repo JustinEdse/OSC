@@ -9,9 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+//import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
- 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuInflater;
+
 public class NewsFragment extends SherlockFragment {
  
     @Override
@@ -27,6 +32,9 @@ public class NewsFragment extends SherlockFragment {
     
         mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         
+        setHasOptionsMenu(true);
+        
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         
         return view;
     }
@@ -46,4 +54,7 @@ public class NewsFragment extends SherlockFragment {
             throw new RuntimeException(e);
         }
     }
+    
+    	
+   
 }

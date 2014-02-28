@@ -71,7 +71,10 @@ public class EventDisplayFragment extends SherlockFragment {
 		     		displayListView = (ListView) view.findViewById(R.id.listview);
 		     		displayListView.setAdapter(new EventAdapter(getActivity().getApplicationContext(), 
 		     				evdispTitles, evdispDescs, evdispDates, evdispTimes, evdispLocs));
-		        
+		     		
+		     		setHasOptionsMenu(true);
+		            
+		            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		        return view;
 		    }

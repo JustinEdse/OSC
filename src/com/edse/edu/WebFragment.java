@@ -39,7 +39,9 @@ public class WebFragment extends Fragment
 		webView.loadUrl(url);
 		
         
-
+		setHasOptionsMenu(true);
+        
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		return view;
 	}
 	
