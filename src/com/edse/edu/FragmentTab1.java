@@ -66,11 +66,13 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
-			
+			getActivity().setTitle("Calendar");
 			//call method to handle actions when Calendar fragment 1st tab
 			view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
 			CalendarView calendar;
 			calendar = (CalendarView)view.findViewById(R.id.calendar);
+			
+			
 			//calendar.setWeekNumberColor(R.color.black);
 			calendar.setOnDateChangeListener(new OnDateChangeListener() {
 			
@@ -91,8 +93,10 @@ public class FragmentTab1 extends SherlockFragment
 						ft.replace(R.id.calendar, newFragment);
 						ft.addToBackStack(null);
 						
+						
 						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 						MainActivity.movesCount++;
+						//getActivity().setTitle("Content");
 						ft.commit();
 					}
 					else 

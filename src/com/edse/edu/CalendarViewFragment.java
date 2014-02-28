@@ -25,7 +25,10 @@ public class CalendarViewFragment extends SherlockFragment {
 		View view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
 		//super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_calendar_view_fragment);
+		
 		calendar = (CalendarView)view.findViewById(R.id.calendar);
+		
+		getActivity().setTitle("Calendar");
 		calendar.setOnDateChangeListener(new OnDateChangeListener() {
 	
 			
@@ -40,6 +43,8 @@ public class CalendarViewFragment extends SherlockFragment {
 		setHasOptionsMenu(true);
         
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+       
+       
 		return view;
 	}
 

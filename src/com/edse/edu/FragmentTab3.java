@@ -39,7 +39,7 @@ public class FragmentTab3 extends SherlockFragment {
 		else if(MainActivity.selectedFrag == 1)
 		{
 			//call method to handle actions when Calendar fragment 3rd tab: Full calendar fragment
-			
+			getActivity().setTitle("Calendar");
 			//launchCalendarView(view, inflater, container);
 			view = inflater.inflate(R.layout.fragmenttab1, container, false);
 		}
@@ -56,6 +56,7 @@ public class FragmentTab3 extends SherlockFragment {
            //pagerTabStrip.setDrawFullUnderline(true);
            //pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.scarlet));
            
+    	
     	ArrayList<Article> upcomingTest = new ArrayList<Article>();
         Article upcomingArtOne = new Article("XSEDE HPC Monthly Workshop - Big Data",
         		"Tuesday, February 4, 2014 - 11:00am to 5:00pm", "upcoming", R.drawable.osclogo, "01/20/2014");
@@ -81,7 +82,7 @@ public class FragmentTab3 extends SherlockFragment {
         Integer[] specImg = img.toArray(new Integer[img.size()]);
         
         
-    	
+        
     	
  		upcomingList = (ListView) view.findViewById(R.id.listview);
  		upcomingList.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
@@ -109,6 +110,7 @@ public class FragmentTab3 extends SherlockFragment {
 					break;
 					
 				}
+				
 				
 				 MainActivity.movesCount++;
 				Bundle urlExtras = new Bundle();

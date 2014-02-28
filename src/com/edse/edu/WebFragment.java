@@ -38,6 +38,8 @@ public class WebFragment extends Fragment
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.loadUrl(url);
 		
+		
+        getActivity().setTitle("Content");
         
 		setHasOptionsMenu(true);
         

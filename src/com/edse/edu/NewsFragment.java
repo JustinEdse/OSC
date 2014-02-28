@@ -35,6 +35,7 @@ public class NewsFragment extends SherlockFragment {
         setHasOptionsMenu(true);
         
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActivity().setTitle("News");
         
         return view;
     }

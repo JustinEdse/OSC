@@ -126,6 +126,8 @@ public class DisplayFragment extends SherlockFragment {
 						
 					}
 					
+					 
+					//getActivity().setTitle(FragmentTab1.categoryChosen);
 					Bundle urlExtras = new Bundle();
 					urlExtras.putString("url", url);
 					webFrag.setArguments(urlExtras);

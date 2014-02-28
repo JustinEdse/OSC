@@ -37,7 +37,7 @@ public class EventDisplayFragment extends SherlockFragment {
 		            Bundle savedInstanceState) {
 		    	
 		    	//((MainActivity) getActivity()).setTitle(FragmentTab1.categoryChosen);
-			 
+		    	getActivity().setTitle("Content");
 		    	//GET THE STRING KEY FROM THE BUNDLE passed 
 		    	Bundle b = getArguments();
 		    	String date = b.getString("date");
@@ -75,7 +75,7 @@ public class EventDisplayFragment extends SherlockFragment {
 		     		setHasOptionsMenu(true);
 		            
 		            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		           
 		        return view;
 		    }
 		

@@ -35,6 +35,7 @@ public class EventDetailFragment extends SherlockFragment {
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	            Bundle savedInstanceState) {
 		 	Bundle b = getArguments();
+		 	getActivity().setTitle("Content");
 		 	//Get the details of event from bundle
 	    	String evtitle = b.getString("title");
 	    	String evdesc = b.getString("desc");
@@ -51,6 +52,8 @@ public class EventDetailFragment extends SherlockFragment {
 			date_time.setText(evdate + " - " + evtime);
 			desc.setText(evdesc);
 			location.setText(evlocation);  
+			
+			 
 			
 		return view;
 	 }

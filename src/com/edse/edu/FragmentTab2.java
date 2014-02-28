@@ -41,7 +41,7 @@ public class FragmentTab2 extends SherlockFragment
 		else if(MainActivity.selectedFrag == 1)
 		{
 			//call method to handle actions when Calendar fragment 1st tab
-			
+			getActivity().setTitle("Calendar");
 			view = inflater.inflate(R.layout.article_display, container, false);
 			 ArrayList<String> eventTitles = new ArrayList<String>();
 	            ArrayList<String> eventDates = new ArrayList<String>();
@@ -115,7 +115,7 @@ public class FragmentTab2 extends SherlockFragment
 		//Most of this section will be different in the final version of the app. Right now this is
 		//hard coded somewhat like the other section for client UI viewing purposes.
 	
-    	
+		getActivity().setTitle("News");
     	ArrayList<Article> recentTest = new ArrayList<Article>();
         Article recArtOne = new Article("Arctic cyclones more common than previously thought",
         		"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10-14-2013");

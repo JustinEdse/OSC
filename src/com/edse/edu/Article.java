@@ -155,6 +155,6 @@ public class Article implements Parcelable
 	@Override
 	public String toString()
 	{
-		return this.title + " " + this.type + " " + this.date;
+		return this.title;
 	}
 }

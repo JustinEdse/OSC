@@ -29,10 +29,12 @@ public class CalendarFragment extends SherlockFragment {
      
          mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
          
+         
          setHasOptionsMenu(true);
         
+        
          getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-      
+         getActivity().setTitle("Calendar");
         return view;
     }
  
