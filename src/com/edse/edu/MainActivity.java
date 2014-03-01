@@ -202,6 +202,16 @@ public class MainActivity extends SherlockFragmentActivity
 
 			}
 		}
+		
+		if(MainActivity.movesCount == 0 && selectedFrag == 1)
+		{
+			setTitle("Calendar");
+		}
+		
+		if(MainActivity.movesCount == 0 && selectedFrag == 0)
+		{
+			setTitle("News");
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -296,6 +306,7 @@ public class MainActivity extends SherlockFragmentActivity
 	@Override
 	public void onBackPressed()
 	{
+		
 		FragmentManager manager = getSupportFragmentManager();
 		if (manager.getBackStackEntryCount() > 0)
 		{
@@ -305,7 +316,6 @@ public class MainActivity extends SherlockFragmentActivity
 			manager.popBackStack();
 
 		}
-		
 		
 
 		if (mDrawerToggle.isDrawerIndicatorEnabled())
@@ -357,6 +367,16 @@ public class MainActivity extends SherlockFragmentActivity
 				mDrawerToggle.setDrawerIndicatorEnabled(true);
 			}
 			
+			if(MainActivity.movesCount == 0 && selectedFrag == 1)
+			{
+				setTitle("Calendar");
+			}
+			
+			if(MainActivity.movesCount == 0 && selectedFrag == 0)
+			{
+				setTitle("News");
+			}
+			
 		}
 		// CHANGES!!!!!!!!/////////////////////////////////
 
@@ -374,6 +394,7 @@ public class MainActivity extends SherlockFragmentActivity
 		lv.setItemChecked(0, false);
 		mDrawerLayout.openDrawer(mDrawerList);
 		mDrawerLayout.setFocusableInTouchMode(false);
+		setTitle("OSC");
 
 	}
 
