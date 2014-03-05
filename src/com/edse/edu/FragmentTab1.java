@@ -44,8 +44,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class FragmentTab1 extends SherlockFragment
 {
-	public static ArrayList<ArrayList<String>> articles = new ArrayList<ArrayList<String>>();
-	public static ArrayList<ArrayList<String>> events = new ArrayList<ArrayList<String>>();
+	public static ArrayList<Article> articles = new ArrayList<Article>();
+	public static ArrayList<Event> events = new ArrayList<Event>();
 	
 	private ListView listView = null;
 	static String categoryChosen = "";

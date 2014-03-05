@@ -8,20 +8,21 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.edse.edu.Article;
+
 import android.util.Log;
 import android.widget.Toast;
 
 public class ArticleRSSReader
 {
 	ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-	//private ArrayList<ArrayList<String>> collectArticles = new ArrayList<ArrayList<String>>();
+	
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
 	private ArrayList<String> descriptions = new ArrayList<String>();
 	private ArrayList<String> pubs = new ArrayList<String>();
-	//private String title = "title";
-	//private String link = "link";
-	//private String description = "description";
+
+	private ArrayList<Article> articles = new ArrayList<Article>();
 
 	private int countTitle = 0;
 	private int countDesc = 0;
@@ -36,22 +37,15 @@ public class ArticleRSSReader
 		this.urlString = url;
 	}
 
-	public ArrayList<String> getPub(){
-		return pubs;
+	public ArrayList<Article> getArticles(){
+		return articles;
 	}
-	public ArrayList<String> getTitle(){
-	 return titles;
-	 }
-	 public ArrayList<String> getLink(){
-	 return links;
-	 }
-	 public ArrayList<String> getDescription(){
-	 return descriptions;
-	 }
+	
 	public void parseXMLAndStoreIt(XmlPullParser myParser)
 	{
 		
 
+		String title = null, description = null, link = null, pubDate = null;
 		int event;
 		String text = null;
 		try
@@ -75,6 +69,7 @@ public class ArticleRSSReader
 						if(countTitle > 1)
 						{
 						titles.add(text);
+						title = text;
 						}
 					}
 					else if (name.equals("link"))
@@ -84,6 +79,7 @@ public class ArticleRSSReader
 						if(countLink > 1)
 						{
 						links.add(text);
+						link = text;
 						}
 					}
 					else if (name.equals("description"))
@@ -93,16 +89,26 @@ public class ArticleRSSReader
 						if(countDesc > 1)
 						{
 						descriptions.add(text);
+						description = text;
 						}
 					}
 					else if(name.equals("pubDate"))
 					{
 						pubs.add(text);
+						pubDate = text;
 					}
 					else
 					{
 					}
 					break;
+				}
+				
+				if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
+				{
+					String type = null;
+					int image = 0;
+					Article createdArt = new Article(title, description, type, image, link, pubDate);
+					articles.add(createdArt);
 				}
 				event = myParser.next();
 			}

@@ -64,16 +64,16 @@ public class DisplayFragment extends SherlockFragment {
         	String[] hardCodedDesc = new String[]{"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection","DoE experiment to detect particles; provide clues to universe evolution"};
         	
         	ArrayList<Article> test = new ArrayList<Article>();
-            Article one = new Article("Arctic cyclones more common than previously thought",
-            		"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10/14/2013");
+            //Article one = new Article("Arctic cyclones more common than previously thought",
+            	//	"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10/14/2013");
             
-            Article two = new Article("UC's Sousa to leverage OSC to simulate neutrino behavior",
-            		"DoE experiment to detect particles; provide clues to universe evolution", "supercomputer", R.drawable.novalogo, "01/10/2014");
+           // Article two = new Article("UC's Sousa to leverage OSC to simulate neutrino behavior",
+            //		"DoE experiment to detect particles; provide clues to universe evolution", "supercomputer", R.drawable.novalogo, "01/10/2014");
             
             //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
             //myself to simulate what we might have...
-            test.add(one);
-            test.add(two);
+            //test.add(one);
+            //test.add(two);
             ArrayList<String> testTitle = new ArrayList<String>();
             ArrayList<String> testDesc = new ArrayList<String>();
             ArrayList<Integer> img = new ArrayList<Integer>();

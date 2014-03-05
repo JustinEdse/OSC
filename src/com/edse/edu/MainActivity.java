@@ -10,6 +10,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.edse.network.ArticleRSSReader;
+import com.edse.network.EventRSSReader;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -35,8 +36,8 @@ public class MainActivity extends SherlockFragmentActivity
 {
 
 	// Declare Variables
-	public static ArrayList<ArrayList<String>> articlesReturned = new ArrayList<ArrayList<String>>();
-	public static ArrayList<ArrayList<String>> eventsReturned = new ArrayList<ArrayList<String>>();
+	public static ArrayList<Article> articlesReturned = new ArrayList<Article>();
+	public static ArrayList<Event> eventsReturned = new ArrayList<Event>();
 	public static FragmentTransaction ft = null;
 	static Map<String, ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
 	static int selectedFrag = 0;
@@ -57,7 +58,7 @@ public class MainActivity extends SherlockFragmentActivity
 	private final String urlArticles = "https://www.osc.edu/press-feed";
 	private final String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
-	private com.edse.network.ArticleRSSReader eventReaderObj;
+	private EventRSSReader eventReaderObj;
 	GetArticlesFromRSS task1;
 	GetEventsFromRSS task2;
 
@@ -414,17 +415,17 @@ public class MainActivity extends SherlockFragmentActivity
 
 
 	private class GetArticlesFromRSS extends
-			AsyncTask<Void, Void, ArrayList<ArrayList<String>>>
+			AsyncTask<Void, Void, ArrayList<Article>>
 	{
 
 		//In each of these async tasks I wanted to name variables something different
 		//rather than just assigning them at run time. If the threads were called at 
 		//different times some untold conflicts might happen if the threads were running
 		//at the same time. This may just be a precaution....
-		ArrayList<ArrayList<String>> retArtList = new ArrayList<ArrayList<String>>();
+		ArrayList<Article> retArtList = new ArrayList<Article>();
 
 		@Override
-		protected ArrayList<ArrayList<String>> doInBackground(Void... v)
+		protected ArrayList<Article> doInBackground(Void... v)
 		{
 
 			// TODO Auto-generated method stub
@@ -442,15 +443,14 @@ public class MainActivity extends SherlockFragmentActivity
 
 			while (artReaderObj.parsingComplete)
 				;
-			retArtList.add(artReaderObj.getTitle());
-			retArtList.add(artReaderObj.getLink());
-			retArtList.add(artReaderObj.getDescription());
+			retArtList.addAll(artReaderObj.getArticles());
+			
 
 			return retArtList;
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<ArrayList<String>> result)
+		protected void onPostExecute(ArrayList<Article> result)
 		{
 			returnArticles(result);
 
@@ -459,17 +459,17 @@ public class MainActivity extends SherlockFragmentActivity
 	}
 
 	private class GetEventsFromRSS extends
-			AsyncTask<Void, Void, ArrayList<ArrayList<String>>>
+			AsyncTask<Void, Void, ArrayList<Event>>
 	{
 
-		ArrayList<ArrayList<String>> retEventList = new ArrayList<ArrayList<String>>();
+		ArrayList<Event> retEventList = new ArrayList<Event>();
 
 		@Override
-		protected ArrayList<ArrayList<String>> doInBackground(Void... v)
+		protected ArrayList<Event> doInBackground(Void... v)
 		{
 
 			// TODO Auto-generated method stub
-			eventReaderObj = new ArticleRSSReader(urlEvents);
+			eventReaderObj = new EventRSSReader(urlEvents);
 
 			try
 			{
@@ -483,15 +483,14 @@ public class MainActivity extends SherlockFragmentActivity
 
 			while (eventReaderObj.parsingComplete)
 				;
-			retEventList.add(eventReaderObj.getTitle());
-			retEventList.add(eventReaderObj.getLink());
-			retEventList.add(eventReaderObj.getDescription());
+			retEventList.addAll(eventReaderObj.getEvents());
+			
 
 			return retEventList;
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<ArrayList<String>> result)
+		protected void onPostExecute(ArrayList<Event> result)
 		{
 			returnEvents(result);
 
@@ -499,14 +498,14 @@ public class MainActivity extends SherlockFragmentActivity
 
 	}
 
-	public void returnArticles(ArrayList<ArrayList<String>> artList)
+	public void returnArticles(ArrayList<Article> result)
 	{
-		articlesReturned = artList;
+		articlesReturned = result;
 	}
 
-	public void returnEvents(ArrayList<ArrayList<String>> eList)
+	public void returnEvents(ArrayList<Event> result)
 	{
-		eventsReturned = eList;
+		eventsReturned = result;
 	}
 	
 	@Override

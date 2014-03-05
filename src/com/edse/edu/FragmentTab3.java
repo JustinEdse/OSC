@@ -58,12 +58,12 @@ public class FragmentTab3 extends SherlockFragment {
            
     	
     	ArrayList<Article> upcomingTest = new ArrayList<Article>();
-        Article upcomingArtOne = new Article("XSEDE HPC Monthly Workshop - Big Data",
-        		"Tuesday, February 4, 2014 - 11:00am to 5:00pm", "upcoming", R.drawable.osclogo, "01/20/2014");
+        //Article upcomingArtOne = new Article("XSEDE HPC Monthly Workshop - Big Data",
+        	//	"Tuesday, February 4, 2014 - 11:00am to 5:00pm", "upcoming", R.drawable.osclogo, "01/20/2014");
 
         //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
         //myself to simulate what we might have...
-        upcomingTest.add(upcomingArtOne);
+        //upcomingTest.add(upcomingArtOne);
         ArrayList<String> testTitle = new ArrayList<String>();
         ArrayList<String> testDesc = new ArrayList<String>();
         

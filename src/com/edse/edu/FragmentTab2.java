@@ -20,12 +20,19 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class FragmentTab2 extends SherlockFragment
 {
+	public static ArrayList<Article> articles = new ArrayList<Article>();
+	public static ArrayList<Event> events = new ArrayList<Event>();
 	ListView listViewRecent;
 	
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		
+		articles = MainActivity.articlesReturned;
+		events = MainActivity.eventsReturned;
+		
+		
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
         pagerTabStrip.setDrawFullUnderline(true);
         pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.scarlet));
@@ -116,17 +123,19 @@ public class FragmentTab2 extends SherlockFragment
 		//hard coded somewhat like the other section for client UI viewing purposes.
 	
 		getActivity().setTitle("News");
+		
+		
     	ArrayList<Article> recentTest = new ArrayList<Article>();
-        Article recArtOne = new Article("Arctic cyclones more common than previously thought",
-        		"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10-14-2013");
+        //Article recArtOne = new Article("Arctic cyclones more common than previously thought",
+        	//	"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10-14-2013");
         
-        Article recArtTwo = new Article("Simulation experts creating virtual house for healthcare training",
-        		"omputer-generated environments will alert workers to potential hazards", "supercomputer", R.drawable.nioshlogo, "01/01/2014");
+        //Article recArtTwo = new Article("Simulation experts creating virtual house for healthcare training",
+        	//	"omputer-generated environments will alert workers to potential hazards", "supercomputer", R.drawable.nioshlogo, "01/01/2014");
         
         //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
         //myself to simulate what we might have...
-        recentTest.add(recArtOne);
-        recentTest.add(recArtTwo);
+        //recentTest.add(recArtOne);
+        //recentTest.add(recArtTwo);
         ArrayList<String> testTitle = new ArrayList<String>();
         ArrayList<String> testDesc = new ArrayList<String>();
         ArrayList<Integer> img = new ArrayList<Integer>();

@@ -18,6 +18,7 @@ public class Article implements Parcelable
 	private String title;
 	private String subDesc;
 	private String type;
+	private String link;
 	private int previewImage;
 	//these images will be small and so we don't have to worry about them taking up
 	//huge amounts of memory/space. They will be to the left of the article title and description on
@@ -27,16 +28,25 @@ public class Article implements Parcelable
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
 	
-	public Article(String title, String subDesc, String type, int previewImage, String date)
+	public Article(String title, String subDesc, String type, int previewImage, String link, String date)
 	{
 		this.title = title;
 		this.subDesc = subDesc;
 		this.type = type;
 		this.previewImage = previewImage;
-		
+		this.link = link;
 		
 		//format of date coming from article???
 		this.date = date;
+	}
+	
+	public String getLink()
+	{
+		return this.link;
+	}
+	public void setLink(String link)
+	{
+		this.link = link;
 	}
 	
 	public String getTitle()
