@@ -9,6 +9,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.edse.network.ArticleRSSReader;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,10 +35,12 @@ public class MainActivity extends SherlockFragmentActivity
 {
 
 	// Declare Variables
+	public static ArrayList<ArrayList<String>> articlesReturned = new ArrayList<ArrayList<String>>();
+	public static ArrayList<ArrayList<String>> eventsReturned = new ArrayList<ArrayList<String>>();
+	public static FragmentTransaction ft = null;
 	static Map<String, ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
 	static int selectedFrag = 0;
 	static int movesCount = 0;
-
 	DrawerLayout mDrawerLayout;
 	ListView mDrawerList;
 	static ActionBarDrawerToggle mDrawerToggle;
@@ -50,12 +53,21 @@ public class MainActivity extends SherlockFragmentActivity
 	private CharSequence mTitle;
 	private int backCount = 0;
 
+	// for getting rss article feed.
+	private final String urlArticles = "https://www.osc.edu/press-feed";
+	private final String urlEvents = "https://osc.edu/feeds/events/all";
+	private com.edse.network.ArticleRSSReader artReaderObj;
+	private com.edse.network.ArticleRSSReader eventReaderObj;
+	GetArticlesFromRSS task1;
+	GetEventsFromRSS task2;
+
 	// action bar
 	ActionBar actionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+
 		// Hardcoded events for calendar testing
 		Event test1 = new Event();
 		test1.addTitle("Monthly HPC Tech Talk");
@@ -95,7 +107,6 @@ public class MainActivity extends SherlockFragmentActivity
 		// this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		FontsOverride.setDefaultFont(this, "MONOSPACE", "Roboto-Light.ttf");
-		;
 
 		setContentView(R.layout.drawer_main);
 
@@ -141,17 +152,20 @@ public class MainActivity extends SherlockFragmentActivity
 			public void onDrawerClosed(View view)
 			{
 				// TODO Auto-generated method stub
+
 				setTitle(title[selectedFrag]);
 				super.onDrawerClosed(view);
 				backCount = 0;
+
 			}
 
 			public void onDrawerOpened(View drawerView)
 			{
 				// TODO Auto-generated method stub
 				// Set the title on the action when drawer open
+
 				getSupportActionBar().setTitle(mDrawerTitle);
-				//getSupportActionBar().setTitle(R.string.app_name);
+				// getSupportActionBar().setTitle(R.string.app_name);
 				super.onDrawerOpened(drawerView);
 			}
 		};
@@ -160,8 +174,12 @@ public class MainActivity extends SherlockFragmentActivity
 
 		if (savedInstanceState == null)
 		{
+
 			selectItem(0);
+			getSupportActionBar().setTitle(R.string.app_name);
+
 		}
+
 	}
 
 	@Override
@@ -174,8 +192,7 @@ public class MainActivity extends SherlockFragmentActivity
 			if (mDrawerLayout.isDrawerOpen(mDrawerList))
 			{
 				mDrawerLayout.closeDrawer(mDrawerList);
-				
-				
+
 				backCount = 0;
 			}
 			else
@@ -202,13 +219,13 @@ public class MainActivity extends SherlockFragmentActivity
 
 			}
 		}
-		
-		if(MainActivity.movesCount == 0 && selectedFrag == 1)
+
+		if (MainActivity.movesCount == 0 && selectedFrag == 1)
 		{
 			setTitle("Calendar");
 		}
-		
-		if(MainActivity.movesCount == 0 && selectedFrag == 0)
+
+		if (MainActivity.movesCount == 0 && selectedFrag == 0)
 		{
 			setTitle("News");
 		}
@@ -235,7 +252,7 @@ public class MainActivity extends SherlockFragmentActivity
 		// fragments easily.
 		selectedFrag = position;
 
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft = getSupportFragmentManager().beginTransaction();
 		// Locate Position
 		FragmentManager manager = getSupportFragmentManager();
 		// new fragment replaces older material.
@@ -267,17 +284,27 @@ public class MainActivity extends SherlockFragmentActivity
 			}
 			ft.replace(R.id.content_frame, fragment2);
 			break;
+
 		}
 
+		//Bundle passedRSSReturns = new Bundle();
+
+		// THANK GOD ARRAYLISTS ARE EASILY SERIALIZABLE
+		//if (selectedFrag == 0)
+		//{
+		//	passedRSSReturns.putSerializable("articles", articlesReturned);
+		//}
+		//else if (selectedFrag == 1)
+		//{
+		//	passedRSSReturns.putSerializable("events", eventsReturned);
+		//}
 		ft.commit();
 
 		mDrawerList.setItemChecked(position, true);
 
-		// Get the title followed by the position
-		setTitle(title[position]);
-
 		// Close drawer
 		mDrawerLayout.closeDrawer(mDrawerList);
+
 	}
 
 	@Override
@@ -285,6 +312,7 @@ public class MainActivity extends SherlockFragmentActivity
 	{
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
+
 		mDrawerToggle.syncState();
 	}
 
@@ -299,14 +327,16 @@ public class MainActivity extends SherlockFragmentActivity
 	@Override
 	public void setTitle(CharSequence title)
 	{
+
 		mTitle = title;
+
 		getSupportActionBar().setTitle(mTitle);
 	}
 
 	@Override
 	public void onBackPressed()
 	{
-		
+
 		FragmentManager manager = getSupportFragmentManager();
 		if (manager.getBackStackEntryCount() > 0)
 		{
@@ -316,7 +346,6 @@ public class MainActivity extends SherlockFragmentActivity
 			manager.popBackStack();
 
 		}
-		
 
 		if (mDrawerToggle.isDrawerIndicatorEnabled())
 		{
@@ -357,31 +386,129 @@ public class MainActivity extends SherlockFragmentActivity
 			// navigation
 			// drawer doesn't take place.
 		}
-		else 
+		else
 		{
-			
+
 			MainActivity.movesCount--;
-			
-			if(MainActivity.movesCount == 0)
+
+			if (MainActivity.movesCount == 0)
 			{
 				mDrawerToggle.setDrawerIndicatorEnabled(true);
 			}
-			
-			if(MainActivity.movesCount == 0 && selectedFrag == 1)
+
+			if (MainActivity.movesCount == 0 && selectedFrag == 1)
 			{
 				setTitle("Calendar");
 			}
-			
-			if(MainActivity.movesCount == 0 && selectedFrag == 0)
+
+			if (MainActivity.movesCount == 0 && selectedFrag == 0)
 			{
 				setTitle("News");
 			}
-			
+
 		}
 		// CHANGES!!!!!!!!/////////////////////////////////
 
 	}
 
+
+
+	private class GetArticlesFromRSS extends
+			AsyncTask<Void, Void, ArrayList<ArrayList<String>>>
+	{
+
+		//In each of these async tasks I wanted to name variables something different
+		//rather than just assigning them at run time. If the threads were called at 
+		//different times some untold conflicts might happen if the threads were running
+		//at the same time. This may just be a precaution....
+		ArrayList<ArrayList<String>> retArtList = new ArrayList<ArrayList<String>>();
+
+		@Override
+		protected ArrayList<ArrayList<String>> doInBackground(Void... v)
+		{
+
+			// TODO Auto-generated method stub
+			artReaderObj = new ArticleRSSReader(urlArticles);
+
+			try
+			{
+				artReaderObj.fetchXML();
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			while (artReaderObj.parsingComplete)
+				;
+			retArtList.add(artReaderObj.getTitle());
+			retArtList.add(artReaderObj.getLink());
+			retArtList.add(artReaderObj.getDescription());
+
+			return retArtList;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<ArrayList<String>> result)
+		{
+			returnArticles(result);
+
+		}
+
+	}
+
+	private class GetEventsFromRSS extends
+			AsyncTask<Void, Void, ArrayList<ArrayList<String>>>
+	{
+
+		ArrayList<ArrayList<String>> retEventList = new ArrayList<ArrayList<String>>();
+
+		@Override
+		protected ArrayList<ArrayList<String>> doInBackground(Void... v)
+		{
+
+			// TODO Auto-generated method stub
+			eventReaderObj = new ArticleRSSReader(urlEvents);
+
+			try
+			{
+				eventReaderObj.fetchXML();
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			while (eventReaderObj.parsingComplete)
+				;
+			retEventList.add(eventReaderObj.getTitle());
+			retEventList.add(eventReaderObj.getLink());
+			retEventList.add(eventReaderObj.getDescription());
+
+			return retEventList;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<ArrayList<String>> result)
+		{
+			returnEvents(result);
+
+		}
+
+	}
+
+	public void returnArticles(ArrayList<ArrayList<String>> artList)
+	{
+		articlesReturned = artList;
+	}
+
+	public void returnEvents(ArrayList<ArrayList<String>> eList)
+	{
+		eventsReturned = eList;
+	}
+	
 	@Override
 	public void onStart()
 	{
@@ -390,12 +517,40 @@ public class MainActivity extends SherlockFragmentActivity
 		// This is similar to many apps already on the market.
 
 		super.onStart();
+		
+		//executing tasks/calls to the article and event RSS readers.
+		//possibility of moving these task calls to splash screen activity? Would be weird to call async methods from 
+		//fragments to the splash screen though. I also guess that splash activity's life would be over after the 3 seconds...
+		task1 = new GetArticlesFromRSS();
+		//task2 = new GetEventsFromRSS();
+		
+		
+		task1.execute();
+		//task2.execute();
+		
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
-		mDrawerLayout.openDrawer(mDrawerList);
-		mDrawerLayout.setFocusableInTouchMode(false);
-		setTitle("OSC");
 
+		
+		mDrawerLayout.openDrawer(mDrawerList);
+		setTitle("OSC");
+		mDrawerLayout.setFocusableInTouchMode(false);
+
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+		//task1 = new GetArticlesFromRSS();
+		//task2 = new GetEventsFromRSS();
+		
+		//task1.execute();
+		//task2.execute();
+		
+		//check articles and events returned. compare with entries already in SQLite. 
+		//Delete the X oldest things in the table if there are new updates from either RSS feed.....
 	}
 
 }

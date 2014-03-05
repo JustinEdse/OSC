@@ -18,7 +18,10 @@
       android:theme="@style/Theme.MyTheme"
    
         >
-        <activity android:name="com.edse.edu.MainActivity" 
+        <activity android:name="com.edse.edu.SplashActivity" 
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +29,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="com.edse.edu.MainActivity"
+            android:label="@string/app_name"
+         
+        /> 
+            
         <activity android:name="com.edse.edu.ArticleDisplay" >
         </activity>
         <activity android:name="com.edse.edu.Test" >
@@ -38,6 +48,8 @@
             android:name="com.edse.edu.CalendarViewFragment"
             android:label="@string/title_activity_calendar_view_fragment" >
         </activity>
+        
+         
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

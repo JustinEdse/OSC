@@ -44,6 +44,9 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class FragmentTab1 extends SherlockFragment
 {
+	public static ArrayList<ArrayList<String>> articles = new ArrayList<ArrayList<String>>();
+	public static ArrayList<ArrayList<String>> events = new ArrayList<ArrayList<String>>();
+	
 	private ListView listView = null;
 	static String categoryChosen = "";
     View view = null;
@@ -51,6 +54,11 @@ public class FragmentTab1 extends SherlockFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		
+		//get lists from main activity...
+		articles = MainActivity.articlesReturned;
+		events = MainActivity.eventsReturned;
+		
 		// Get the view from fragmenttab1.xml
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
         pagerTabStrip.setDrawFullUnderline(true);
@@ -66,6 +74,15 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
+			
+			//we can find out some way to highlight days on the caldendar by using the event list 
+			//that we got from the MainActivity. We can iterate through it and get the dates for each event
+			//and then go from there.. Just an idea...Who would have thought getting the dates of the articles
+			//would have been easier than highlighting days on the calendar.
+			
+			
+			
+			
 			getActivity().setTitle("Calendar");
 			//call method to handle actions when Calendar fragment 1st tab
 			view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
@@ -109,6 +126,7 @@ public class FragmentTab1 extends SherlockFragment
 			});
 			
 		}
+		
 		return view;
 	}
 	  
@@ -181,13 +199,17 @@ public class FragmentTab1 extends SherlockFragment
 					break;
 				}
 				
-				//make call to client component to interaction with network.
-				ArrayList<Article> articlesInList = new ArrayList<Article>();
-				articlesInList = ClientCompnt.getArticlesByType(type);
+				
+				
 				
 				//we now have articles in the list that are the same category the user chose.
 				 
 				categoryChosen = type;
+				//iterate through the list to see which type of article type is needed...
+				
+				
+				
+				
 				
 				
 				////////////CHANGES HERE////////////////////////////////
