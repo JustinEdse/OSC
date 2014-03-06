@@ -103,13 +103,26 @@ public class ArticleRSSReader
 					break;
 				}
 				
+				if(titles.size() > 0 && links.size() > 0 && descriptions.size() > 0 && pubs.size() > 0)
+				{
 				if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
 				{
-					String type = null;
+					String type = "unknown";
 					int image = 0;
 					Article createdArt = new Article(title, description, type, image, link, pubDate);
 					articles.add(createdArt);
+					
+				titles.clear();
+				links.clear();
+				descriptions.clear();
+				pubs.clear();
+					
 				}
+				
+				
+				}
+				
+				
 				event = myParser.next();
 			}
 			parsingComplete = false;
@@ -160,5 +173,11 @@ public class ArticleRSSReader
 					e.printStackTrace();
 				}
 			}
+	
+	public static ArrayList<Article> parseImgAndCat(ArrayList<Article> arts)
+	{
+		return arts;
+		
+	}
 	
 }

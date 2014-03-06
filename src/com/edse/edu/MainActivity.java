@@ -16,6 +16,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -55,8 +58,8 @@ public class MainActivity extends SherlockFragmentActivity
 	private int backCount = 0;
 
 	// for getting rss article feed.
-	private final String urlArticles = "https://www.osc.edu/press-feed";
-	private final String urlEvents = "https://osc.edu/feeds/events/all";
+	private String urlArticles = "https://www.osc.edu/press-feed";
+	private String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private EventRSSReader eventReaderObj;
 	GetArticlesFromRSS task1;
@@ -417,13 +420,32 @@ public class MainActivity extends SherlockFragmentActivity
 	private class GetArticlesFromRSS extends
 			AsyncTask<Void, Void, ArrayList<Article>>
 	{
-
+		private ProgressDialog dialog = null;
+		ArrayList<Article> retArtList = new ArrayList<Article>();
+		private Context context;
+		
+		public GetArticlesFromRSS() {
+	        context = MainActivity.this;
+	        dialog = new ProgressDialog(context);
+	    }
+		
+		
+		
+		
+		
 		//In each of these async tasks I wanted to name variables something different
 		//rather than just assigning them at run time. If the threads were called at 
 		//different times some untold conflicts might happen if the threads were running
 		//at the same time. This may just be a precaution....
-		ArrayList<Article> retArtList = new ArrayList<Article>();
-
+		
+		protected void onPreExecute()
+		{
+			this.dialog.setMessage("Progress start");
+			this.dialog.show();
+		}
+		
+		
+		
 		@Override
 		protected ArrayList<Article> doInBackground(Void... v)
 		{
@@ -452,7 +474,18 @@ public class MainActivity extends SherlockFragmentActivity
 		@Override
 		protected void onPostExecute(ArrayList<Article> result)
 		{
+			
 			returnArticles(result);
+			if(dialog.isShowing()){
+				dialog.dismiss();
+			}
+			
+			if (MainActivity.articlesReturned.size() > 0){
+				Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+			}
+			else{
+				Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+			}
 
 		}
 
@@ -525,6 +558,7 @@ public class MainActivity extends SherlockFragmentActivity
 		
 		
 		task1.execute();
+		
 		//task2.execute();
 		
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);

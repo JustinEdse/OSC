@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class EventRSSReader
 {
-	
+	ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
 	
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
@@ -104,15 +104,26 @@ public class EventRSSReader
 					break;
 				}
 				
+				if(titles.size() > 0 && links.size() > 0 && descriptions.size() > 0 && pubs.size() > 0)
+				{
 				if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
 				{
-					String type = null;
-					int image = 0;
-					
-					//name,desc,date,location. still work in progress......location field???????????
-					Event createdEvent = new Event(title, description, pubDate, link);
+					String type = "unknown";
+					//int image = 0;
+					Event createdEvent = new Event(title, description, type, link);
 					events.add(createdEvent);
+					
+				titles.clear();
+				links.clear();
+				descriptions.clear();
+				pubs.clear();
+					
 				}
+				
+				
+				}
+				
+				
 				event = myParser.next();
 			}
 			parsingComplete = false;
@@ -163,5 +174,11 @@ public class EventRSSReader
 					e.printStackTrace();
 				}
 			}
+	
+	public static ArrayList<Article> parseImgAndCat(ArrayList<Article> arts)
+	{
+		return arts;
+		
+	}
 	
 }
