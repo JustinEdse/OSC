@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 //import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -30,12 +32,15 @@ public class NewsFragment extends SherlockFragment {
       ;
 		// Capture listview menu item click
     
+       //here is where the 2 or 3 tabs associated with news are set.
         mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         
         setHasOptionsMenu(true);
         
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         getActivity().setTitle("News");
+        
+        Toast.makeText(getActivity().getApplicationContext(), "NEWS",Toast.LENGTH_SHORT).show();
         
         return view;
     }

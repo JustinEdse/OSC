@@ -14,23 +14,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.actionbarsherlock.app.SherlockFragment;
 
-public class FragmentTab2 extends SherlockFragment
+import com.actionbarsherlock.app.SherlockFragment;
+import com.edse.network.EventRSSReader;
+
+public class FragmentTab2 extends SherlockFragment implements ResultsListener
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
 	public static ArrayList<Event> events = new ArrayList<Event>();
+	public static View savedView;
+	public static LayoutInflater savedInflater;
+	public static ViewGroup savedContainer;
 	ListView listViewRecent;
+	
 	
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		
-		articles = MainActivity.articlesReturned;
-		events = MainActivity.eventsReturned;
+		savedInflater = inflater;
+		savedContainer = container;
 		
 		
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
@@ -39,6 +45,7 @@ public class FragmentTab2 extends SherlockFragment
 		// Get the view from fragmenttab2.xml
 		View view = inflater.inflate(R.layout.article_display, container, false);
 		
+		savedView = view;
 		if(MainActivity.selectedFrag == 0)
 		{
 		  //should call a method to handle News fragment recent 2nd tab
@@ -114,7 +121,13 @@ public class FragmentTab2 extends SherlockFragment
 	     		});
 			
 		}
+		
+		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
+		task.setOnResultsListener(this);
+		task.execute();
 		return view;
+		
+		
 	}
 	
 	public void NewsTabRecent(View view, LayoutInflater inflater, ViewGroup container)
@@ -122,7 +135,10 @@ public class FragmentTab2 extends SherlockFragment
 		//Most of this section will be different in the final version of the app. Right now this is
 		//hard coded somewhat like the other section for client UI viewing purposes.
 	
+		
 		getActivity().setTitle("News");
+		
+		
 		
 		
     	
@@ -170,25 +186,14 @@ public class FragmentTab2 extends SherlockFragment
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				WebFragment webFrag = new WebFragment();
 				String url = "";
-				//switch(position)
-				//{
-				//case 0:
-					//url = "https://www.osc.edu/press/arctic_cyclones_more_common_than_previously_thought";
-				    //break;
-				//case 1:
-					//url = "https://www.osc.edu/press/simulation_experts_creating_virtual_house_for_healthcare_training";
-					//break;
-				//default:
-					//url = "http://www.google.com";
-					//break;
-					
-				//}
+				
+				//get the url from each article
 				for(int i = 0; i < articles.size(); i++)
 				{
 					url = articles.get(position).getLink();
 				}
 				
-				// making a bundle and passing setting these arguments so another fragment can recieve them.
+				// making a bundle and passing setting these arguments so another fragment can receive them.
 				// This is very similar with making a bundle and passing it to another activity via an
 				// intent.
 				 MainActivity.movesCount++;
@@ -208,6 +213,26 @@ public class FragmentTab2 extends SherlockFragment
  		});
    
 	}
+
+	@Override
+	public void onResultSuccess(ArrayList<Article> result)
+	{
+		articles = result;
+		NewsTabRecent(savedView, savedInflater, savedContainer);
+		
+	}
+
+	@Override
+	public void onResultFail(int resultCode, String errorMessage)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+	
 	 
 	
 	

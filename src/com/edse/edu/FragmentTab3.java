@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -24,6 +25,9 @@ public class FragmentTab3 extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	
+    	
+    	
         // Get the view from fragmenttab2.xml
     	PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity().findViewById(R.id.pagerTabStrip);
         pagerTabStrip.setDrawFullUnderline(true);

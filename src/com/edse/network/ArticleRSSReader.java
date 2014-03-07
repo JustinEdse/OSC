@@ -1,9 +1,12 @@
 package com.edse.network;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -103,13 +106,16 @@ public class ArticleRSSReader
 					break;
 				}
 				
+				
+				//MAX SIZE OF THESE ARRAYLISTS WILL ALWAYS BE SIZE OF 1.
 				if(titles.size() > 0 && links.size() > 0 && descriptions.size() > 0 && pubs.size() > 0)
 				{
 				if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
 				{
+					String subDesc = ArticleRSSReader.parseSubDesc(descriptions.get(0));
 					String type = "unknown";
 					int image = 0;
-					Article createdArt = new Article(title, description, type, image, link, pubDate);
+					Article createdArt = new Article(title, subDesc, type, image, link, pubDate);
 					articles.add(createdArt);
 					
 				titles.clear();
@@ -125,11 +131,11 @@ public class ArticleRSSReader
 				
 				event = myParser.next();
 			}
+			
+			
 			parsingComplete = false;
 
-			//collectArticles.add(titles);
-			//collectArticles.add(descriptions);
-			//collectArticles.add(links);
+			
 			
 			
 			
@@ -143,7 +149,7 @@ public class ArticleRSSReader
 	
 	}
 
-	public void fetchXML() throws InterruptedException
+	public void fetchXML() throws InterruptedException, IOException
 	{
 		
 		
@@ -170,13 +176,31 @@ public class ArticleRSSReader
 				}
 				catch (Exception e)
 				{
+					parsingComplete = false;
 					e.printStackTrace();
+					throw new IOException();
 				}
+				
+					
+				
 			}
 	
-	public static ArrayList<Article> parseImgAndCat(ArrayList<Article> arts)
+	public static String parseSubDesc(String desc)
 	{
-		return arts;
+		
+		;
+		String temp = "";
+		String arr[] = new String[]{};
+		String modified[] = new String[]{};
+		
+		arr = desc.split("<p>");
+		temp = arr[0];
+		modified = temp.split("</p>");
+		String finalStr = modified[0].replaceAll("</p>"," ").trim();
+		
+		
+		return finalStr;
+		
 		
 	}
 	

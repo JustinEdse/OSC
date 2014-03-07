@@ -55,6 +55,7 @@ public class FragmentTab1 extends SherlockFragment
 			Bundle savedInstanceState)
 	{
 		
+		
 		//get lists from main activity...
 		articles = MainActivity.articlesReturned;
 		events = MainActivity.eventsReturned;

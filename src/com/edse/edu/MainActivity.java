@@ -1,9 +1,11 @@
 package com.edse.edu;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -11,6 +13,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.edse.network.ArticleRSSReader;
 import com.edse.network.EventRSSReader;
+
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +30,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -56,13 +60,16 @@ public class MainActivity extends SherlockFragmentActivity
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private int backCount = 0;
+	private static final String NEWSFRAG = "News";
+	private static final String CALFRAG = "Calendar";
 
 	// for getting rss article feed.
 	private String urlArticles = "https://www.osc.edu/press-feed";
 	private String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private EventRSSReader eventReaderObj;
-	GetArticlesFromRSS task1;
+	public static Context globalTHIS =null;
+	
 	GetEventsFromRSS task2;
 
 	// action bar
@@ -71,7 +78,11 @@ public class MainActivity extends SherlockFragmentActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-
+        
+		globalTHIS = this;
+		
+		
+		
 		// Hardcoded events for calendar testing
 		Event test1 = new Event();
 		test1.addTitle("Monthly HPC Tech Talk");
@@ -183,7 +194,8 @@ public class MainActivity extends SherlockFragmentActivity
 			getSupportActionBar().setTitle(R.string.app_name);
 
 		}
-
+		
+		
 	}
 
 	@Override
@@ -277,7 +289,7 @@ public class MainActivity extends SherlockFragmentActivity
 			{
 				manager.popBackStack();
 			}
-			ft.replace(R.id.content_frame, fragment1);
+			ft.replace(R.id.content_frame, fragment1, NEWSFRAG);
 
 			break;
 		case 1:// calendar
@@ -286,22 +298,12 @@ public class MainActivity extends SherlockFragmentActivity
 			{
 				manager.popBackStack();
 			}
-			ft.replace(R.id.content_frame, fragment2);
+			ft.replace(R.id.content_frame, fragment2, CALFRAG);
 			break;
 
 		}
 
-		//Bundle passedRSSReturns = new Bundle();
-
-		// THANK GOD ARRAYLISTS ARE EASILY SERIALIZABLE
-		//if (selectedFrag == 0)
-		//{
-		//	passedRSSReturns.putSerializable("articles", articlesReturned);
-		//}
-		//else if (selectedFrag == 1)
-		//{
-		//	passedRSSReturns.putSerializable("events", eventsReturned);
-		//}
+		
 		ft.commit();
 
 		mDrawerList.setItemChecked(position, true);
@@ -417,79 +419,7 @@ public class MainActivity extends SherlockFragmentActivity
 
 
 
-	private class GetArticlesFromRSS extends
-			AsyncTask<Void, Void, ArrayList<Article>>
-	{
-		private ProgressDialog dialog = null;
-		ArrayList<Article> retArtList = new ArrayList<Article>();
-		private Context context;
-		
-		public GetArticlesFromRSS() {
-	        context = MainActivity.this;
-	        dialog = new ProgressDialog(context);
-	    }
-		
-		
-		
-		
-		
-		//In each of these async tasks I wanted to name variables something different
-		//rather than just assigning them at run time. If the threads were called at 
-		//different times some untold conflicts might happen if the threads were running
-		//at the same time. This may just be a precaution....
-		
-		protected void onPreExecute()
-		{
-			this.dialog.setMessage("Progress start");
-			this.dialog.show();
-		}
-		
-		
-		
-		@Override
-		protected ArrayList<Article> doInBackground(Void... v)
-		{
-
-			// TODO Auto-generated method stub
-			artReaderObj = new ArticleRSSReader(urlArticles);
-
-			try
-			{
-				artReaderObj.fetchXML();
-			}
-			catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			while (artReaderObj.parsingComplete)
-				;
-			retArtList.addAll(artReaderObj.getArticles());
-			
-
-			return retArtList;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<Article> result)
-		{
-			
-			returnArticles(result);
-			if(dialog.isShowing()){
-				dialog.dismiss();
-			}
-			
-			if (MainActivity.articlesReturned.size() > 0){
-				Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
-			}
-			else{
-				Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-			}
-
-		}
-
-	}
+	
 
 	private class GetEventsFromRSS extends
 			AsyncTask<Void, Void, ArrayList<Event>>
@@ -530,15 +460,20 @@ public class MainActivity extends SherlockFragmentActivity
 		}
 
 	}
-
+/*
 	public void returnArticles(ArrayList<Article> result)
 	{
-		articlesReturned = result;
+		MainActivity.articlesReturned = result;
+		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(NEWSFRAG);
+	    FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+	    fragTransaction.detach(currentFragment);
+	    fragTransaction.attach(currentFragment);
+	    fragTransaction.commit();
 	}
-
+*/
 	public void returnEvents(ArrayList<Event> result)
 	{
-		eventsReturned = result;
+		
 	}
 	
 	@Override
@@ -553,11 +488,11 @@ public class MainActivity extends SherlockFragmentActivity
 		//executing tasks/calls to the article and event RSS readers.
 		//possibility of moving these task calls to splash screen activity? Would be weird to call async methods from 
 		//fragments to the splash screen though. I also guess that splash activity's life would be over after the 3 seconds...
-		task1 = new GetArticlesFromRSS();
+		//task1 = new GetArticlesFromRSS();
 		//task2 = new GetEventsFromRSS();
 		
 		
-		task1.execute();
+		//task1.execute();
 		
 		//task2.execute();
 		
@@ -585,5 +520,6 @@ public class MainActivity extends SherlockFragmentActivity
 		//check articles and events returned. compare with entries already in SQLite. 
 		//Delete the X oldest things in the table if there are new updates from either RSS feed.....
 	}
+	 
 
 }
