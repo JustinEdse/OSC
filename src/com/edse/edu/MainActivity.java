@@ -14,7 +14,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.edse.network.ArticleRSSReader;
 import com.edse.network.EventRSSReader;
 
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
@@ -39,7 +38,7 @@ import android.widget.Toast;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 
-public class MainActivity extends SherlockFragmentActivity
+public class MainActivity extends SherlockFragmentActivity implements ResultsListener
 {
 
 	// Declare Variables
@@ -495,6 +494,10 @@ public class MainActivity extends SherlockFragmentActivity
 		//task1.execute();
 		
 		//task2.execute();
+
+        UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
+        task.setOnResultsListener(this);
+        task.execute();
 		
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
@@ -519,6 +522,29 @@ public class MainActivity extends SherlockFragmentActivity
 		
 		//check articles and events returned. compare with entries already in SQLite. 
 		//Delete the X oldest things in the table if there are new updates from either RSS feed.....
+	}
+
+	@Override
+	public void onResultSuccess(ArrayList<Article> result)
+	{
+		// TODO Auto-generated method stub
+		MainActivity.articlesReturned = result;
+		ArticleAdapter.done = true;
+		ArticleAdapter.artCount = result.size();
+		ArticleAdapter.savedCount = result.size();
+		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(NEWSFRAG);
+	    FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+	    fragTransaction.detach(currentFragment);
+	    fragTransaction.attach(currentFragment);
+	    fragTransaction.commit();
+		
+	}
+
+	@Override
+	public void onResultFail(int resultCode, String errorMessage)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	 
 

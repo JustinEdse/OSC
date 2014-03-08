@@ -1,11 +1,13 @@
 package com.edse.edu;
  
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -40,9 +42,9 @@ public class NewsFragment extends SherlockFragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         getActivity().setTitle("News");
         
-        Toast.makeText(getActivity().getApplicationContext(), "NEWS",Toast.LENGTH_SHORT).show();
         
         return view;
+        
     }
  
     @Override
@@ -60,6 +62,9 @@ public class NewsFragment extends SherlockFragment {
             throw new RuntimeException(e);
         }
     }
+
+
+	
     
     	
    

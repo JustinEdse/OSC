@@ -17,24 +17,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-
 import com.actionbarsherlock.app.SherlockFragment;
 import com.edse.network.EventRSSReader;
 
-public class FragmentTab2 extends SherlockFragment implements ResultsListener
+public class FragmentTab2 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
 	public static ArrayList<Event> events = new ArrayList<Event>();
 	public static View savedView;
 	public static LayoutInflater savedInflater;
 	public static ViewGroup savedContainer;
+	public static boolean done = false;
+	public static int count = 0;
 	ListView listViewRecent;
+	ArticleAdapter artAdapter;
 	
 	
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		articles = MainActivity.articlesReturned;
 		savedInflater = inflater;
 		savedContainer = container;
 		
@@ -122,9 +125,10 @@ public class FragmentTab2 extends SherlockFragment implements ResultsListener
 			
 		}
 		
-		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
-		task.setOnResultsListener(this);
-		task.execute();
+		
+		
+		
+		
 		return view;
 		
 		
@@ -134,24 +138,15 @@ public class FragmentTab2 extends SherlockFragment implements ResultsListener
 	{
 		//Most of this section will be different in the final version of the app. Right now this is
 		//hard coded somewhat like the other section for client UI viewing purposes.
-	
+	    
+	    
+		articles = MainActivity.articlesReturned;
 		
 		getActivity().setTitle("News");
 		
 		
 		
-		
-    	
-        //Article recArtOne = new Article("Arctic cyclones more common than previously thought",
-        	//	"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10-14-2013");
-        
-        //Article recArtTwo = new Article("Simulation experts creating virtual house for healthcare training",
-        	//	"omputer-generated environments will alert workers to potential hazards", "supercomputer", R.drawable.nioshlogo, "01/01/2014");
-        
-        //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
-        //myself to simulate what we might have...
-        //recentTest.add(recArtOne);
-        //recentTest.add(recArtTwo);
+		//CHECK IF NOT DONE!!!!!!!!!!!!!!!!!!!
         ArrayList<String> testTitle = new ArrayList<String>();
         ArrayList<String> testDesc = new ArrayList<String>();
         ArrayList<Integer> img = new ArrayList<Integer>();
@@ -169,11 +164,11 @@ public class FragmentTab2 extends SherlockFragment implements ResultsListener
         
         
     	
-    	
+    	artAdapter = new ArticleAdapter(getActivity().getApplicationContext(),specImg,specTitle,specDesc);
  		listViewRecent = (ListView) view.findViewById(R.id.listview);
- 		listViewRecent.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
- 				specImg,specTitle, specDesc));
-    
+ 		listViewRecent.setAdapter(artAdapter);
+		
+		
  		listViewRecent.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
@@ -214,26 +209,8 @@ public class FragmentTab2 extends SherlockFragment implements ResultsListener
    
 	}
 
-	@Override
-	public void onResultSuccess(ArrayList<Article> result)
-	{
-		articles = result;
-		NewsTabRecent(savedView, savedInflater, savedContainer);
-		
-	}
 
-	@Override
-	public void onResultFail(int resultCode, String errorMessage)
-	{
-		// TODO Auto-generated method stub
-		
-	}
 	
-	
-	
-	
-	
-	 
 	
 	
 }

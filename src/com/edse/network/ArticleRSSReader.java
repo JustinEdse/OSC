@@ -107,7 +107,7 @@ public class ArticleRSSReader
 				}
 				
 				
-				//MAX SIZE OF THESE ARRAYLISTS WILL ALWAYS BE SIZE OF 1.
+				//MAX SIZE OF THESE ARRAYLISTS WILL ALWAYS BE 1.
 				if(titles.size() > 0 && links.size() > 0 && descriptions.size() > 0 && pubs.size() > 0)
 				{
 				if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
@@ -188,15 +188,15 @@ public class ArticleRSSReader
 	public static String parseSubDesc(String desc)
 	{
 		
-		;
+		
 		String temp = "";
 		String arr[] = new String[]{};
-		String modified[] = new String[]{};
+		
 		
 		arr = desc.split("<p>");
-		temp = arr[0];
-		modified = temp.split("</p>");
-		String finalStr = modified[0].replaceAll("</p>"," ").trim();
+		temp = arr[1];
+//		modified = temp.split("</p>");
+		String finalStr = temp.replaceAll("</p>"," ").trim();
 		
 		
 		return finalStr;

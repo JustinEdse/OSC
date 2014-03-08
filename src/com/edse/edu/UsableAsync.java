@@ -64,7 +64,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 
 		while (artReaderObj.parsingComplete)
 			;
-		retArtList.addAll(artReaderObj.getArticles());
+		retArtList = artReaderObj.getArticles();
 		
 
 		return retArtList;

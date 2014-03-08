@@ -57,7 +57,7 @@ public class FragmentTab1 extends SherlockFragment
 		
 		
 		//get lists from main activity...
-		articles = MainActivity.articlesReturned;
+		
 		events = MainActivity.eventsReturned;
 		
 		// Get the view from fragmenttab1.xml
@@ -133,6 +133,8 @@ public class FragmentTab1 extends SherlockFragment
 	  
 	public void NewsTabCategories(View viewOuter, LayoutInflater inflater, ViewGroup container)
 	{
+		articles = MainActivity.articlesReturned;
+		
 		ArrayAdapter<CharSequence> catListAdapter = ArrayAdapter.createFromResource(getActivity().getBaseContext(),
 				R.array.categories, R.layout.custom_list_view);
 		

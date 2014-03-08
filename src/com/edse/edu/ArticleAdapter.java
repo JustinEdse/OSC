@@ -1,5 +1,7 @@
 package com.edse.edu;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +17,19 @@ public class ArticleAdapter extends BaseAdapter
 	Integer[] artImages;
 	String[] artTitles;
 	String[] artDesc;
+	public static boolean done = false;
+	UsableAsync taskI = new UsableAsync(context);
+	public static int artCount = 0;
+	public static int savedCount = 0;
+	
+	
 	
 	private static LayoutInflater inflater = null;
 	
 	// this ArticleAdapter constructor contains pieces of an Article object.
 	public ArticleAdapter(Context context, Integer[] specImg, String[] artTitles, String[] artDesc)
 	{
+		
 		this.context = context;
 		this.artImages = specImg;
 		this.artTitles = artTitles;
@@ -54,7 +63,7 @@ public class ArticleAdapter extends BaseAdapter
 		// Sets a view with the article's information and returns it.
 		View view = convertView;
 		 
-		if(view == null)
+		if(done == true && artCount != 0)
 		{
 			view = inflater.inflate(R.layout.article_row, null);
 			ImageView image = (ImageView) view.findViewById(R.id.list_image);
@@ -65,9 +74,15 @@ public class ArticleAdapter extends BaseAdapter
 			title.setText(artTitles[position]);
 			desc.setText(artDesc[position]);
 		
+			artCount--;
+		}
+		
+		if(artCount == 0 && done == true)
+		{
+			artCount = savedCount;
 		}
 		
 		return view;
 	}
-
+	
 }
