@@ -10,9 +10,9 @@ import android.widget.TabWidget;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
  
     // Declare the number of ViewPager pages or tabs.
-    final int ARTICLE_PAGE_COUNT = 3;
+    final int ARTICLE_PAGE_COUNT = 2;
     final int EVENT_PAGE_COUNT = 2;
-    private String newstitles[] = new String[] { "CATEGORIES", "RECENT", "UPCOMING" };
+    private String newstitles[] = new String[] { "CATEGORIES", "RECENT"};
     private String calendartitles[] = new String[] {"FULL CALENDAR", "ALL EVENTS"};
     
    
@@ -38,9 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             FragmentTab2 fragmenttab2 = new FragmentTab2();
             return fragmenttab2;
             
-        case 2:
-        	FragmentTab3 fragmenttab3 = new FragmentTab3();
-        	return fragmenttab3;
+        
         }
         
         
