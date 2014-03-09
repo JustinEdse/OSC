@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -76,7 +77,7 @@ public class DisplayFragment extends SherlockFragment {
             //test.add(two);
             ArrayList<String> testTitle = new ArrayList<String>();
             ArrayList<String> testDesc = new ArrayList<String>();
-            ArrayList<Integer> img = new ArrayList<Integer>();
+            ArrayList<Bitmap> img = new ArrayList<Bitmap>();
             
             for(Article art : test)
             {
@@ -87,7 +88,7 @@ public class DisplayFragment extends SherlockFragment {
             
             String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
             String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
-            Integer[] specImg = img.toArray(new Integer[img.size()]);
+            Bitmap[] specImg = img.toArray(new Bitmap[img.size()]);
             
             
         	

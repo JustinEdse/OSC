@@ -1,14 +1,14 @@
 package com.edse.edu;
 
 import java.util.Date;
-
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 //import javax.imageio.ImageIO;
 
+
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,7 +19,7 @@ public class Article implements Parcelable
 	private String subDesc;
 	private String type;
 	private String link;
-	private int previewImage;
+	private Bitmap previewImage;
 	//these images will be small and so we don't have to worry about them taking up
 	//huge amounts of memory/space. They will be to the left of the article title and description on
 	//the article previews.
@@ -28,12 +28,12 @@ public class Article implements Parcelable
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
 	
-	public Article(String title, String subDesc, String type, int previewImage, String link, String date)
+	public Article(String title, String subDesc, String type, Bitmap bitmap, String link, String date)
 	{
 		this.title = title;
 		this.subDesc = subDesc;
 		this.type = type;
-		this.previewImage = previewImage;
+		this.previewImage = bitmap;
 		this.link = link;
 		
 		//format of date coming from article???
@@ -77,11 +77,11 @@ public class Article implements Parcelable
 		this.type = type;
 	}
 	
-	public int getPreviewImage()
+	public Bitmap getPreviewImage()
 	{
 		return this.previewImage;
 	}
-	public void setPreviewImage(int previewImage)
+	public void setPreviewImage(Bitmap previewImage)
 	{
 		this.previewImage = previewImage;
 	}
@@ -135,7 +135,7 @@ public class Article implements Parcelable
 		dest.writeString(title);
 		dest.writeString(subDesc);
 		dest.writeString(type);
-		dest.writeInt(previewImage);
+		dest.writeValue(previewImage);
 		dest.writeString(date);
 		
 	}
@@ -144,7 +144,7 @@ public class Article implements Parcelable
 		this.title = in.readString();
 		this.subDesc = in.readString();
 		this.type = in.readString();
-		this.previewImage = in.readInt();
+		this.previewImage = in.readParcelable(Bitmap.class.getClassLoader());
 		this.date = in.readString();
 	}
 	

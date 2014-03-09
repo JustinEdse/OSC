@@ -13,7 +13,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.edse.edu.Article;
+import com.edse.edu.MainActivity;
 
+import android.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -125,16 +127,18 @@ public class ArticleRSSReader
 						String subDesc = ArticleRSSReader
 								.parseSubDesc(descriptions.get(0));
 						Bitmap bitmap = ArticleRSSReader.parseForImg(descriptions.get(0));
+						
 						String type = "unknown";
-						int image = 0;
+						
 						Article createdArt = new Article(title, subDesc, type,
-								image, link, pubDate);
+								bitmap, link, pubDate);
 						articles.add(createdArt);
-
+						
 						titles.clear();
 						links.clear();
 						descriptions.clear();
 						pubs.clear();
+						System.gc();
 
 					}
 
@@ -200,19 +204,36 @@ public class ArticleRSSReader
 
 	}
 
-	public static Bitmap parseForImg(String desc)
+	public static Bitmap parseForImg(String desc) throws IOException
 	{
+		
+		
 		Document doc = Jsoup.parse(desc);
+		
 		Elements images = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
 		String imgURL = "";
+		Bitmap img = null;
 
+		if(images.size() > 0){
 		for (Element image : images)
 		{
 			imgURL = image.attr("src");
 			break;
 		}
+		}
+		else
+		{
+			//in the event there is no image related to a description in the rss feed, just display
+			//the osc logo for now...
+			InputStream inputS = MainActivity.globalTHIS.getResources().getAssets().open("osclogo.png");
+			img = BitmapFactory.decodeStream(inputS);
+			//no need to grab image from url, just return 
+			return img;
+			
+		}
 
-		Bitmap img = ArticleRSSReader.grabImgFromURL(imgURL);
+		String editedImgURL = imgURL.replace("/sites/", "https://www.").trim();
+		img = ArticleRSSReader.grabImgFromURL(editedImgURL);
 		
 		return img;
 
@@ -221,7 +242,7 @@ public class ArticleRSSReader
 	public static Bitmap grabImgFromURL(String imageURLLoc)
 	{
 		URL imageURL = null;
-		Bitmap bitmap = null;
+		Bitmap resizedBit = null;
 
 		try
 		{
@@ -241,9 +262,17 @@ public class ArticleRSSReader
 			connection.connect();
 			InputStream inputStream = connection.getInputStream();
 
-			bitmap = BitmapFactory.decodeStream(inputStream);// Convert to
+			//bitmap = BitmapFactory.decodeStream(inputStream);// Convert to
 																// bitmap
 			// image_view.setImageBitmap(bitmap);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 8;
+			options.inPurgeable = true;
+			
+			
+			resizedBit = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream,null,options), 100, 100, false);
+			
+			
 		}
 		catch (IOException e)
 		{
@@ -251,7 +280,7 @@ public class ArticleRSSReader
 			e.printStackTrace();
 		}
 		
-		return bitmap;
+		return resizedBit;
 	}
 
 }

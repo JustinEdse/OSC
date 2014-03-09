@@ -3,6 +3,7 @@ package com.edse.edu;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -72,7 +73,7 @@ public class FragmentTab3 extends SherlockFragment {
         ArrayList<String> testDesc = new ArrayList<String>();
         
         //Later we need to check if there is an image when getting from the server. If not then just assign the generic OSC logo.
-        ArrayList<Integer> img = new ArrayList<Integer>();
+        ArrayList<Bitmap> img = new ArrayList<Bitmap>();
         
         for(Article art : upcomingTest)
         {
@@ -83,7 +84,7 @@ public class FragmentTab3 extends SherlockFragment {
         
         String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
         String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
-        Integer[] specImg = img.toArray(new Integer[img.size()]);
+        Bitmap[] specImg = img.toArray(new Bitmap[img.size()]);
         
         
         

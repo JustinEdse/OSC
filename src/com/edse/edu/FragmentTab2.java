@@ -3,6 +3,7 @@ package com.edse.edu;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -149,7 +150,7 @@ public class FragmentTab2 extends SherlockFragment
 		//CHECK IF NOT DONE!!!!!!!!!!!!!!!!!!!
         ArrayList<String> testTitle = new ArrayList<String>();
         ArrayList<String> testDesc = new ArrayList<String>();
-        ArrayList<Integer> img = new ArrayList<Integer>();
+        ArrayList<Bitmap> img = new ArrayList<Bitmap>();
         
         for(Article art : articles)
         {
@@ -160,7 +161,7 @@ public class FragmentTab2 extends SherlockFragment
         
         String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
         String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
-        Integer[] specImg = img.toArray(new Integer[img.size()]);
+        Bitmap[] specImg = img.toArray(new Bitmap[img.size()]);
         
         
     	

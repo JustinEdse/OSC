@@ -3,6 +3,7 @@ package com.edse.edu;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class ArticleAdapter extends BaseAdapter
 {
 
 	Context context;
-	Integer[] artImages;
+	Bitmap[] artImages;
 	String[] artTitles;
 	String[] artDesc;
 	public static boolean done = false;
@@ -27,7 +29,7 @@ public class ArticleAdapter extends BaseAdapter
 	private static LayoutInflater inflater = null;
 	
 	// this ArticleAdapter constructor contains pieces of an Article object.
-	public ArticleAdapter(Context context, Integer[] specImg, String[] artTitles, String[] artDesc)
+	public ArticleAdapter(Context context, Bitmap[] specImg, String[] artTitles, String[] artDesc)
 	{
 		
 		this.context = context;
@@ -70,7 +72,7 @@ public class ArticleAdapter extends BaseAdapter
 			TextView title = (TextView) view.findViewById(R.id.articletitle);
 			TextView desc = (TextView) view.findViewById(R.id.articldesc);
 			
-			image.setImageResource(artImages[position]);
+			image.setImageBitmap(artImages[position]);
 			title.setText(artTitles[position]);
 			desc.setText(artDesc[position]);
 		
