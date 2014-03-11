@@ -130,7 +130,7 @@ public class FragmentTab2 extends SherlockFragment
 		if(MainActivity.networkStatus == false)
 		{
 			//return view = inflater.inflate(R.layout.nointernet_view, container, false);
-			Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
 		}
 		
 			return view;

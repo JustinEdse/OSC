@@ -95,7 +95,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 				listener.onResultFail(1, "No Internet Connection");
 				//set xml layout to recent fragment to indicate something.
 			}
-			Toast.makeText(context, "Error, Check Network Connection.", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG).show();
 		}
 		
 	}

@@ -163,10 +163,7 @@ public class DisplayFragment extends SherlockFragment{
             
            
         //this may will be needed for first time start up of the app. Right now it looks better than just a blank screen.
-        if(MainActivity.networkStatus == false)
-        {
-        	Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-        }
+        
         
             return view;
         

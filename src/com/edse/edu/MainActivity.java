@@ -38,14 +38,15 @@ import android.widget.Toast;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 
-public class MainActivity extends SherlockFragmentActivity implements ResultsListener
+public class MainActivity extends SherlockFragmentActivity implements
+		ResultsListener
 {
 
 	// Declare Variables
 	public static ArrayList<Article> articlesReturned = new ArrayList<Article>();
 	public static ArrayList<Event> eventsReturned = new ArrayList<Event>();
 	public static FragmentTransaction ft = null;
-	
+
 	public static boolean networkStatus = false;
 	static Map<String, ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
 	static int selectedFrag = 0;
@@ -69,8 +70,8 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 	private String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private EventRSSReader eventReaderObj;
-	public static Context globalTHIS =null;
-	
+	public static Context globalTHIS = null;
+
 	GetEventsFromRSS task2;
 
 	// action bar
@@ -79,11 +80,9 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-        
+
 		globalTHIS = this;
-		
-		
-		
+
 		// Hardcoded events for calendar testing
 		Event test1 = new Event();
 		test1.addTitle("Monthly HPC Tech Talk");
@@ -183,6 +182,7 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 				getSupportActionBar().setTitle(mDrawerTitle);
 				// getSupportActionBar().setTitle(R.string.app_name);
 				super.onDrawerOpened(drawerView);
+
 			}
 		};
 
@@ -195,8 +195,7 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 			getSupportActionBar().setTitle(R.string.app_name);
 
 		}
-		
-		
+
 	}
 
 	@Override
@@ -304,7 +303,6 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 
 		}
 
-		
 		ft.commit();
 
 		mDrawerList.setItemChecked(position, true);
@@ -414,13 +412,8 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 			}
 
 		}
-		// CHANGES!!!!!!!!/////////////////////////////////
 
 	}
-
-
-
-	
 
 	private class GetEventsFromRSS extends
 			AsyncTask<Void, Void, ArrayList<Event>>
@@ -448,7 +441,6 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 			while (eventReaderObj.parsingComplete)
 				;
 			retEventList.addAll(eventReaderObj.getEvents());
-			
 
 			return retEventList;
 		}
@@ -464,9 +456,9 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 
 	public void returnEvents(ArrayList<Event> result)
 	{
-		
+
 	}
-	
+
 	@Override
 	public void onStart()
 	{
@@ -475,76 +467,83 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 		// This is similar to many apps already on the market.
 
 		super.onStart();
-		
-		//executing tasks/calls to the article and event RSS readers.
-		//possibility of moving these task calls to splash screen activity? Would be weird to call async methods from 
-		//fragments to the splash screen though. I also guess that splash activity's life would be over after the 3 seconds...
-		//task1 = new GetArticlesFromRSS();
-		//task2 = new GetEventsFromRSS();
-		
-		
-		//task1.execute();
-		
-		//task2.execute();
 
-        UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
-        task.setOnResultsListener(this);
-        task.execute();
-		
+		// executing tasks/calls to the article and event RSS readers.
+		// possibility of moving these task calls to splash screen activity?
+		// Would be weird to call async methods from
+		// fragments to the splash screen though. I also guess that splash
+		// activity's life would be over after the 3 seconds...
+		// task1 = new GetArticlesFromRSS();
+		// task2 = new GetEventsFromRSS();
+
+		// task1.execute();
+
+		// task2.execute();
+
+		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
+		task.setOnResultsListener(this);
+		task.execute();
+
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
 
-		
 		mDrawerLayout.openDrawer(mDrawerList);
-		setTitle("OSC");
+		
 		mDrawerLayout.setFocusableInTouchMode(false);
 
 	}
-	
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		
-		 //UsableAsync taskResumeArt = new UsableAsync(MainActivity.globalTHIS);
-	     //taskResumeArt.setOnResultsListener(this);
-	     //taskResumeArt.execute();
-		
-		//check articles and events returned. compare with entries already in SQLite. 
-		//Delete the X oldest things in the table if there are new updates from either RSS feed.....
+
+		// UsableAsync taskResumeArt = new UsableAsync(MainActivity.globalTHIS);
+		// taskResumeArt.setOnResultsListener(this);
+		// taskResumeArt.execute();
+
+		// check articles and events returned. compare with entries already in
+		// SQLite.
+		// Delete the X oldest things in the table if there are new updates from
+		// either RSS feed.....
 	}
 
 	@Override
 	public void onResultSuccess(ArrayList<Article> result)
 	{
 		// TODO Auto-generated method stub
-		
-		//HERE WE NEED TO COMPARE THE SIZE OF THE SQLITE TABLE WITH SIZE
-		//OF THE ARTICES RETURNED. IF THERE IS NO DIFFERENCE THEN NOTHING HAS TO BE DONE.
-		//IF THE SIZE RETURNED FROM THE RSS FEED IS GREATER WE KNOW A NEW ARTICLE HAS 
-		//BEEN PUBLISHED. SO, NEW SIZE - OLD SIZE IS THE NUMER WE NEED TO KNOW. ALSO
-		//DEPENDING ON THE CURRENT SIZE OF THE SQLITE TABLE, WE MAY NEED TO DELETE A ROW OR TWO.
-		
-		setTitle("OSC");
+
+		// HERE WE NEED TO COMPARE THE SIZE OF THE SQLITE TABLE WITH SIZE
+		// OF THE ARTICES RETURNED. IF THERE IS NO DIFFERENCE THEN NOTHING HAS
+		// TO BE DONE.
+		// IF THE SIZE RETURNED FROM THE RSS FEED IS GREATER WE KNOW A NEW
+		// ARTICLE HAS
+		// BEEN PUBLISHED. SO, NEW SIZE - OLD SIZE IS THE NUMER WE NEED TO KNOW.
+		// ALSO
+		// DEPENDING ON THE CURRENT SIZE OF THE SQLITE TABLE, WE MAY NEED TO
+		// DELETE A ROW OR TWO.
+
 		MainActivity.articlesReturned = result;
 		ArticleAdapter.done = true;
 		ArticleAdapter.artCount = result.size();
 		ArticleAdapter.savedCount = result.size();
-		
-		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(NEWSFRAG);
-	    FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
-	    fragTransaction.detach(currentFragment);
-	    fragTransaction.attach(currentFragment);
-	    fragTransaction.commit();
-		
+
+		Fragment currentFragment = getSupportFragmentManager()
+				.findFragmentByTag(NEWSFRAG);
+		FragmentTransaction fragTransaction = getSupportFragmentManager()
+				.beginTransaction();
+		fragTransaction.detach(currentFragment);
+		fragTransaction.attach(currentFragment);
+
+		fragTransaction.commit();
+
 	}
 
 	@Override
 	public void onResultFail(int resultCode, String errorMessage)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-	 
 
 }
