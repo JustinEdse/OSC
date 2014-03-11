@@ -26,14 +26,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
  
-public class DisplayFragment extends SherlockFragment {
+public class DisplayFragment extends SherlockFragment{
  
 	    //declare variables for custom list view and article previews.
 		static int selectedFrag = 0;
 	
-		
+		public static String catChosen = FragmentTab1.categoryChosen;
 		ListView displayListView;
+		ArrayList<Article> disArticles = new ArrayList<Article>();
+		public static ArrayList<Article> modifiedListArt = new ArrayList<Article>();
 
 		
     @Override
@@ -41,6 +44,17 @@ public class DisplayFragment extends SherlockFragment {
             Bundle savedInstanceState) {
     	
     	((MainActivity) getActivity()).setTitle(FragmentTab1.categoryChosen);
+    	
+    	
+    	if(MainActivity.networkStatus == false)
+ 	   {
+ 		   //get arraylist of articles from cache/SQLite and rely upon that.
+ 	   }
+ 	   else
+ 	   {
+ 		   disArticles = MainActivity.articlesReturned;
+ 	   }
+    	
     	
         View view = inflater.inflate(R.layout.article_display, container, false);
         // Locate the ViewPager in viewpager_main.xml
@@ -51,40 +65,39 @@ public class DisplayFragment extends SherlockFragment {
        // mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
      // Get the Title
      	
-        //SET LIST LAYOUT WITH MENU LIST ADAPTER. PUT ARTICLE OBJECT INFORMATION INTO THE LIST.
-
-        	//in the future an arraylist of article objects will be passed to this class. It should be iterated
-        	//through and the individual attributes need to be put into arrays so they can be passed as parameters
-        	//to the ArticleAdapter class. This arrays below were when I hard coded with arrays but I thought it
-        	//if I actually worked with an array list of Articles it would be closer to what we're actually going
-        	// to experience.
-            
-        	int[] hardCodedImages = new int[]{R.drawable.articcyclones, R.drawable.nioshlogo};
-        	
-        	String[] hardCodedTitles = new String[]{"Arctic cyclones more common than previously thought", "UC's Sousa to leverage OSC to simulate neutrino behavior"};
-        	String[] hardCodedDesc = new String[]{"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection","DoE experiment to detect particles; provide clues to universe evolution"};
-        	
-        	ArrayList<Article> test = new ArrayList<Article>();
-            //Article one = new Article("Arctic cyclones more common than previously thought",
-            	//	"Weather data at the Ohio Supercomputer Center reveals in new study hundreds of smaller storms that had previously escaped detection", "supercomputer", R.drawable.articcyclones, "10/14/2013");
-            
-           // Article two = new Article("UC's Sousa to leverage OSC to simulate neutrino behavior",
-            //		"DoE experiment to detect particles; provide clues to universe evolution", "supercomputer", R.drawable.novalogo, "01/10/2014");
-            
-            //since we don't actually have a list of Articles retrieved from the server I added these to an arraylist
-            //myself to simulate what we might have...
-            //test.add(one);
-            //test.add(two);
+        
             ArrayList<String> testTitle = new ArrayList<String>();
             ArrayList<String> testDesc = new ArrayList<String>();
             ArrayList<Bitmap> img = new ArrayList<Bitmap>();
+            //ArrayList<ArrayList<String>> type= new ArrayList<ArrayList<String>>();
             
-            for(Article art : test)
+            
+            for(Article art : disArticles)
             {
-            	testTitle.add(art.getTitle());
-            	testDesc.add(art.getsubDesc());
-            	img.add(art.getPreviewImage());
+            	
+            	
+            	
+            	//type.add(art.getType());
+            	
+            	
+            	if(art.getType().contains(catChosen))
+            	{
+            		modifiedListArt.add(art);
+            		testTitle.add(art.getTitle());
+                	testDesc.add(art.getsubDesc());
+                	img.add(art.getPreviewImage());
+            	}
+            	
+            	
+            	
+            	
+            	
             }
+            
+            //after this testTitle, testDesc, and img should have all the articles according to the category chosen.
+            
+            
+            
             
             String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
             String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
@@ -94,7 +107,10 @@ public class DisplayFragment extends SherlockFragment {
         	
         	
      		displayListView = (ListView) view.findViewById(R.id.listview);
-     		displayListView.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
+     		//set size of article count in Article Adapter now that we now how many articles are supposed
+        	//to be displayed. 
+        	ArticleAdapter.artCount = modifiedListArt.size();
+     		displayListView.setAdapter(new ArticleAdapter(0, getActivity().getApplicationContext(), 
      				specImg,specTitle, specDesc));
         
      		
@@ -111,20 +127,10 @@ public class DisplayFragment extends SherlockFragment {
 					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 					WebFragment webFrag = new WebFragment();
 					String url = "";
-					switch(position)
+					
+					for(int i = 0; i < modifiedListArt.size(); i++)
 					{
-					case 0:
-						
-						
-						url = "https://www.osc.edu/press/arctic_cyclones_more_common_than_previously_thought";
-					    break;
-					case 1:
-						url = "https://www.osc.edu/press/ucs_sousa_to_leverage_osc_to_simulate_neutrino_behavior";
-						break;
-					default:
-						url = "http://www.google.com";
-					    break;
-						
+						url = modifiedListArt.get(position).getLink();
 					}
 					
 					 
@@ -156,8 +162,14 @@ public class DisplayFragment extends SherlockFragment {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             
            
-            
-        return view;
+        //this may will be needed for first time start up of the app. Right now it looks better than just a blank screen.
+        if(MainActivity.networkStatus == false)
+        {
+        	Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+        
+            return view;
+        
     }
  
     @Override
@@ -175,6 +187,8 @@ public class DisplayFragment extends SherlockFragment {
             throw new RuntimeException(e);
         }
     }
+
+	
     
   
 }

@@ -90,8 +90,8 @@ public class FragmentTab3 extends SherlockFragment {
         
     	
  		upcomingList = (ListView) view.findViewById(R.id.listview);
- 		upcomingList.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
- 				specImg,specTitle, specDesc));
+ 		//upcomingList.setAdapter(new ArticleAdapter(getActivity().getApplicationContext(), 
+ 			//	specImg,specTitle, specDesc));
     
  		upcomingList.setOnItemClickListener(new OnItemClickListener(){
 

@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,9 +127,10 @@ public class ArticleRSSReader
 					{
 						String subDesc = ArticleRSSReader
 								.parseSubDesc(descriptions.get(0));
+						ArrayList<String> type = ArticleRSSReader.parseForType(descriptions.get(0));
 						Bitmap bitmap = ArticleRSSReader.parseForImg(descriptions.get(0));
 						
-						String type = "unknown";
+						//String type = "unknown";
 						
 						Article createdArt = new Article(title, subDesc, type,
 								bitmap, link, pubDate);
@@ -138,7 +140,8 @@ public class ArticleRSSReader
 						links.clear();
 						descriptions.clear();
 						pubs.clear();
-						System.gc();
+						
+						
 
 					}
 
@@ -207,19 +210,23 @@ public class ArticleRSSReader
 	public static Bitmap parseForImg(String desc) throws IOException
 	{
 		
-		
-		Document doc = Jsoup.parse(desc);
-		
-		Elements images = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+
+		Element image = Jsoup.parse(desc).select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
+
+		//Element image = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
 		String imgURL = "";
 		Bitmap img = null;
 
-		if(images.size() > 0){
-		for (Element image : images)
+		if(image != null)
 		{
+		
 			imgURL = image.attr("src");
-			break;
-		}
+			
+		
+		
+		String editedImgURL = imgURL.replace("/sites/", "https://www.").trim();
+		img = ArticleRSSReader.grabImgFromURL(editedImgURL);
+		
 		}
 		else
 		{
@@ -227,16 +234,15 @@ public class ArticleRSSReader
 			//the osc logo for now...
 			InputStream inputS = MainActivity.globalTHIS.getResources().getAssets().open("osclogo.png");
 			img = BitmapFactory.decodeStream(inputS);
+			inputS.close();
 			//no need to grab image from url, just return 
-			return img;
 			
+
 		}
 
-		String editedImgURL = imgURL.replace("/sites/", "https://www.").trim();
-		img = ArticleRSSReader.grabImgFromURL(editedImgURL);
 		
-		return img;
 
+		return img;
 	}
 
 	public static Bitmap grabImgFromURL(String imageURLLoc)
@@ -261,17 +267,17 @@ public class ArticleRSSReader
 			connection.setDoInput(true);
 			connection.connect();
 			InputStream inputStream = connection.getInputStream();
-
+			
 			//bitmap = BitmapFactory.decodeStream(inputStream);// Convert to
 																// bitmap
 			// image_view.setImageBitmap(bitmap);
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 8;
+			options.inSampleSize = 2;
 			options.inPurgeable = true;
 			
 			
-			resizedBit = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream,null,options), 100, 100, false);
-			
+			resizedBit = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream,null,options), 100, 100, true);
+			inputStream.close();
 			
 		}
 		catch (IOException e)
@@ -282,5 +288,35 @@ public class ArticleRSSReader
 		
 		return resizedBit;
 	}
+	
+	public static ArrayList<String> parseForType(String desc) throws IOException
+	{
+		
+
+		// TODO Auto-generated method stub
+				
+				ArrayList<String> cats = new ArrayList<String>();
+				
+
+				
+				String[] rr = new String[]{};
+				
+				rr = desc.split("datatype=\"\">");
+				
+				
+				String[] adjustedArr = Arrays.copyOfRange(rr, 1, rr.length);
+				
+				for(String individual : adjustedArr)
+				{
+					String[] fixedInd = individual.split("</a>");
+					
+					cats.add(fixedInd[0].trim());
+					
+				}
+				
+
+		return cats;
+	}
+
 
 }

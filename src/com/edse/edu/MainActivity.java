@@ -45,6 +45,8 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 	public static ArrayList<Article> articlesReturned = new ArrayList<Article>();
 	public static ArrayList<Event> eventsReturned = new ArrayList<Event>();
 	public static FragmentTransaction ft = null;
+	
+	public static boolean networkStatus = false;
 	static Map<String, ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
 	static int selectedFrag = 0;
 	static int movesCount = 0;
@@ -459,17 +461,7 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 		}
 
 	}
-/*
-	public void returnArticles(ArrayList<Article> result)
-	{
-		MainActivity.articlesReturned = result;
-		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(NEWSFRAG);
-	    FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
-	    fragTransaction.detach(currentFragment);
-	    fragTransaction.attach(currentFragment);
-	    fragTransaction.commit();
-	}
-*/
+
 	public void returnEvents(ArrayList<Event> result)
 	{
 		
@@ -514,11 +506,9 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 	{
 		super.onResume();
 		
-		//task1 = new GetArticlesFromRSS();
-		//task2 = new GetEventsFromRSS();
-		
-		//task1.execute();
-		//task2.execute();
+		 //UsableAsync taskResumeArt = new UsableAsync(MainActivity.globalTHIS);
+	     //taskResumeArt.setOnResultsListener(this);
+	     //taskResumeArt.execute();
 		
 		//check articles and events returned. compare with entries already in SQLite. 
 		//Delete the X oldest things in the table if there are new updates from either RSS feed.....
@@ -528,10 +518,19 @@ public class MainActivity extends SherlockFragmentActivity implements ResultsLis
 	public void onResultSuccess(ArrayList<Article> result)
 	{
 		// TODO Auto-generated method stub
+		
+		//HERE WE NEED TO COMPARE THE SIZE OF THE SQLITE TABLE WITH SIZE
+		//OF THE ARTICES RETURNED. IF THERE IS NO DIFFERENCE THEN NOTHING HAS TO BE DONE.
+		//IF THE SIZE RETURNED FROM THE RSS FEED IS GREATER WE KNOW A NEW ARTICLE HAS 
+		//BEEN PUBLISHED. SO, NEW SIZE - OLD SIZE IS THE NUMER WE NEED TO KNOW. ALSO
+		//DEPENDING ON THE CURRENT SIZE OF THE SQLITE TABLE, WE MAY NEED TO DELETE A ROW OR TWO.
+		
+		setTitle("OSC");
 		MainActivity.articlesReturned = result;
 		ArticleAdapter.done = true;
 		ArticleAdapter.artCount = result.size();
 		ArticleAdapter.savedCount = result.size();
+		
 		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(NEWSFRAG);
 	    FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
 	    fragTransaction.detach(currentFragment);

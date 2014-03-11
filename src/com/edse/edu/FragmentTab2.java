@@ -127,24 +127,31 @@ public class FragmentTab2 extends SherlockFragment
 		}
 		
 		
+		if(MainActivity.networkStatus == false)
+		{
+			//return view = inflater.inflate(R.layout.nointernet_view, container, false);
+			Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+		}
 		
-		
-		
-		return view;
-		
-		
+			return view;
+
 	}
 	
 	public void NewsTabRecent(View view, LayoutInflater inflater, ViewGroup container)
 	{
-		//Most of this section will be different in the final version of the app. Right now this is
-		//hard coded somewhat like the other section for client UI viewing purposes.
+		
 	    
-	    
-		articles = MainActivity.articlesReturned;
+	   if(MainActivity.networkStatus == false)
+	   {
+		   //get arraylist of articles from cache/SQLite and rely upon that.
+	   }
+	   else
+	   {
+		   articles = MainActivity.articlesReturned;
+	   }
+		
 		
 		getActivity().setTitle("News");
-		
 		
 		
 		//CHECK IF NOT DONE!!!!!!!!!!!!!!!!!!!
@@ -164,8 +171,8 @@ public class FragmentTab2 extends SherlockFragment
         Bitmap[] specImg = img.toArray(new Bitmap[img.size()]);
         
         
-    	
-    	artAdapter = new ArticleAdapter(getActivity().getApplicationContext(),specImg,specTitle,specDesc);
+    	//calling article adapter for list of articles in fragment 2.
+    	artAdapter = new ArticleAdapter(1,getActivity().getApplicationContext(),specImg,specTitle,specDesc);
  		listViewRecent = (ListView) view.findViewById(R.id.listview);
  		listViewRecent.setAdapter(artAdapter);
 		
@@ -209,9 +216,9 @@ public class FragmentTab2 extends SherlockFragment
  		});
    
 	}
-
-
 	
 	
 	
 }
+	
+	

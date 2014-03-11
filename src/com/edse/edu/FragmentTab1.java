@@ -133,7 +133,7 @@ public class FragmentTab1 extends SherlockFragment
 	  
 	public void NewsTabCategories(View viewOuter, LayoutInflater inflater, ViewGroup container)
 	{
-		articles = MainActivity.articlesReturned;
+		//articles = MainActivity.articlesReturned;
 		
 		ArrayAdapter<CharSequence> catListAdapter = ArrayAdapter.createFromResource(getActivity().getBaseContext(),
 				R.array.categories, R.layout.custom_list_view);

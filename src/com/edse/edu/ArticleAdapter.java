@@ -15,10 +15,12 @@ import android.widget.TextView;
 public class ArticleAdapter extends BaseAdapter
 {
 
-	Context context;
-	Bitmap[] artImages;
-	String[] artTitles;
-	String[] artDesc;
+	private int varyingArtNum;
+	private Context context;
+	private Bitmap[] artImages;
+	private String[] artTitles;
+	private String[] artDesc;
+	
 	public static boolean done = false;
 	UsableAsync taskI = new UsableAsync(context);
 	public static int artCount = 0;
@@ -29,15 +31,17 @@ public class ArticleAdapter extends BaseAdapter
 	private static LayoutInflater inflater = null;
 	
 	// this ArticleAdapter constructor contains pieces of an Article object.
-	public ArticleAdapter(Context context, Bitmap[] specImg, String[] artTitles, String[] artDesc)
+	public ArticleAdapter(int varyingArtNum, Context context, Bitmap[] specImg, String[] artTitles, String[] artDesc)
 	{
-		
+		this.varyingArtNum = varyingArtNum;
 		this.context = context;
 		this.artImages = specImg;
 		this.artTitles = artTitles;
 		this.artDesc = artDesc;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
+	
+	
 	@Override
 	public int getCount()
 	{
@@ -81,9 +85,20 @@ public class ArticleAdapter extends BaseAdapter
 		
 		if(artCount == 0 && done == true)
 		{
+			if(this.varyingArtNum == 0)
+			{
+				artCount = DisplayFragment.modifiedListArt.size();
+			}
+			else if(this.varyingArtNum == 1)
+			{
 			artCount = savedCount;
+			}
 		}
 		
+		/*
+		 * ArticleAdapter.artCount = result.size();
+		ArticleAdapter.savedCount = result.size();
+		 */
 		return view;
 	}
 	

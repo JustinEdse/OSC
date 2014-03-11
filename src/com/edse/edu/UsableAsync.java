@@ -48,6 +48,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 
 		try
 		{
+			
 			artReaderObj.fetchXML();
 		}
 		catch (InterruptedException e)
@@ -57,8 +58,9 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		}
 		catch(IOException ioe)
 		{
+			ioe.printStackTrace();
 			
-			cancel(true);
+			
 			
 		}
 
@@ -81,14 +83,17 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			if(listener != null)
 			{
 				listener.onResultSuccess(result);
+				MainActivity.networkStatus = true;
 			}
 			
 			Toast.makeText(context, "Ok", Toast.LENGTH_LONG).show();
 		}
 		else{
-			if(listener != null)
+			if(listener != null || result.size() == 0)
 			{
-				listener.onResultFail(1, "Error internet connection.");
+				
+				listener.onResultFail(1, "No Internet Connection");
+				//set xml layout to recent fragment to indicate something.
 			}
 			Toast.makeText(context, "Error, Check Network Connection.", Toast.LENGTH_LONG).show();
 		}

@@ -1,11 +1,13 @@
 package com.edse.edu;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 //import javax.imageio.ImageIO;
+
 
 
 import android.graphics.Bitmap;
@@ -17,7 +19,7 @@ public class Article implements Parcelable
 {
 	private String title;
 	private String subDesc;
-	private String type;
+	private ArrayList<String> type;
 	private String link;
 	private Bitmap previewImage;
 	//these images will be small and so we don't have to worry about them taking up
@@ -28,7 +30,7 @@ public class Article implements Parcelable
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
 	
-	public Article(String title, String subDesc, String type, Bitmap bitmap, String link, String date)
+	public Article(String title, String subDesc, ArrayList<String> type, Bitmap bitmap, String link, String date)
 	{
 		this.title = title;
 		this.subDesc = subDesc;
@@ -68,11 +70,11 @@ public class Article implements Parcelable
 		this.subDesc = subDesc;
 	}
 	
-	public String getType()
+	public ArrayList<String> getType()
 	{
 		return this.type;
 	}
-	public void setType(String type)
+	public void setType(ArrayList<String> type)
 	{
 		this.type = type;
 	}
@@ -134,7 +136,7 @@ public class Article implements Parcelable
 		// TODO Auto-generated method stub
 		dest.writeString(title);
 		dest.writeString(subDesc);
-		dest.writeString(type);
+		dest.writeStringList(type);
 		dest.writeValue(previewImage);
 		dest.writeString(date);
 		
@@ -143,7 +145,7 @@ public class Article implements Parcelable
 	{
 		this.title = in.readString();
 		this.subDesc = in.readString();
-		this.type = in.readString();
+		this.type = in.readParcelable(ArrayList.class.getClassLoader());
 		this.previewImage = in.readParcelable(Bitmap.class.getClassLoader());
 		this.date = in.readString();
 	}
