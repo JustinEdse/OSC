@@ -154,6 +154,8 @@ public class FragmentTab1 extends SherlockFragment
 				//when each category is selected the article objects within the list will
 				//change.
 				
+				
+				
 				//During this switch the type of article wanted should be set for each choice.
 				//Then at the end of the switch statement we make one call to the client component
 				//class in the networking package to interact with the server.
@@ -214,7 +216,7 @@ public class FragmentTab1 extends SherlockFragment
 				
 				
 				
-				
+				DisplayFragment.modifiedListArt.clear();
 				////////////CHANGES HERE////////////////////////////////
 				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -226,6 +228,9 @@ public class FragmentTab1 extends SherlockFragment
 				
 					ft.replace(R.id.content_frame, newFrag);
 				    ft.addToBackStack(null);
+				    
+				   
+				    
 				
 				ft.commit();
 			    

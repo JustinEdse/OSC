@@ -33,7 +33,7 @@ public class DisplayFragment extends SherlockFragment{
 	    //declare variables for custom list view and article previews.
 		static int selectedFrag = 0;
 	
-		public static String catChosen = FragmentTab1.categoryChosen;
+		//public static String catChosen = FragmentTab1.categoryChosen;
 		ListView displayListView;
 		ArrayList<Article> disArticles = new ArrayList<Article>();
 		public static ArrayList<Article> modifiedListArt = new ArrayList<Article>();
@@ -69,7 +69,7 @@ public class DisplayFragment extends SherlockFragment{
             ArrayList<String> testTitle = new ArrayList<String>();
             ArrayList<String> testDesc = new ArrayList<String>();
             ArrayList<Bitmap> img = new ArrayList<Bitmap>();
-            //ArrayList<ArrayList<String>> type= new ArrayList<ArrayList<String>>();
+         
             
             
             for(Article art : disArticles)
@@ -80,7 +80,7 @@ public class DisplayFragment extends SherlockFragment{
             	//type.add(art.getType());
             	
             	
-            	if(art.getType().contains(catChosen))
+            	if(art.getType().contains(FragmentTab1.categoryChosen))
             	{
             		modifiedListArt.add(art);
             		testTitle.add(art.getTitle());
@@ -105,11 +105,20 @@ public class DisplayFragment extends SherlockFragment{
             
             
         	
-        	
+            //ArticleAdapter.artCount = modifiedListArt.size();
      		displayListView = (ListView) view.findViewById(R.id.listview);
      		//set size of article count in Article Adapter now that we now how many articles are supposed
         	//to be displayed. 
-        	ArticleAdapter.artCount = modifiedListArt.size();
+     		//
+     		//
+     		//
+     		///
+     		//
+     		//
+     		//
+     		//
+     		
+        
      		displayListView.setAdapter(new ArticleAdapter(0, getActivity().getApplicationContext(), 
      				specImg,specTitle, specDesc));
         

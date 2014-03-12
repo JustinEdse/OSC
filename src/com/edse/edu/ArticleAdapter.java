@@ -69,6 +69,11 @@ public class ArticleAdapter extends BaseAdapter
 		// Sets a view with the article's information and returns it.
 		View view = convertView;
 		 
+		if(varyingArtNum == 0)
+		{
+			artCount = DisplayFragment.modifiedListArt.size();
+		}
+		
 		if(done == true && artCount != 0)
 		{
 			view = inflater.inflate(R.layout.article_row, null);
