@@ -12,6 +12,7 @@
     <string name="preview_text">On this screen there would be a list of article preview objects</string>
 	<string name="no_internet">No Internet Connection</string>
 	
+	
     <color name="gray">#D8D8D8</color>
     <color name="black">#000000</color>
     <color name="scarlet">#D10232</color>

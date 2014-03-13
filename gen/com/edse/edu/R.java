@@ -931,16 +931,17 @@ containing a value of this type.
         public static final int dritempressed=0x7f020077;
         public static final int ic_drawer=0x7f020078;
         public static final int ic_launcher=0x7f020079;
-        public static final int item_shape=0x7f02007a;
-        public static final int item_shape_pressed=0x7f02007b;
-        public static final int newsicon=0x7f02007c;
-        public static final int nioshlogo=0x7f02007d;
-        public static final int novalogo=0x7f02007e;
-        public static final int osc=0x7f02007f;
-        public static final int oscbuilding=0x7f020080;
-        public static final int osclogo=0x7f020081;
-        public static final int selector=0x7f020082;
-        public static final int selectordrawer=0x7f020083;
+        public static final int info=0x7f02007a;
+        public static final int item_shape=0x7f02007b;
+        public static final int item_shape_pressed=0x7f02007c;
+        public static final int newsicon=0x7f02007d;
+        public static final int nioshlogo=0x7f02007e;
+        public static final int novalogo=0x7f02007f;
+        public static final int osc=0x7f020080;
+        public static final int oscbuilding=0x7f020081;
+        public static final int osclogo=0x7f020082;
+        public static final int selector=0x7f020083;
+        public static final int selectordrawer=0x7f020084;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f040020;
@@ -982,7 +983,7 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int action_settings=0x7f040056;
+        public static final int action_settings=0x7f04005e;
         public static final int articldesc=0x7f04003b;
         public static final int articletitle=0x7f04003a;
         public static final int calendar=0x7f040033;
@@ -1006,8 +1007,16 @@ containing a value of this type.
         public static final int homeAsUp=0x7f040006;
         public static final int icon=0x7f04003e;
         public static final int imageView1=0x7f040035;
-        public static final int item_shape=0x7f040054;
-        public static final int item_shape_pressed=0x7f040055;
+        public static final int imageViewMemoryG=0x7f040054;
+        public static final int imageViewMemoryO=0x7f040058;
+        public static final int imageViewNetowrkO=0x7f040059;
+        public static final int imageViewNetworkG=0x7f040055;
+        public static final int imageViewOneCPUG=0x7f040052;
+        public static final int imageViewOneCPUO=0x7f040056;
+        public static final int imageViewTwoLoadG=0x7f040053;
+        public static final int imageViewTwoLoadO=0x7f040057;
+        public static final int item_shape=0x7f04005c;
+        public static final int item_shape_pressed=0x7f04005d;
         public static final int listMode=0x7f040002;
         public static final int listViewCategories=0x7f040050;
         public static final int list_image=0x7f040039;
@@ -1015,7 +1024,7 @@ containing a value of this type.
         public static final int listview_drawer=0x7f040042;
         public static final int normal=0x7f040001;
         public static final int oscView=0x7f040034;
-        public static final int pagerTabStrip=0x7f040053;
+        public static final int pagerTabStrip=0x7f04005b;
         public static final int progressBar=0x7f040032;
         public static final int relativerow=0x7f040037;
         public static final int showCustom=0x7f040008;
@@ -1027,7 +1036,7 @@ containing a value of this type.
         public static final int thumbnail=0x7f040038;
         public static final int title=0x7f04003f;
         public static final int useLogo=0x7f040004;
-        public static final int viewPager=0x7f040052;
+        public static final int viewPager=0x7f04005a;
         public static final int webview=0x7f04003d;
         public static final int wrap_content=0x7f040000;
     }
@@ -1077,7 +1086,9 @@ containing a value of this type.
         public static final int nointernet_view=0x7f030027;
         public static final int sherlock_spinner_dropdown_item=0x7f030028;
         public static final int sherlock_spinner_item=0x7f030029;
-        public static final int viewpager_main=0x7f03002a;
+        public static final int status_matrix_glenn=0x7f03002a;
+        public static final int status_matrix_oakley=0x7f03002b;
+        public static final int viewpager_main=0x7f03002c;
     }
     public static final class menu {
         public static final int calendar_view=0x7f0c0000;

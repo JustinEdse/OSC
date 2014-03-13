@@ -125,6 +125,10 @@ public class FragmentTab2 extends SherlockFragment
 	     		});
 			
 		}
+		else if(MainActivity.selectedFrag == 2)
+		{
+			view = inflater.inflate(R.layout.status_matrix_oakley, container, false);
+		}
 		
 		
 		if(MainActivity.networkStatus == false)

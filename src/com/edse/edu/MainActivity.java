@@ -59,11 +59,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 	int[] icon;
 	Fragment fragment1 = new NewsFragment();
 	Fragment fragment2 = new CalendarFragment();
+	Fragment fragment3 = new StatusFragment();
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private int backCount = 0;
 	private static final String NEWSFRAG = "News";
 	private static final String CALFRAG = "Calendar";
+	private static final String STATUSFRAG = "System Status";
 
 	// for getting rss article feed.
 	private String urlArticles = "https://www.osc.edu/press-feed";
@@ -129,10 +131,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mTitle = mDrawerTitle = getTitle();
 
 		// Generate title
-		title = new String[] { "News", "Calendar" };
+		title = new String[] { "News", "Calendar", "System Status" };
 
 		// Generate icon
-		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2 };
+		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2, R.drawable.info };
 
 		// Locate DrawerLayout in drawer_main.xml
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -240,6 +242,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		{
 			setTitle("Calendar");
 		}
+		
+		if(MainActivity.movesCount == 0 && selectedFrag == 2)
+		{
+			setTitle("System Status");
+		}
 
 		if (MainActivity.movesCount == 0 && selectedFrag == 0)
 		{
@@ -299,6 +306,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 				manager.popBackStack();
 			}
 			ft.replace(R.id.content_frame, fragment2, CALFRAG);
+			break;
+		case 2:// calendar
+			manager = this.getSupportFragmentManager();
+			for (int i = 0; i < manager.getBackStackEntryCount(); ++i)
+			{
+				manager.popBackStack();
+			}
+			ft.replace(R.id.content_frame, fragment3, STATUSFRAG);
 			break;
 
 		}
@@ -404,6 +419,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 			if (MainActivity.movesCount == 0 && selectedFrag == 1)
 			{
 				setTitle("Calendar");
+			}
+			
+			if(MainActivity.movesCount == 0 && selectedFrag == 2)
+			{
+				setTitle("System Status");
 			}
 
 			if (MainActivity.movesCount == 0 && selectedFrag == 0)

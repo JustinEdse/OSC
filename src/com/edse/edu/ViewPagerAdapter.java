@@ -12,8 +12,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     // Declare the number of ViewPager pages or tabs.
     final int ARTICLE_PAGE_COUNT = 2;
     final int EVENT_PAGE_COUNT = 2;
+    final int SYSTEM_INFO_COUNT = 2;
     private String newstitles[] = new String[] { "CATEGORIES", "RECENT"};
     private String calendartitles[] = new String[] {"FULL CALENDAR", "ALL EVENTS"};
+    private String systemTitles[] = new String[]{"GLENN", "OAKLEY"};
     
    
     public ViewPagerAdapter(FragmentManager fm) 
@@ -56,6 +58,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	{
     		temp = (CharSequence)calendartitles[position];
     	}
+    	else if(MainActivity.selectedFrag == 2)
+    	{
+    		temp = (CharSequence)systemTitles[position];
+    	}
         
     	return temp;
     }
@@ -70,6 +76,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	else if (MainActivity.selectedFrag == 1)
     	{
     		count = EVENT_PAGE_COUNT;
+    	}
+    	else if(MainActivity.selectedFrag == 2)
+    	{
+    		count = SYSTEM_INFO_COUNT;
     	}
     	return count;
     }

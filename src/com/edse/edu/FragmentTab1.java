@@ -128,6 +128,12 @@ public class FragmentTab1 extends SherlockFragment
 			
 		}
 		
+		else if(MainActivity.selectedFrag == 2)
+		{
+			view = inflater.inflate(R.layout.status_matrix_glenn, container, false);
+			GlennStatus(view, inflater, container);
+		}
+		
 		return view;
 	}
 	  
@@ -239,6 +245,14 @@ public class FragmentTab1 extends SherlockFragment
 
 		});
 
+}
+	
+public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
+{
+	
+	//set glenn status images in matrix....
+	//top row = cpu report, load report.
+	//bottom row = memory report, network report
 }
 	
 	 
