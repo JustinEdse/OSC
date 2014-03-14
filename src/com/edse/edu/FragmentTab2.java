@@ -58,71 +58,9 @@ public class FragmentTab2 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
-			//call method to handle actions when Calendar fragment 1st tab
 			getActivity().setTitle("Calendar");
-			view = inflater.inflate(R.layout.article_display, container, false);
-			 ArrayList<String> eventTitles = new ArrayList<String>();
-	            ArrayList<String> eventDates = new ArrayList<String>();
-	            ArrayList<String> eventDescs = new ArrayList<String>();
-	            ArrayList<String> eventTimes = new ArrayList<String>();
-	            ArrayList<String> eventLocations = new ArrayList<String>();
-	            
-	            //Get all events stored in all arraylists in the map
-	            for (String date : MainActivity.calendarMap.keySet())
-	            {
-		            for(Event ev : MainActivity.calendarMap.get(date))
-		            {
-		            	eventTitles.add(ev.getEventName());
-		            	eventDates.add(ev.getDate());
-		            	eventTimes.add(ev.getTime());
-		            	eventDescs.add(ev.getEventDetails());
-		            	eventLocations.add(ev.getLocation());
-		            }
-	            }
-	            
-	            final String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
-	            final String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
-	            final String[] evdispDates = eventDates.toArray(new String [eventDates.size()]);
-	            final String[] evdispTimes = eventTimes.toArray(new String [eventTimes.size()]);
-	            final String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
-	            
-	            
-	        	
-	        	
-	     		ListView displayListView = (ListView) view.findViewById(R.id.listview);
-	     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), 
-	     				evdispTitles, evdispDates, evdispTimes));
-	     		displayListView.setOnItemClickListener(new OnItemClickListener(){
-
-	    			@Override
-	    			public void onItemClick(AdapterView<?> parent, View view,
-	    					int position, long id)
-	    			{
-	    				//The idea is to show a more detailed view of event in this onclick event. 	
-	    				
-	    				//Create a fragment to show more detailed event information
-	    				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-	    				EventDetailFragment fragment = new EventDetailFragment();
-	    				Bundle bunds = new Bundle();
-	    				//Pass title, description, date, time and location to the fragment
-	    				bunds.putString("title", evdispTitles[position]);
-	    				bunds.putString("desc", evdispDescs[position]);
-	    				bunds.putString("date", evdispDates[position]);
-	    				bunds.putString("time", evdispTimes[position]);
-	    				bunds.putString("loc", evdispLocs[position]);
-	    				fragment.setArguments(bunds);
-	    				
-	    				
-	    				MainActivity.movesCount++;
-	    				ft.replace(R.id.content_frame, fragment);
-	    				ft.addToBackStack(null);
-	   
-	    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-	    				ft.commit();
-	    				
-	    			}
-	     			
-	     		});
+			//call method to handle actions when Calendar fragment 1st tab
+			DisplayAllEvents(view, inflater, container);
 			
 		}
 		else if(MainActivity.selectedFrag == 2)
@@ -221,7 +159,71 @@ public class FragmentTab2 extends SherlockFragment
    
 	}
 	
-	
+	public void DisplayAllEvents(View view, LayoutInflater inflater, ViewGroup container)
+	{
+		 ArrayList<String> eventTitles = new ArrayList<String>();
+            ArrayList<String> eventDates = new ArrayList<String>();
+            ArrayList<String> eventDescs = new ArrayList<String>();
+            ArrayList<String> eventTimes = new ArrayList<String>();
+            ArrayList<String> eventLocations = new ArrayList<String>();
+            
+            //Get all events stored in all arraylists in the map
+            for (String date : MainActivity.calendarMap.keySet())
+            {
+	            for(Event ev : MainActivity.calendarMap.get(date))
+	            {
+	            	eventTitles.add(ev.getEventName());
+	            	eventDates.add(ev.getDate());
+	            	eventTimes.add(ev.getTime());
+	            	eventDescs.add(ev.getEventDetails());
+	            	eventLocations.add(ev.getLocation());
+	            }
+            }
+            
+            final String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
+            final String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
+            final String[] evdispDates = eventDates.toArray(new String [eventDates.size()]);
+            final String[] evdispTimes = eventTimes.toArray(new String [eventTimes.size()]);
+            final String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
+            
+            
+        	
+        	
+     		ListView displayListView = (ListView) view.findViewById(R.id.listview);
+     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), 
+     				evdispTitles, evdispDates, evdispTimes));
+     		displayListView.setOnItemClickListener(new OnItemClickListener(){
+
+    			@Override
+    			public void onItemClick(AdapterView<?> parent, View view,
+    					int position, long id)
+    			{
+    				//The idea is to show a more detailed view of event in this onclick event. 	
+    				
+    				//Create a fragment to show more detailed event information
+    				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+    				EventDetailFragment fragment = new EventDetailFragment();
+    				Bundle bunds = new Bundle();
+    				//Pass title, description, date, time and location to the fragment
+    				bunds.putString("title", evdispTitles[position]);
+    				bunds.putString("desc", evdispDescs[position]);
+    				bunds.putString("date", evdispDates[position]);
+    				bunds.putString("time", evdispTimes[position]);
+    				bunds.putString("loc", evdispLocs[position]);
+    				fragment.setArguments(bunds);
+    				
+    				
+    				MainActivity.movesCount++;
+    				ft.replace(R.id.content_frame, fragment);
+    				ft.addToBackStack(null);
+   
+    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+    				ft.commit();
+    				
+    			}
+     			
+     		});
+	}
 	
 }
 	
