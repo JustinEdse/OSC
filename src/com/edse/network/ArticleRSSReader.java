@@ -13,8 +13,10 @@ import java.util.regex.Pattern;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.edse.database.Database;
 import com.edse.edu.Article;
 import com.edse.edu.MainActivity;
+import com.edse.edu.UsableAsync;
 
 import android.R;
 import android.graphics.Bitmap;
@@ -56,9 +58,60 @@ public class ArticleRSSReader
 		return articles;
 	}
 
-	public void parseXMLAndStoreIt(XmlPullParser myParser)
+	public int checkArticleStatus(XmlPullParser parser)
+	{
+		int uniqueTitleCount = 0;
+		int event;
+		String text = null;
+		try
+		{
+			event = parser.getEventType();
+			while (event != XmlPullParser.END_DOCUMENT)
+			{
+				String name = parser.getName();
+				switch (event)
+				{
+				case XmlPullParser.START_TAG:
+					break;
+				case XmlPullParser.TEXT:
+					text = parser.getText();
+					break;
+				case XmlPullParser.END_TAG:
+					if (name.equals("title"))
+					{
+						// title = text;
+						countTitle++;
+						if (countTitle > 1)
+						{
+							uniqueTitleCount++;
+						}
+					}
+
+					else
+					{
+					}
+					break;
+				}
+
+				event = parser.next();
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		countTitle = 0;
+
+		return uniqueTitleCount;
+
+	}
+
+	public void parseXMLAndStoreIt(XmlPullParser myParser, int numNeeded)
 	{
 
+		int articlesFetched = 0;
 		String title = null, description = null, link = null, pubDate = null;
 		int event;
 		String text = null;
@@ -127,21 +180,31 @@ public class ArticleRSSReader
 					{
 						String subDesc = ArticleRSSReader
 								.parseSubDesc(descriptions.get(0));
-						ArrayList<String> type = ArticleRSSReader.parseForType(descriptions.get(0));
-						Bitmap bitmap = ArticleRSSReader.parseForImg(descriptions.get(0));
-						
-						//String type = "unknown";
-						
+						ArrayList<String> type = ArticleRSSReader
+								.parseForType(descriptions.get(0));
+						Bitmap bitmap = ArticleRSSReader
+								.parseForImg(descriptions.get(0));
+
+						// String type = "unknown";
+
 						Article createdArt = new Article(title, subDesc, type,
 								bitmap, link, pubDate);
 						articles.add(createdArt);
-						
+
+						articlesFetched++;
+
+						if (articlesFetched == numNeeded)
+						{
+							// only fetch new articles added...after this
+							// condition is met break the while loop.
+							// the returned list should only have a small number
+							// of article objects in it.
+							break;
+						}
 						titles.clear();
 						links.clear();
 						descriptions.clear();
 						pubs.clear();
-						
-						
 
 					}
 
@@ -178,7 +241,36 @@ public class ArticleRSSReader
 			XmlPullParser myparser = xmlFactoryObject.newPullParser();
 			myparser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			myparser.setInput(stream, null);
-			parseXMLAndStoreIt(myparser);
+			int checkResult = checkArticleStatus(myparser);
+
+			if (checkResult > UsableAsync.db.getArticlesCount())
+			{
+				int numOfArticlesNeeded = checkResult
+						- UsableAsync.db.getArticlesCount();
+				// most recent added articles should be at the top or beginning
+				// of the feed.
+				URL urlSecond = new URL(urlString);
+				HttpURLConnection connSecond = (HttpURLConnection) urlSecond
+						.openConnection();
+				connSecond.setReadTimeout(10000 /* milliseconds */);
+				connSecond.setConnectTimeout(15000 /* milliseconds */);
+				connSecond.setRequestMethod("GET");
+				connSecond.setDoInput(true);
+				// Starts the query
+				connSecond.connect();
+				InputStream streamSecond = connSecond.getInputStream();
+				XmlPullParser newParser = xmlFactoryObject.newPullParser();
+				newParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES,
+						false);
+				newParser.setInput(streamSecond, null);
+				parseXMLAndStoreIt(newParser, numOfArticlesNeeded);
+			}
+			else if (checkResult == UsableAsync.db.getArticlesCount())
+			{
+				parsingComplete = false;
+
+			}
+
 			stream.close();
 
 		}
@@ -209,38 +301,36 @@ public class ArticleRSSReader
 
 	public static Bitmap parseForImg(String desc) throws IOException
 	{
-		
 
-		Element image = Jsoup.parse(desc).select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
-
-		//Element image = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
-		String imgURL = "";
 		Bitmap img = null;
+		// Element image =
+		// Jsoup.parse(desc).select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
 
-		if(image != null)
-		{
-		
-			imgURL = image.attr("src");
-			
-		
-		
-		String editedImgURL = imgURL.replace("/sites/", "https://www.").trim();
-		img = ArticleRSSReader.grabImgFromURL(editedImgURL);
-		
-		}
-		else
-		{
-			//in the event there is no image related to a description in the rss feed, just display
-			//the osc logo for now...
-			InputStream inputS = MainActivity.globalTHIS.getResources().getAssets().open("osclogo.png");
-			img = BitmapFactory.decodeStream(inputS);
-			inputS.close();
-			//no need to grab image from url, just return 
-			
+		// Element image =
+		// doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
+		// String imgURL = "";
+		// Bitmap img = null;
 
-		}
+		// if(image != null)
+		// {
 
-		
+		// imgURL = image.attr("src");
+
+		// String editedImgURL = imgURL.replace("/sites/",
+		// "https://www.").trim();
+		// img = ArticleRSSReader.grabImgFromURL(editedImgURL);
+
+		// }
+		// else
+		// {
+		// in the event there is no image related to a description in the rss
+		// feed, just display
+		// the osc logo for now...
+		InputStream inputS = MainActivity.globalTHIS.getResources().getAssets()
+				.open("osclogo.png");
+		img = BitmapFactory.decodeStream(inputS);
+		inputS.close();
+		// no need to grab image from url, just return
 
 		return img;
 	}
@@ -267,56 +357,52 @@ public class ArticleRSSReader
 			connection.setDoInput(true);
 			connection.connect();
 			InputStream inputStream = connection.getInputStream();
-			
-			//bitmap = BitmapFactory.decodeStream(inputStream);// Convert to
-																// bitmap
+
+			// bitmap = BitmapFactory.decodeStream(inputStream);// Convert to
+			// bitmap
 			// image_view.setImageBitmap(bitmap);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = 2;
 			options.inPurgeable = true;
-			
-			
-			resizedBit = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream,null,options), 100, 100, true);
+
+			resizedBit = Bitmap.createScaledBitmap(
+					BitmapFactory.decodeStream(inputStream, null, options),
+					100, 100, true);
 			inputStream.close();
-			
+
 		}
 		catch (IOException e)
 		{
 
 			e.printStackTrace();
 		}
-		
+
 		return resizedBit;
 	}
-	
-	public static ArrayList<String> parseForType(String desc) throws IOException
+
+	public static ArrayList<String> parseForType(String desc)
+			throws IOException
 	{
-		
 
 		// TODO Auto-generated method stub
-				
-				ArrayList<String> cats = new ArrayList<String>();
-				
 
-				
-				String[] rr = new String[]{};
-				
-				rr = desc.split("datatype=\"\">");
-				
-				
-				String[] adjustedArr = Arrays.copyOfRange(rr, 1, rr.length);
-				
-				for(String individual : adjustedArr)
-				{
-					String[] fixedInd = individual.split("</a>");
-					
-					cats.add(fixedInd[0].trim());
-					
-				}
-				
+		ArrayList<String> cats = new ArrayList<String>();
+
+		String[] rr = new String[] {};
+
+		rr = desc.split("datatype=\"\">");
+
+		String[] adjustedArr = Arrays.copyOfRange(rr, 1, rr.length);
+
+		for (String individual : adjustedArr)
+		{
+			String[] fixedInd = individual.split("</a>");
+
+			cats.add(fixedInd[0].trim());
+
+		}
 
 		return cats;
 	}
-
 
 }

@@ -100,10 +100,7 @@ public class ArticleAdapter extends BaseAdapter
 			}
 		}
 		
-		/*
-		 * ArticleAdapter.artCount = result.size();
-		ArticleAdapter.savedCount = result.size();
-		 */
+		
 		return view;
 	}
 	

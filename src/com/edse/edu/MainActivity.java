@@ -11,6 +11,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.edse.database.Database;
 import com.edse.network.ArticleRSSReader;
 import com.edse.network.EventRSSReader;
 
@@ -448,6 +449,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			// TODO Auto-generated method stub
 			eventReaderObj = new EventRSSReader(urlEvents);
 
+			
 			try
 			{
 				eventReaderObj.fetchXML();
@@ -548,6 +550,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 		ArticleAdapter.artCount = result.size();
 		ArticleAdapter.savedCount = result.size();
 
+		
+		
+		
+		
 		Fragment currentFragment = getSupportFragmentManager()
 				.findFragmentByTag(NEWSFRAG);
 		FragmentTransaction fragTransaction = getSupportFragmentManager()

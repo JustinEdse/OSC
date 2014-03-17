@@ -17,10 +17,12 @@ import android.os.Parcelable;
 
 public class Article implements Parcelable
 {
+	private int id;
 	private String title;
 	private String subDesc;
 	private ArrayList<String> type;
 	private String link;
+	private byte[] storedImage;
 	private Bitmap previewImage;
 	//these images will be small and so we don't have to worry about them taking up
 	//huge amounts of memory/space. They will be to the left of the article title and description on
@@ -30,6 +32,10 @@ public class Article implements Parcelable
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
 	
+	public Article()
+	{
+		
+	}
 	public Article(String title, String subDesc, ArrayList<String> type, Bitmap bitmap, String link, String date)
 	{
 		this.title = title;
@@ -40,6 +46,17 @@ public class Article implements Parcelable
 		
 		//format of date coming from article???
 		this.date = date;
+	}
+	
+	public Article(int id,String title, String desc, ArrayList<String> types, String link, Bitmap bitmap)
+	{
+		this.id = id;
+		this.title = title;
+		this.subDesc = desc;
+		this.type = types;
+		this.link = link;
+		this.previewImage = bitmap;
+		
 	}
 	
 	public String getLink()
@@ -95,6 +112,24 @@ public class Article implements Parcelable
 	public void setDate(String date)
 	{
 		this.date = date;
+	}
+	
+	public byte[] getByteImg()
+	{
+		return this.storedImage;
+	}
+	public void setByteImg(byte[] img)
+	{
+		this.storedImage = img;
+	}
+	
+	public int getArtID()
+	{
+		return this.id;
+	}
+	public void setArtID(int id)
+	{
+		this.id = id;
 	}
 	
 
