@@ -1,10 +1,16 @@
 package com.edse.edu;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.edse.network.*;
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -46,10 +52,16 @@ public class FragmentTab1 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
 	public static ArrayList<Event> events = new ArrayList<Event>();
+	public static final String DATE_FORMAT = "MM/dd/yyyy";
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	private FragmentTransaction t = null;
+	private CaldroidFragment caldroidFragment = null;
+	private FragmentTransaction eventFragmentTransaction = null;
 	
 	private ListView listView = null;
 	static String categoryChosen = "";
     View view = null;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
@@ -75,57 +87,99 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1)
 		{
-			
 			//we can find out some way to highlight days on the caldendar by using the event list 
 			//that we got from the MainActivity. We can iterate through it and get the dates for each event
 			//and then go from there.. Just an idea...Who would have thought getting the dates of the articles
 			//would have been easier than highlighting days on the calendar.
+
+			/*
+			 * Anurag. Trying out the Caldroid Calendar 
+			 */
+			//			getActivity().setTitle("Calendar");
+			view = inflater.inflate(R.layout.calendar_view_host, container, false);
+			caldroidFragment = new CaldroidFragment();
+			Bundle args = new Bundle();
+			Calendar cal = Calendar.getInstance();
+			args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+			args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+			args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
+			args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true);
+			caldroidFragment.setArguments(args);
+
+			setColorToEvents(caldroidFragment);
+
+			// Attach to the activity
+			t = getActivity().getSupportFragmentManager().beginTransaction();			
+			t.replace(R.id.calendar1, caldroidFragment);
+//			t.addToBackStack(null);
+			// What does this mDrawerToggle and movesCount do ????????????????
+			MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+			MainActivity.movesCount++;
+			t.commit();
 			
-			
-			
-			
-			getActivity().setTitle("Calendar");
-			//call method to handle actions when Calendar fragment 1st tab
-			view = inflater.inflate(R.layout.activity_calendar_view_fragment, container, false);
-			CalendarView calendar;
-			calendar = (CalendarView)view.findViewById(R.id.calendar);
-			
-			
-			//calendar.setWeekNumberColor(R.color.black);
-			calendar.setOnDateChangeListener(new OnDateChangeListener() {
-			
+			// setting up Listener
+			final CaldroidListener listener = new CaldroidListener() {
+
 				@Override
-				public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) 
-				{
-					
-					String key = Integer.toString(month+1) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year);
-					if (MainActivity.calendarMap.containsKey(key))
-					{
-						//Log.d("Selected Day", "Map isnt empty");
-						//DO Fragment transaction to to show detailed list of events
-						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				public void onSelectDate(Date date, View view) {
+					String strDate = dateFormat.format(date);
+					Log.d("anurag", "After formatting Date: " + strDate);
+					Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
+					strDate = hackFirstZero(strDate);
+					if (MainActivity.calendarMap.containsKey(strDate)) {
+						Log.d("anurag", "The date has events assiciated with it.");
+						
+//						t.remove(caldroidFragment);
+						t.detach(caldroidFragment);
+						// I have no idea why I did the decrement thing
+						MainActivity.movesCount--;
+						
+//						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 						Bundle bunds = new Bundle();
-						bunds.putString("date", key);
+						bunds.putString("date", strDate);
 						EventDisplayFragment newFragment = new EventDisplayFragment();
 						newFragment.setArguments(bunds);
-						ft.replace(R.id.calendar, newFragment);
-						ft.addToBackStack(null);
-						
-						
-						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+						eventFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+						eventFragmentTransaction.replace(R.id.calendar1, newFragment);
+						eventFragmentTransaction.addToBackStack(null);
+
+//						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 						MainActivity.movesCount++;
 						//getActivity().setTitle("Content");
-						ft.commit();
+						eventFragmentTransaction.commit();
 					}
-					else 
-					{
+					else {
+					int id = view.getId();
 						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 					}
-					//Toast.makeText(getActivity().getApplicationContext(), (month+1)+ "/"+dayOfMonth+"/"+year, Toast.LENGTH_SHORT).show();
 					
 				}
-			});
-			
+
+				/**
+				 * The String date received from onSelectDate callback method contains date in format: mm/dd/yyyy. For months like Feb, the mm part
+				 * contains: 02. But the String key entered by us in test data does not contain 02 (it contains just 2). This causes string mismatch.
+				 *  This method will check to see if the Date string starts with a 0, if yes, it will remove it.
+				 * @param strDate
+				 * @return
+				 */
+				private String hackFirstZero(String strDate) {
+					if (strDate.startsWith("0")) {
+						strDate = strDate.substring(1);
+					}
+					return strDate;
+				}
+
+				@Override
+				public void onLongClickDate(Date date, View view) {
+					onSelectDate(date, view);
+				}
+				
+
+			};
+
+			// Setup Caldroid
+			caldroidFragment.setCaldroidListener(listener);
+			getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);	
 		}
 		
 		else if(MainActivity.selectedFrag == 2)
@@ -246,6 +300,24 @@ public class FragmentTab1 extends SherlockFragment
 		});
 
 }
+	/*
+	 * Note: Later, we can modify the code for optimization, to call caldroidFragment.setBackgroundResourceForDates(backgroundForDateMap);
+	 * method. Also we may want to set different colors for events - say to differentiate between past and new events.
+	 */
+	private void setColorToEvents(CaldroidFragment caldroidFragment) {
+		Date dateObj = null;
+		for (String strDate : MainActivity.calendarMap.keySet()) {
+			try {
+				dateObj = dateFormat.parse(strDate);
+			} catch (ParseException e) {
+				Log.e("anurag", "Error when parsing date: " + strDate, e);
+				continue;
+			}
+			caldroidFragment.setBackgroundResourceForDate(R.color.green, dateObj);
+			caldroidFragment.setTextColorForDate(R.color.white, dateObj);
+		}
+
+	}
 	
 public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
 {
