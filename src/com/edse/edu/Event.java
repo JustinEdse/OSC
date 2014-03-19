@@ -1,26 +1,37 @@
 package com.edse.edu;
 
+import java.util.Date;
+
 public class Event 
 {
 	private String title;
 	private String description;
-	private String date;
+	private Date date;
 	private String time;
 	private String location;
-	//private String link;
+	private Date pubDate;
 	
 
 	public Event()
 	{
 		
 	}
-	public Event(String eventname, String desc, String date, String location)//, String url)
+	public Event(String eventname, String desc, Date date, String location)//, String url)
 	{
 		this.title = eventname;
 		this.description = desc;
 		//this.link = url;
 		this.date = date;
 		this.location = location;
+	}
+	public Event(String eventname, String desc, Date date, String location, Date pubDate)
+	{
+		this.title = eventname;
+		this.description = desc;
+		//this.link = url;
+		this.date = date;
+		this.location = location;
+		this.pubDate = pubDate;
 	}
 	public void addTitle(String eventname)
 	{
@@ -30,9 +41,13 @@ public class Event
 	{
 		this.description = desc;
 	}
-	public void addDate(String date)
+	public void addDate(Date date)
 	{
 		this.date = date;
+	}
+	public void addPubDate(Date pubDate)
+	{
+		this.pubDate = pubDate;
 	}
 	public void addTime(String time)
 	{
@@ -54,9 +69,13 @@ public class Event
 //	{
 //		return this.link;
 //	}
-	public String getDate()
+	public Date getDate()
 	{
 		return this.date;
+	}
+	public Date getPubDate()
+	{
+		return this.pubDate;
 	}
 	public String getTime()
 	{

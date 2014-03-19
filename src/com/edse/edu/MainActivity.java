@@ -2,7 +2,10 @@ package com.edse.edu;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +52,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public static FragmentTransaction ft = null;
 
 	public static boolean networkStatus = false;
-	static Map<String, ArrayList<Event>> calendarMap = new HashMap<String, ArrayList<Event>>();
+	static Map<Date, ArrayList<Event>> calendarMap = new HashMap<Date, ArrayList<Event>>();
 	static int selectedFrag = 0;
 	static int movesCount = 0;
 	DrawerLayout mDrawerLayout;
@@ -67,12 +70,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static final String NEWSFRAG = "News";
 	private static final String CALFRAG = "Calendar";
 	private static final String STATUSFRAG = "System Status";
+	public static final String DATE_FORMAT = "MM/dd/yyyy";
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
 	// for getting rss article feed.
-	private String urlArticles = "https://www.osc.edu/press-feed";
-	private String urlEvents = "https://osc.edu/feeds/events/all";
+	static String urlArticles = "https://www.osc.edu/press-feed";
+	static String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
-	private EventRSSReader eventReaderObj;
+	private com.edse.network.EventRSSReader eventReaderObj;
 	public static Context globalTHIS = null;
 
 	GetEventsFromRSS task2;
@@ -90,17 +95,32 @@ public class MainActivity extends SherlockFragmentActivity implements
 		Event test1 = new Event();
 		test1.addTitle("Monthly HPC Tech Talk");
 		test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
-		test1.addDate("2/18/2014");
+		try {
+			test1.addDate(MainActivity.dateFormat.parse("2/18/2014"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		test1.addLocation("WebEX");
 		test1.addTime("4:00pm to 5:00pm");
 		Event test2 = new Event();
 		test2.addTitle("HPC System Downtime");
-		test2.addDate("2/11/2014");
+		try {
+			test2.addDate(MainActivity.dateFormat.parse("2/11/2014"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		test2.addTime("(All Day)");
 		Event test3 = new Event();
 		test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
 		test3.addTime("11:00am to 5:00pm");
-		test3.addDate("2/4/2014");
+		try {
+			test3.addDate(MainActivity.dateFormat.parse("2/4/2014"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
 		test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
 

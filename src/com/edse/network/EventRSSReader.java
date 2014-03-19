@@ -110,8 +110,8 @@ public class EventRSSReader
 				{
 					String type = "unknown";
 					//int image = 0;
-					Event createdEvent = new Event(title, description, type, link);
-					events.add(createdEvent);
+//					Event createdEvent = new Event(title, description, type, link);
+//					events.add(createdEvent);
 					
 				titles.clear();
 				links.clear();

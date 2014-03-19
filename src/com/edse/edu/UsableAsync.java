@@ -16,7 +16,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 {
 	ResultsListener listener;
 	private com.edse.network.ArticleRSSReader artReaderObj;
-	private String urlArticles = "https://www.osc.edu/press-feed";
+	private String urlArticles = MainActivity.urlArticles;
 	private Context context;
 	public static Database db;
 

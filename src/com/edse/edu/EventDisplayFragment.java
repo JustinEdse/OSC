@@ -1,7 +1,9 @@
 package com.edse.edu;
  
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -14,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,6 +44,14 @@ public class EventDisplayFragment extends SherlockFragment {
 		    	//GET THE STRING KEY FROM THE BUNDLE passed 
 		    	Bundle b = getArguments();
 		    	String date = b.getString("date");
+		    	Log.d("Date check", date);
+		    	Date evDate = null;
+				try {
+					evDate = MainActivity.dateFormat.parse(date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		        View view = inflater.inflate(R.layout.article_display, container, false);
 		     
 		        //Create arrays that can be passed to the event adapter, and so populate the list view
@@ -50,10 +61,10 @@ public class EventDisplayFragment extends SherlockFragment {
 		            ArrayList<String> eventTimes = new ArrayList<String>();
 		            ArrayList<String> eventLocations = new ArrayList<String>();
 		            
-		            for(Event ev : MainActivity.calendarMap.get(date))
+		            for(Event ev : MainActivity.calendarMap.get(evDate))
 		            {
 		            	eventTitles.add(ev.getEventName());
-		            	eventDates.add(ev.getDate());
+		            	eventDates.add(MainActivity.dateFormat.format(ev.getDate()));
 		            	eventTimes.add(ev.getTime());
 		            	eventDescs.add(ev.getEventDetails());
 		            	eventLocations.add(ev.getLocation());

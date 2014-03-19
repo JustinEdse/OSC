@@ -52,8 +52,7 @@ public class FragmentTab1 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
 	public static ArrayList<Event> events = new ArrayList<Event>();
-	public static final String DATE_FORMAT = "MM/dd/yyyy";
-	private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	
 	private FragmentTransaction t = null;
 	private CaldroidFragment caldroidFragment = null;
 	private FragmentTransaction eventFragmentTransaction = null;
@@ -95,7 +94,7 @@ public class FragmentTab1 extends SherlockFragment
 			/*
 			 * Anurag. Trying out the Caldroid Calendar 
 			 */
-			//			getActivity().setTitle("Calendar");
+			getActivity().setTitle("Calendar");
 			view = inflater.inflate(R.layout.calendar_view_host, container, false);
 			caldroidFragment = new CaldroidFragment();
 			Bundle args = new Bundle();
@@ -122,25 +121,26 @@ public class FragmentTab1 extends SherlockFragment
 
 				@Override
 				public void onSelectDate(Date date, View view) {
-					String strDate = dateFormat.format(date);
-					Log.d("anurag", "After formatting Date: " + strDate);
+					//String strDate = MainActivity.dateFormat.format(date);
+					//Log.d("anurag", "After formatting Date: " + strDate);
 					Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
-					strDate = hackFirstZero(strDate);
-					if (MainActivity.calendarMap.containsKey(strDate)) {
+					//strDate = hackFirstZero(strDate);
+					//Log.d("What string key is", strDate);
+					if (MainActivity.calendarMap.containsKey(date)) {
 						Log.d("anurag", "The date has events assiciated with it.");
 						
 //						t.remove(caldroidFragment);
 						t.detach(caldroidFragment);
 						// I have no idea why I did the decrement thing
-						MainActivity.movesCount--;
+						//MainActivity.movesCount--;
 						
 //						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 						Bundle bunds = new Bundle();
-						bunds.putString("date", strDate);
+						bunds.putString("date",  MainActivity.dateFormat.format(date));
 						EventDisplayFragment newFragment = new EventDisplayFragment();
 						newFragment.setArguments(bunds);
 						eventFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-						eventFragmentTransaction.replace(R.id.calendar1, newFragment);
+						eventFragmentTransaction.replace(R.id.content_frame, newFragment);
 						eventFragmentTransaction.addToBackStack(null);
 
 //						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
@@ -306,15 +306,15 @@ public class FragmentTab1 extends SherlockFragment
 	 */
 	private void setColorToEvents(CaldroidFragment caldroidFragment) {
 		Date dateObj = null;
-		for (String strDate : MainActivity.calendarMap.keySet()) {
-			try {
-				dateObj = dateFormat.parse(strDate);
-			} catch (ParseException e) {
-				Log.e("anurag", "Error when parsing date: " + strDate, e);
-				continue;
-			}
-			caldroidFragment.setBackgroundResourceForDate(R.color.green, dateObj);
-			caldroidFragment.setTextColorForDate(R.color.white, dateObj);
+		for (Date strDate : MainActivity.calendarMap.keySet()) {
+//			try {
+//				dateObj = MainActivitydateFormat.parse(strDate);
+//			} catch (ParseException e) {
+//				Log.e("anurag", "Error when parsing date: " + strDate, e);
+//				continue;
+//			}
+			caldroidFragment.setBackgroundResourceForDate(R.color.green, strDate);
+			caldroidFragment.setTextColorForDate(R.color.white, strDate);
 		}
 
 	}

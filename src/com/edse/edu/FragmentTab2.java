@@ -2,6 +2,7 @@ package com.edse.edu;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -168,12 +169,12 @@ public class FragmentTab2 extends SherlockFragment
             ArrayList<String> eventLocations = new ArrayList<String>();
             
             //Get all events stored in all arraylists in the map
-            for (String date : MainActivity.calendarMap.keySet())
+            for (Date date : MainActivity.calendarMap.keySet())
             {
 	            for(Event ev : MainActivity.calendarMap.get(date))
 	            {
 	            	eventTitles.add(ev.getEventName());
-	            	eventDates.add(ev.getDate());
+	            	eventDates.add(MainActivity.dateFormat.format(ev.getDate()));
 	            	eventTimes.add(ev.getTime());
 	            	eventDescs.add(ev.getEventDetails());
 	            	eventLocations.add(ev.getLocation());
