@@ -108,12 +108,13 @@ public class FragmentTab1 extends SherlockFragment
 			setColorToEvents(caldroidFragment);
 
 			// Attach to the activity
+			
 			t = getActivity().getSupportFragmentManager().beginTransaction();			
 			t.replace(R.id.calendar1, caldroidFragment);
 //			t.addToBackStack(null);
 			// What does this mDrawerToggle and movesCount do ????????????????
-			MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-			MainActivity.movesCount++;
+			
+			//MainActivity.movesCount++;
 			t.commit();
 			
 			// setting up Listener
@@ -139,11 +140,14 @@ public class FragmentTab1 extends SherlockFragment
 						bunds.putString("date",  MainActivity.dateFormat.format(date));
 						EventDisplayFragment newFragment = new EventDisplayFragment();
 						newFragment.setArguments(bunds);
+						
+						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+						
 						eventFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 						eventFragmentTransaction.replace(R.id.content_frame, newFragment);
 						eventFragmentTransaction.addToBackStack(null);
 
-//						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+						
 						MainActivity.movesCount++;
 						//getActivity().setTitle("Content");
 						eventFragmentTransaction.commit();
@@ -234,7 +238,7 @@ public class FragmentTab1 extends SherlockFragment
 					break;
 				case 2:
 				// computational science
-					type = "Computational Scicence";
+					type = "Computational Science";
 					break;
 				case 3:
 				// outreach

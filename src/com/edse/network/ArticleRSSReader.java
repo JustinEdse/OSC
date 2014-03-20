@@ -5,8 +5,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,18 +36,23 @@ import org.jsoup.select.Elements;
 public class ArticleRSSReader
 {
 	ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-
+    private boolean done = false;
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
 	private ArrayList<String> descriptions = new ArrayList<String>();
 	private ArrayList<String> pubs = new ArrayList<String>();
-
+    
+	private ArrayList<Date> checkPubs = new ArrayList<Date>();
 	private ArrayList<Article> articles = new ArrayList<Article>();
+	private static SimpleDateFormat format = new SimpleDateFormat(
+			"EEE, dd MMM yyyy hh:mm:ss zzzz");
 
 	private int countTitle = 0;
 	private int countDesc = 0;
 	private int countLink = 0;
 
+	
+	private static ArrayList<Article> artList = new ArrayList<Article>();
 	private String urlString = null;
 	private XmlPullParserFactory xmlFactoryObject;
 	public volatile boolean parsingComplete = true;
@@ -60,13 +69,14 @@ public class ArticleRSSReader
 
 	public int checkArticleStatus(XmlPullParser parser)
 	{
-		int uniqueTitleCount = 0;
+
+		int newArts = 0;
 		int event;
 		String text = null;
 		try
 		{
 			event = parser.getEventType();
-			while (event != XmlPullParser.END_DOCUMENT)
+			while (event != XmlPullParser.END_DOCUMENT && done == false)
 			{
 				String name = parser.getName();
 				switch (event)
@@ -77,14 +87,19 @@ public class ArticleRSSReader
 					text = parser.getText();
 					break;
 				case XmlPullParser.END_TAG:
-					if (name.equals("title"))
+					if (name.equals("pubDate"))
 					{
 						// title = text;
-						countTitle++;
-						if (countTitle > 1)
+						Date date = format.parse(text);
+						if (ArticleRSSReader.isArticleNew(date))
 						{
-							uniqueTitleCount++;
+							newArts++;
 						}
+						else
+						{
+							done = true;
+						}
+
 					}
 
 					else
@@ -102,9 +117,7 @@ public class ArticleRSSReader
 			e.printStackTrace();
 		}
 
-		countTitle = 0;
-
-		return uniqueTitleCount;
+		return newArts;
 
 	}
 
@@ -113,6 +126,7 @@ public class ArticleRSSReader
 
 		int articlesFetched = 0;
 		String title = null, description = null, link = null, pubDate = null;
+		Date realDate = null;
 		int event;
 		String text = null;
 		try
@@ -186,20 +200,24 @@ public class ArticleRSSReader
 								.parseForImg(descriptions.get(0));
 
 						// String type = "unknown";
-
+						realDate = format.parse(pubDate);
 						Article createdArt = new Article(title, subDesc, type,
-								bitmap, link, pubDate);
+								bitmap, link, realDate);
 						articles.add(createdArt);
 
 						articlesFetched++;
 
-						if (articlesFetched == numNeeded)
+						if (numNeeded > 0)
 						{
-							// only fetch new articles added...after this
-							// condition is met break the while loop.
-							// the returned list should only have a small number
-							// of article objects in it.
-							break;
+							if (articlesFetched == numNeeded)
+							{
+								// only fetch new articles added...after this
+								// condition is met break the while loop.
+								// the returned list should only have a small
+								// number
+								// of article objects in it.
+								break;
+							}
 						}
 						titles.clear();
 						links.clear();
@@ -241,35 +259,62 @@ public class ArticleRSSReader
 			XmlPullParser myparser = xmlFactoryObject.newPullParser();
 			myparser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			myparser.setInput(stream, null);
-			int checkResult = checkArticleStatus(myparser);
 
-			if (checkResult > UsableAsync.db.getArticlesCount())
+			// get pub date tags. It's necessary to get all pub date tags. If we
+			// just checked for the most recent pub date and it happened
+			// after any dates that were in cache there was a new article
+			// published. However, there might be more than one new article or
+			// a lot of material in the feed could be completely
+			// modified/updated. So because of this thought, if any of the
+			// publication dates
+			// are newer than what's in cache then it's a new article to the
+			// feed. I figure the way I did this below is sort of a
+			// "catch all scenarios" type
+			// way.
+
+			artList = UsableAsync.db.getAllArticles();
+
+			// going through pub dates that were returned. For each pub date, is
+			// it new than any of the dates already in cache?
+			// I tested this in an external program and it worked.
+			if (artList.size() > 0)
 			{
-				int numOfArticlesNeeded = checkResult
-						- UsableAsync.db.getArticlesCount();
-				// most recent added articles should be at the top or beginning
-				// of the feed.
-				URL urlSecond = new URL(urlString);
-				HttpURLConnection connSecond = (HttpURLConnection) urlSecond
+				int checkResult = checkArticleStatus(myparser);
+				if(checkResult > 0)
+				{
+				parseXMLAndStoreIt(myparser, checkResult);
+				}
+				else
+				{
+					parsingComplete = false;
+				}
+			}
+
+			else
+			{
+
+				URL urlTwo = new URL(urlString);
+				HttpURLConnection connTwo = (HttpURLConnection) urlTwo
 						.openConnection();
-				connSecond.setReadTimeout(10000 /* milliseconds */);
-				connSecond.setConnectTimeout(15000 /* milliseconds */);
-				connSecond.setRequestMethod("GET");
-				connSecond.setDoInput(true);
+				connTwo.setReadTimeout(10000 /* milliseconds */);
+				connTwo.setConnectTimeout(15000 /* milliseconds */);
+				connTwo.setRequestMethod("GET");
+				connTwo.setDoInput(true);
 				// Starts the query
-				connSecond.connect();
-				InputStream streamSecond = connSecond.getInputStream();
-				XmlPullParser newParser = xmlFactoryObject.newPullParser();
-				newParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES,
-						false);
-				newParser.setInput(streamSecond, null);
-				parseXMLAndStoreIt(newParser, numOfArticlesNeeded);
-			}
-			else if (checkResult == UsableAsync.db.getArticlesCount())
-			{
-				parsingComplete = false;
+				connTwo.connect();
+				InputStream streamTwo = connTwo.getInputStream();
+				xmlFactoryObject = XmlPullParserFactory.newInstance();
+				XmlPullParser noCacheInfo = xmlFactoryObject.newPullParser();
+				noCacheInfo.setFeature(
+						XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+				noCacheInfo.setInput(streamTwo, null);
+
+				// want the full load of articles. There is nothing in the
+				// sqlite table at the moment.
+				parseXMLAndStoreIt(noCacheInfo, 0);
 
 			}
+			// no new publication dates were detected...
 
 			stream.close();
 
@@ -403,6 +448,32 @@ public class ArticleRSSReader
 		}
 
 		return cats;
+	}
+
+	public static boolean isArticleNew(Date pubDate) throws IOException
+	{
+		
+		boolean isNew = false;
+		
+
+		ArrayList<Date> dates = new ArrayList<Date>();
+
+		for (Article art : artList)
+		{
+			dates.add(art.getDate());
+		}
+
+		Collections.sort(dates);
+
+		Date retDate = dates.get(dates.size() - 1);
+
+		if (pubDate.after(retDate))
+		{
+			isNew = true;
+		}
+
+		return isNew;
+
 	}
 
 }

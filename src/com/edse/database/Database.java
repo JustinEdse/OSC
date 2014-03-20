@@ -5,7 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import com.edse.edu.Article;
 
@@ -21,7 +25,7 @@ public class Database extends SQLiteOpenHelper {
  
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 13;
  
     // Database Name
     private static final String DATABASE_NAME = "articlesManager";
@@ -35,6 +39,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String KEY_DESC = "desc";
     private static final String KEY_TYPE = "type";
     private static final String KEY_LINK = "link";
+    private static final String KEY_DATE = "date";
     private static final String KEY_IMG = "image";
     
     public Database(Context context) {
@@ -46,7 +51,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_ARTICLES_TABLE = "CREATE TABLE " + TABLE_ARTICLES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
-                + KEY_DESC + " TEXT," + KEY_TYPE + " BLOB," + KEY_LINK + " TEXT," + KEY_IMG + " BLOB" + ")";
+                + KEY_DESC + " TEXT," + KEY_TYPE + " BLOB," + KEY_LINK + " TEXT," +  KEY_DATE + " TEXT," + KEY_IMG + " BLOB" + ")";
         db.execSQL(CREATE_ARTICLES_TABLE);
     }
  
@@ -74,6 +79,7 @@ public class Database extends SQLiteOpenHelper {
         values.put(KEY_DESC, article.getsubDesc()); 
         values.put(KEY_TYPE, arrLStringToByteArr(article.getType()));//type
         values.put(KEY_LINK, article.getLink());//link
+        values.put(KEY_DATE, article.getDate().toString());
         values.put(KEY_IMG, convertToByteArr(article.getPreviewImage()));
         // Inserting Row
         db.insert(TABLE_ARTICLES, null, values);
@@ -85,20 +91,20 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
  
         Cursor cursor = db.query(TABLE_ARTICLES, new String[] { KEY_ID,
-                KEY_TITLE, KEY_DESC, KEY_TYPE, KEY_LINK, KEY_IMG }, KEY_ID + "=?",
+                KEY_TITLE, KEY_DESC, KEY_TYPE, KEY_LINK, KEY_DATE, KEY_IMG }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
  
         //id, title, desc, types, link, img
        Article article = new Article(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), byteArrToALOS(cursor.getBlob(3)), cursor.getString(4), convertToBitmap(cursor.getBlob(5)));
+                cursor.getString(1), cursor.getString(2), byteArrToALOS(cursor.getBlob(3)), cursor.getString(4), convertDate(cursor.getString(5)), convertToBitmap(cursor.getBlob(6)));
         // return article
         return article;
     }
      
     // Getting All Articles
-    public ArrayList<Article> getAllArticles() throws IOException {
+    public ArrayList<Article> getAllArticles() throws IOException  {
         ArrayList<Article> artList = new ArrayList<Article>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
@@ -115,7 +121,8 @@ public class Database extends SQLiteOpenHelper {
                 article.setDesc(cursor.getString(2)); //desc
                 article.setType(byteArrToALOS(cursor.getBlob(3))); //type
                 article.setLink(cursor.getString(4));//link
-                article.setPreviewImage(convertToBitmap(cursor.getBlob(5))); //image
+                article.setDate(convertDate(cursor.getString(5)));
+                article.setPreviewImage(convertToBitmap(cursor.getBlob(6))); //image
                 
                 // Adding article to list
                 artList.add(article);
@@ -219,5 +226,24 @@ public class Database extends SQLiteOpenHelper {
     	
     	return retList;
     }
+    
+    public Date convertDate(String str)
+    {
+    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzzz yyyy", Locale.US);
+    	Date retDate = null;
+		try
+		{
+			retDate = format.parse(str);
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return retDate;
+    }
+    
+    
  
 }

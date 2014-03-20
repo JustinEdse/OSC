@@ -16,7 +16,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 {
 	ResultsListener listener;
 	private com.edse.network.ArticleRSSReader artReaderObj;
-	private String urlArticles = MainActivity.urlArticles;
+	private String urlArticles = "https://www.osc.edu/press-feed";
 	private Context context;
 	public static Database db;
 
@@ -92,27 +92,22 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			modifiedList = cacheInfo;
 
 		}
-		else
+		else if(retArtList.size() > 0)
 		{
-			// a new article has been published. retArtList should be larger
-			// than what's in the cache at this point.
-			int newArtSizeAdded = retArtList.size() - db.getArticlesCount();
-			// newArtSizeAdded is equal to the number of new articles added to
-			// the RSS feed at the beginning of the list.
-			// pretty sure about this.
-
+			
+			//int newArtSizeAdded = retArtList.size() - db.getArticlesCount();
+			
 			// while the size of number of articles is greater than zero, add
 			// those entries to our sqlite table.
 			// Nothing needs to be done with retArtList since it should have the
 			// updated article entries already.
 			
 			//MUST FIGURE OUT WHAT TO DO WHEN CACHE IS FULL OR AT A DESIRABLE LIMIT.
-			while (newArtSizeAdded > 0)
+			for(Article art : retArtList)
 			{
-
 				try
 				{
-					db.addArticle(retArtList.get(newArtSizeAdded - 1));
+					db.addArticle(art);
 				}
 				catch (IOException e)
 				{
@@ -122,10 +117,10 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 
 				// at some point establish a max number of articles that are
 				// allowed in the table/cache.
-				newArtSizeAdded--;
 			}
 			try
 			{
+				//Database afterAdd = new Database(MainActivity.globalTHIS);
 				modifiedList = db.getAllArticles();
 			}
 			catch (IOException e)
@@ -136,7 +131,6 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 
 		}
 
-		Collections.reverse(modifiedList);
 		return modifiedList;
 	}
 

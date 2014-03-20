@@ -27,7 +27,7 @@ public class Article implements Parcelable
 	//these images will be small and so we don't have to worry about them taking up
 	//huge amounts of memory/space. They will be to the left of the article title and description on
 	//the article previews.
-	private String date;
+	private Date date;
 	
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
@@ -36,7 +36,7 @@ public class Article implements Parcelable
 	{
 		
 	}
-	public Article(String title, String subDesc, ArrayList<String> type, Bitmap bitmap, String link, String date)
+	public Article(String title, String subDesc, ArrayList<String> type, Bitmap bitmap, String link, Date date)
 	{
 		this.title = title;
 		this.subDesc = subDesc;
@@ -48,13 +48,14 @@ public class Article implements Parcelable
 		this.date = date;
 	}
 	
-	public Article(int id,String title, String desc, ArrayList<String> types, String link, Bitmap bitmap)
+	public Article(int id,String title, String desc, ArrayList<String> types, String link, Date date,Bitmap bitmap)
 	{
 		this.id = id;
 		this.title = title;
 		this.subDesc = desc;
 		this.type = types;
 		this.link = link;
+		this.date = date;
 		this.previewImage = bitmap;
 		
 	}
@@ -105,11 +106,11 @@ public class Article implements Parcelable
 		this.previewImage = previewImage;
 	}
 	
-	public String getDate()
+	public Date getDate()
 	{
 		return this.date;
 	}
-	public void setDate(String date)
+	public void setDate(Date date)
 	{
 		this.date = date;
 	}
@@ -173,7 +174,8 @@ public class Article implements Parcelable
 		dest.writeString(subDesc);
 		dest.writeStringList(type);
 		dest.writeValue(previewImage);
-		dest.writeString(date);
+		dest.writeString(date.toString());
+		
 		
 	}
 	public Article(Parcel in)
@@ -182,7 +184,7 @@ public class Article implements Parcelable
 		this.subDesc = in.readString();
 		this.type = in.readParcelable(ArrayList.class.getClassLoader());
 		this.previewImage = in.readParcelable(Bitmap.class.getClassLoader());
-		this.date = in.readString();
+		this.date = in.readParcelable(Date.class.getClassLoader());
 	}
 	
 	@SuppressWarnings("rawtypes")
