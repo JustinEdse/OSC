@@ -39,49 +39,71 @@ public class EventDisplayFragment extends SherlockFragment {
 		    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		            Bundle savedInstanceState) {
 		    	
-		    	//((MainActivity) getActivity()).setTitle(FragmentTab1.categoryChosen);
-		    	getActivity().setTitle("Content");
+		    	//getActivity().setTitle("Content");
 		    	//GET THE STRING KEY FROM THE BUNDLE passed 
 		    	Bundle b = getArguments();
 		    	String date = b.getString("date");
+		    	Log.d("Obinna", date);
 		    	Log.d("Date check", date);
-		    	Date evDate = null;
+		    	Date evDate = new Date();
 				try {
-					evDate = MainActivity.dateFormat.parse(date);
+					evDate = MainActivity.date_timeFormat.parse(date);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		        View view = inflater.inflate(R.layout.article_display, container, false);
-		     
-		        //Create arrays that can be passed to the event adapter, and so populate the list view
-		            ArrayList<String> eventTitles = new ArrayList<String>();
-		            ArrayList<String> eventDates = new ArrayList<String>();
-		            ArrayList<String> eventDescs = new ArrayList<String>();
-		            ArrayList<String> eventTimes = new ArrayList<String>();
-		            ArrayList<String> eventLocations = new ArrayList<String>();
-		            
-		            for(Event ev : MainActivity.calendarMap.get(evDate))
-		            {
-		            	eventTitles.add(ev.getEventName());
-		            	eventDates.add(MainActivity.dateFormat.format(ev.getDate()));
-		            	eventTimes.add(ev.getTime());
-		            	eventDescs.add(ev.getEventDetails());
-		            	eventLocations.add(ev.getLocation());
-		            }
-		            
-		            String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
-		            String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
-		            String[] evdispDates = eventDates.toArray(new String [eventDates.size()]);
-		            String[] evdispTimes = eventTimes.toArray(new String [eventTimes.size()]);
-		            String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
-		            
-		            
-		        	
-		        	
-		     		displayListView = (ListView) view.findViewById(R.id.listview);
-		     		displayListView.setAdapter(new EventAdapter(getActivity().getApplicationContext(), 
-		     				evdispTitles, evdispDescs, evdispDates, evdispTimes, evdispLocs));
+		        Log.d("Obinna", evDate.toString());
+		        ArrayList<String> eventTitles = new ArrayList<String>();
+	            ArrayList<String> eventDateTimes = new ArrayList<String>();
+	            ArrayList<String> eventLinks = new ArrayList<String>();
+				for(Event ev : MainActivity.calendarMap.get(evDate))
+	            {
+	            	eventTitles.add(ev.getEventName());
+	            	eventDateTimes.add(ev.getDateAndTime());
+	            	eventLinks.add(ev.getEventLink());
+	            	//eventDescs.add(ev.getEventDetails());
+	            	//eventLocations.add(ev.getLocation());
+	            }
+				final String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
+	            final String[] evdispDateTimes = eventDateTimes.toArray(new String [eventDateTimes.size()]);
+	            final String[] evdispLinks = eventLinks.toArray(new String [eventLinks.size()]);
+//				EventListAdapter evAdapter = new EventListAdapter(getActivity().getApplicationContext(), evdispTitles, evdispDateTimes);
+//				ListView listView = (ListView) view.findViewById(R.id.listview);
+//				listView.setAdapter(evAdapter);
+//				listView.setOnItemClickListener(new OnItemClickListener() {
+				ListView displayListView = (ListView) view.findViewById(R.id.listview);
+	     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), evdispTitles, evdispDateTimes));
+	     		displayListView.setOnItemClickListener(new OnItemClickListener(){
+
+					@Override
+	    			public void onItemClick(AdapterView<?> parent, View view,
+	    					int position, long id)
+	    			{
+	    				//The idea is to show a more detailed view of event in this onclick event. 	
+	    				
+	    				//Launch Web Fragment to show link
+	    				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+	    				WebFragment webFrag = new WebFragment();
+	    				String url = "";
+	    				
+	    				//get the url from each article
+	    					url = evdispLinks[position];
+	    				
+	    				// Pass URL in BUndle
+	    				 MainActivity.movesCount++;
+	    				Bundle urlExtras = new Bundle();
+	    				urlExtras.putString("url", url);
+	    				webFrag.setArguments(urlExtras);
+	    				
+	    				ft.replace(R.id.content_frame, webFrag);
+	    				ft.addToBackStack(null);
+	    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+	    				ft.commit();
+	    				
+	    			}
+				
+				});
 		     		
 		     		setHasOptionsMenu(true);
 		            

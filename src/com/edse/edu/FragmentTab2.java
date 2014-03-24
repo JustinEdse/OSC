@@ -2,6 +2,7 @@ package com.edse.edu;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import android.graphics.Bitmap;
@@ -163,36 +164,32 @@ public class FragmentTab2 extends SherlockFragment
 	public void DisplayAllEvents(View view, LayoutInflater inflater, ViewGroup container)
 	{
 		 ArrayList<String> eventTitles = new ArrayList<String>();
-            ArrayList<String> eventDates = new ArrayList<String>();
+            ArrayList<String> eventDateTimes = new ArrayList<String>();
             ArrayList<String> eventDescs = new ArrayList<String>();
-            ArrayList<String> eventTimes = new ArrayList<String>();
-            ArrayList<String> eventLocations = new ArrayList<String>();
+            ArrayList<String> eventLinks = new ArrayList<String>();
+           // ArrayList<String> eventLocations = new ArrayList<String>();
             
-            //Get all events stored in all arraylists in the map
-            for (Date date : MainActivity.calendarMap.keySet())
-            {
-	            for(Event ev : MainActivity.calendarMap.get(date))
-	            {
-	            	eventTitles.add(ev.getEventName());
-	            	eventDates.add(MainActivity.dateFormat.format(ev.getDate()));
-	            	eventTimes.add(ev.getTime());
-	            	eventDescs.add(ev.getEventDetails());
-	            	eventLocations.add(ev.getLocation());
-	            }
-            }
+            Collections.sort(MainActivity.events);
+    		Collections.reverse(MainActivity.events);
             
+    		for (Event ev: MainActivity.events)
+    		{
+    			eventTitles.add(ev.getEventName());
+    			Log.d("List sort", ev.getEventName() + "Evdate is" + ev.getDate().toString());
+    			eventDateTimes.add(ev.getDateAndTime());
+    			eventLinks.add(ev.getEventLink());
+    		}
             final String[] evdispTitles = eventTitles.toArray(new String[eventTitles.size()]);
-            final String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
-            final String[] evdispDates = eventDates.toArray(new String [eventDates.size()]);
-            final String[] evdispTimes = eventTimes.toArray(new String [eventTimes.size()]);
-            final String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
+           // final String[] evdispDescs = eventDescs.toArray(new String[eventDescs.size()]);
+            final String[] evdispDateTimes = eventDateTimes.toArray(new String [eventDateTimes.size()]);
+            final String[] evdispLinks = eventLinks.toArray(new String [eventLinks.size()]);
+           // final String[] evdispLocs = eventLocations.toArray(new String[eventLocations.size()]);
             
             
         	
         	
      		ListView displayListView = (ListView) view.findViewById(R.id.listview);
-     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), 
-     				evdispTitles, evdispDates, evdispTimes));
+     		displayListView.setAdapter(new EventListAdapter(getActivity().getApplicationContext(), evdispTitles, evdispDateTimes));
      		displayListView.setOnItemClickListener(new OnItemClickListener(){
 
     			@Override
@@ -201,24 +198,23 @@ public class FragmentTab2 extends SherlockFragment
     			{
     				//The idea is to show a more detailed view of event in this onclick event. 	
     				
-    				//Create a fragment to show more detailed event information
+    				//Launch Web Fragment to show link
     				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-    				EventDetailFragment fragment = new EventDetailFragment();
-    				Bundle bunds = new Bundle();
-    				//Pass title, description, date, time and location to the fragment
-    				bunds.putString("title", evdispTitles[position]);
-    				bunds.putString("desc", evdispDescs[position]);
-    				bunds.putString("date", evdispDates[position]);
-    				bunds.putString("time", evdispTimes[position]);
-    				bunds.putString("loc", evdispLocs[position]);
-    				fragment.setArguments(bunds);
+    				WebFragment webFrag = new WebFragment();
+    				String url = "";
     				
+    				//get the url from each article
+    					url = evdispLinks[position];
     				
-    				MainActivity.movesCount++;
-    				ft.replace(R.id.content_frame, fragment);
+    				// Pass URL in BUndle
+    				 MainActivity.movesCount++;
+    				Bundle urlExtras = new Bundle();
+    				urlExtras.putString("url", url);
+    				webFrag.setArguments(urlExtras);
+    				
+    				ft.replace(R.id.content_frame, webFrag);
     				ft.addToBackStack(null);
-   
-    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+    				//MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
     				ft.commit();
     				
     			}

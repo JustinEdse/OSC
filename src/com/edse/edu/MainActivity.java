@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -53,6 +56,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	public static boolean networkStatus = false;
 	static Map<Date, ArrayList<Event>> calendarMap = new HashMap<Date, ArrayList<Event>>();
+	static ArrayList<Event> events = new ArrayList<Event>();
 	static int selectedFrag = 0;
 	static int movesCount = 0;
 	DrawerLayout mDrawerLayout;
@@ -72,6 +76,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static final String STATUSFRAG = "System Status";
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	public static final String EXTENDED_DATE_FORMAT = "EEEEEE, MMMMM dd, yyyy";
+	public static final SimpleDateFormat extendeddateFormat = new SimpleDateFormat(EXTENDED_DATE_FORMAT);
+	public static SimpleDateFormat date_timeFormat = new SimpleDateFormat(
+			"EEE, dd MMM yyyy hh:mm:ss");
 
 	// for getting rss article feed.
 	static String urlArticles = "https://www.osc.edu/press-feed";
@@ -81,6 +89,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public static Context globalTHIS = null;
 
 	GetEventsFromRSS task2;
+	
 
 	// action bar
 	ActionBar actionBar;
@@ -92,54 +101,59 @@ public class MainActivity extends SherlockFragmentActivity implements
 		globalTHIS = this;
 
 		// Hardcoded events for calendar testing
-		Event test1 = new Event();
-		test1.addTitle("Monthly HPC Tech Talk");
-		test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
-		try {
-			test1.addDate(MainActivity.dateFormat.parse("2/18/2014"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		test1.addLocation("WebEX");
-		test1.addTime("4:00pm to 5:00pm");
-		Event test2 = new Event();
-		test2.addTitle("HPC System Downtime");
-		try {
-			test2.addDate(MainActivity.dateFormat.parse("2/11/2014"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		test2.addTime("(All Day)");
-		Event test3 = new Event();
-		test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
-		test3.addTime("11:00am to 5:00pm");
-		try {
-			test3.addDate(MainActivity.dateFormat.parse("2/4/2014"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
-		test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
-
-		/**
-		 * In the future, we check to see if the date of the event already
-		 * exists in the map. If so, we add the event to the list of events for
-		 * the date. If not, we create a new array list, throw the event into
-		 * the list and then add the list to the map.
-		 */
-		ArrayList<Event> temp = new ArrayList<Event>();
-		temp.add(test1);
-		MainActivity.calendarMap.put(test1.getDate(), temp);
-		temp = new ArrayList<Event>();
-		temp.add(test2);
-		MainActivity.calendarMap.put(test2.getDate(), temp);
-		temp = new ArrayList<Event>();
-		temp.add(test3);
-		MainActivity.calendarMap.put(test3.getDate(), temp);
+//		Event test1 = new Event();
+//		test1.addTitle("Monthly HPC Tech Talk");
+//		test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
+//		try {
+//			test1.addDate(MainActivity.dateFormat.parse("2/18/2014"));
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		test1.addLocation("WebEX");
+//		test1.addTime("4:00pm to 5:00pm");
+//		Event test2 = new Event();
+//		test2.addTitle("HPC System Downtime");
+//		try {
+//			test2.addDate(MainActivity.dateFormat.parse("2/11/2014"));
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		test2.addTime("(All Day)");
+//		Event test3 = new Event();
+//		test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
+//		test3.addTime("11:00am to 5:00pm");
+//		try {
+//			test3.addDate(MainActivity.dateFormat.parse("2/4/2014"));
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
+//		test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
+//
+//		/**
+//		 * In the future, we check to see if the date of the event already
+//		 * exists in the map. If so, we add the event to the list of events for
+//		 * the date. If not, we create a new array list, throw the event into
+//		 * the list and then add the list to the map.
+//		 */
+//		ArrayList<Event> temp = new ArrayList<Event>();
+//		temp.add(test1);
+//		MainActivity.calendarMap.put(test1.getDate(), temp);
+//		temp = new ArrayList<Event>();
+//		temp.add(test2);
+//		MainActivity.calendarMap.put(test2.getDate(), temp);
+//		temp = new ArrayList<Event>();
+//		temp.add(test3);
+//		MainActivity.calendarMap.put(test3.getDate(), temp);
 		super.onCreate(savedInstanceState);
+		/**
+		 * Testing the reader.
+		 */
+		new GetEventsFromRSS().execute();
+		
 		// Get the view from drawer_main.xml
 
 		// this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -455,15 +469,16 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 
 	}
+	
 
 	private class GetEventsFromRSS extends
-			AsyncTask<Void, Void, ArrayList<Event>>
+			AsyncTask<Void, Void, ArrayList<ArrayList<Event>>>
 	{
 
-		ArrayList<Event> retEventList = new ArrayList<Event>();
+		ArrayList<ArrayList<Event>> retEventLists= new ArrayList<ArrayList<Event>>();
 
 		@Override
-		protected ArrayList<Event> doInBackground(Void... v)
+		protected ArrayList<ArrayList<Event>> doInBackground(Void... v)
 		{
 
 			// TODO Auto-generated method stub
@@ -482,13 +497,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			while (eventReaderObj.parsingComplete)
 				;
-			retEventList.addAll(eventReaderObj.getEvents());
+			retEventLists = eventReaderObj.getEvents();
+			
 
-			return retEventList;
+			return retEventLists;
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<Event> result)
+		protected void onPostExecute(ArrayList<ArrayList<Event>> result)
 		{
 			returnEvents(result);
 
@@ -496,9 +512,28 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	}
 
-	public void returnEvents(ArrayList<Event> result)
+	public void returnEvents(ArrayList<ArrayList<Event>> result)
 	{
-
+	//I have to sort the array list by the dates before adding to the map
+		//calendarMap.clear();
+		for (Event ev : result.get(0))
+		{
+			ArrayList<Event> events = new ArrayList<Event>();
+			if (calendarMap.containsKey(ev.getDate()))
+			{
+				events = calendarMap.remove((ev.getDate()));
+				events.add(ev);
+				calendarMap.put(ev.getDate(), events);
+			}
+			else 
+			{
+				events.add(ev);
+				calendarMap.put(ev.getDate(), events);
+			}
+		}
+		
+		events = result.get(1);
+		Log.d("Obinna", "Two arraylists returned");
 	}
 
 	@Override

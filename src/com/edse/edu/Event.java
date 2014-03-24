@@ -2,44 +2,37 @@ package com.edse.edu;
 
 import java.util.Date;
 
-public class Event 
+public class Event implements Comparable<Event>
 {
 	private String title;
-	private String description;
 	private Date date;
-	private String time;
-	private String location;
+	private String link;
 	private Date pubDate;
-	
+	//Date and Time for display purposes, in the case of multi-day events
+	private String dateTime;
 
 	public Event()
 	{
 		
 	}
-	public Event(String eventname, String desc, Date date, String location)//, String url)
+	public Event(String eventname, Date date, String dateTime,  String url)
 	{
 		this.title = eventname;
-		this.description = desc;
-		//this.link = url;
+		this.link = url;
+		this.dateTime = dateTime;
 		this.date = date;
-		this.location = location;
 	}
-	public Event(String eventname, String desc, Date date, String location, Date pubDate)
+	public Event(String eventname, Date date,String dateTime,  String url, Date pubDate)
 	{
 		this.title = eventname;
-		this.description = desc;
-		//this.link = url;
+		this.link = url;
+		this.dateTime = dateTime;
 		this.date = date;
-		this.location = location;
 		this.pubDate = pubDate;
 	}
 	public void addTitle(String eventname)
 	{
 		this.title = eventname;
-	}
-	public void addEventDetails(String desc)
-	{
-		this.description = desc;
 	}
 	public void addDate(Date date)
 	{
@@ -49,26 +42,18 @@ public class Event
 	{
 		this.pubDate = pubDate;
 	}
-	public void addTime(String time)
+	public void addDateAndTime(String dateTime)
 	{
-		this.time = time;
-	}
-	public void addLocation(String place)
-	{
-		this.location = place;
+		this.dateTime = dateTime;
 	}
 	public String getEventName()
 	{
 		return this.title;
 	}
-	public String getEventDetails()
+	public String getEventLink()
 	{
-		return this.description;
+		return this.link;
 	}
-//	public String getEventCalendarLink()
-//	{
-//		return this.link;
-//	}
 	public Date getDate()
 	{
 		return this.date;
@@ -77,14 +62,30 @@ public class Event
 	{
 		return this.pubDate;
 	}
-	public String getTime()
+	public String getDateAndTime()
 	{
-		return this.time;
+		return this.dateTime;
 	}
-	public String getLocation()
-	{
-		return this.location;
+	
+	@Override
+	public int compareTo(Event rhs) {
+		// TODO Auto-generated method stub
+		int val = 10000;
+		if (this.date.before(rhs.getDate()))
+		{
+			val = -1;
+		}
+		else if (this.date.after(rhs.getDate()))
+		{
+			val = 1;
+		}
+		else
+		{
+			 val = 0;
+		}
+		return val;
 	}
+
 }
 	
 	

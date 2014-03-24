@@ -18,28 +18,27 @@ public class EventAdapter extends BaseAdapter
 	Context context;
 	String[] eventTitles;
 	String[] eventDates;
-	String[] eventTimes;
-	String[] eventLocations;
+	String[] eventdateTimes;
 	String[] eventDescriptions;
+	//ViewHolder holder;
 	
 	private static LayoutInflater inflater = null;
 	
-	public EventAdapter(Context context, String[] eventTitles, String[] eventDates, String[] eventTimes)
+	public EventAdapter(Context context, String[] eventTitles, String[] eventDates, String[] eventdateTimes)
 	{
 		this.context = context;
 		this.eventTitles = eventTitles;
 		this.eventDates = eventDates;
-		this.eventTimes = eventTimes;
+		this.eventdateTimes = eventdateTimes;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	public EventAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventTimes, String[] eventLocations)
+	public EventAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventdateTimes, String[] eventLocations)
 	{
 		this.context = context;
 		this.eventTitles = eventTitles;
 		this.eventDescriptions = eventDescs;
-		this.eventTimes = eventTimes;
+		this.eventdateTimes= eventdateTimes;
 		this.eventDates = eventDates;
-		this.eventLocations = eventLocations;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	@Override
@@ -89,22 +88,23 @@ public class EventAdapter extends BaseAdapter
 	{
 		// Sets a view with the article's information and returns it.
 			View view = convertView;
-			 
+			//ViewHolder holder = new ViewHolder(); 
 			if(view == null)
 			{
-				view = inflater.inflate(R.layout.event_detailed_row, null);
+				view= inflater.inflate(R.layout.event_detailed_row, null);
 				TextView title = (TextView) view.findViewById(R.id.event_detailed_title);
 				TextView date_time = (TextView) view.findViewById(R.id.event_detailed_date_time);
-				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
-				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
+//				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
+//				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
 				
 				title.setText(eventTitles[position]);
-				date_time.setText(eventDates[position] + " - " + eventTimes[position]);
-				desc.setText(eventDescriptions[position]);
-				location.setText(eventLocations[position]);
+				date_time.setText(eventdateTimes[position]);
+//				desc.setText(eventDescriptions[position]);
+//				location.setText(eventLocations[position]);
 	
 			}
 			return view;
 	}
 
 }
+

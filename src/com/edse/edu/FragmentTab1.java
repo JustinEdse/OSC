@@ -62,7 +62,7 @@ public class FragmentTab1 extends SherlockFragment
     View view = null;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
 			Bundle savedInstanceState)
 	{
 		
@@ -134,26 +134,24 @@ public class FragmentTab1 extends SherlockFragment
 						t.detach(caldroidFragment);
 						// I have no idea why I did the decrement thing
 						//MainActivity.movesCount--;
-						
-//						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-						Bundle bunds = new Bundle();
-						bunds.putString("date",  MainActivity.dateFormat.format(date));
-						EventDisplayFragment newFragment = new EventDisplayFragment();
-						newFragment.setArguments(bunds);
-						
 						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-						
-						eventFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-						eventFragmentTransaction.replace(R.id.content_frame, newFragment);
-						eventFragmentTransaction.addToBackStack(null);
-
+						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+						// Launsh fragment showing the list of events on that day.
 						
 						MainActivity.movesCount++;
-						//getActivity().setTitle("Content");
-						eventFragmentTransaction.commit();
+						EventDisplayFragment newFrag= new EventDisplayFragment();
+						Bundle bunds = new Bundle();
+						bunds.putString("date", MainActivity.date_timeFormat.format(date));
+						newFrag.setArguments(bunds);
+						//Log.d("Obinna", "Date sent to event display fragement");
+						ft.replace(R.id.content_frame, newFrag);
+						ft.addToBackStack(null);
+						ft.commit();
+						
 					}
-					else {
-					int id = view.getId();
+					else 
+					{
+						//int id = view.getId();
 						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 					}
 					
