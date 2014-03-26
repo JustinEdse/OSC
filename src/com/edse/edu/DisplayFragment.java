@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -125,10 +126,7 @@ public class DisplayFragment extends SherlockFragment
 				WebFragment webFrag = new WebFragment();
 				String url = "";
 
-				for (int i = 0; i < modifiedListArt.size(); i++)
-				{
 					url = modifiedListArt.get(position).getLink();
-				}
 
 				// getActivity().setTitle(FragmentTab1.categoryChosen);
 				Bundle urlExtras = new Bundle();
@@ -143,6 +141,8 @@ public class DisplayFragment extends SherlockFragment
 				ft.addToBackStack(null);
 
 				ft.commit();
+				
+				
 
 			}
 
@@ -154,7 +154,8 @@ public class DisplayFragment extends SherlockFragment
 
 		// this may will be needed for first time start up of the app. Right now
 		// it looks better than just a blank screen.
-
+		
+		
 		return view;
 
 	}

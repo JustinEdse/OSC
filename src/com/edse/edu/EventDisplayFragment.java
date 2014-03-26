@@ -98,7 +98,7 @@ public class EventDisplayFragment extends SherlockFragment {
 	    				
 	    				ft.replace(R.id.content_frame, webFrag);
 	    				ft.addToBackStack(null);
-	    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+	    				//MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 	    				ft.commit();
 	    				
 	    			}
@@ -108,6 +108,7 @@ public class EventDisplayFragment extends SherlockFragment {
 		     		setHasOptionsMenu(true);
 		            
 		            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		           
 		           
 		        return view;
 		    }

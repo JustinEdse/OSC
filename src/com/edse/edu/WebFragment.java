@@ -4,12 +4,47 @@ import java.lang.reflect.Field;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.edse.database.Database;
+import com.edse.network.ArticleRSSReader;
+import com.edse.network.EventRSSReader;
+
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerTabStrip;
 
 public class WebFragment extends Fragment
 {
@@ -20,6 +55,7 @@ public class WebFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		
 		// "url" is the key for receiving the string from the bundle.
 		Bundle bundle = getArguments();
 		String url = bundle.getString("url");
@@ -35,7 +71,7 @@ public class WebFragment extends Fragment
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setUseWideViewPort(true);
 		
-		webView.setWebChromeClient(new WebChromeClient());
+		webView.setWebViewClient(new WebViewClient());
 		webView.loadUrl(url);
 		
 		

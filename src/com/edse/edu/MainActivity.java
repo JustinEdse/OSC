@@ -313,6 +313,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		ft = getSupportFragmentManager().beginTransaction();
 		// Locate Position
 		FragmentManager manager = getSupportFragmentManager();
+		
 		// new fragment replaces older material.
 		switch (position)
 		{
@@ -626,5 +627,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }

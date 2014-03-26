@@ -214,7 +214,8 @@ public class FragmentTab2 extends SherlockFragment
     				
     				ft.replace(R.id.content_frame, webFrag);
     				ft.addToBackStack(null);
-    				//MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+    				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+    				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
     				ft.commit();
     				
     			}
