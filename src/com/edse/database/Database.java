@@ -25,7 +25,7 @@ public class Database extends SQLiteOpenHelper {
  
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
  
     // Database Name
     private static final String DATABASE_NAME = "articlesManager";
@@ -229,7 +229,7 @@ public class Database extends SQLiteOpenHelper {
     
     public Date convertDate(String str)
     {
-    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzzz yyyy", Locale.US);
+    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss yyyy", Locale.US);
     	Date retDate = null;
 		try
 		{

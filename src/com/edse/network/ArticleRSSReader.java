@@ -45,7 +45,7 @@ public class ArticleRSSReader
 	private ArrayList<Date> checkPubs = new ArrayList<Date>();
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private static SimpleDateFormat format = new SimpleDateFormat(
-			"EEE, dd MMM yyyy hh:mm:ss zzzz");
+			"EEE, dd MMM yyyy hh:mm:ss");
 
 	private int countTitle = 0;
 	private int countDesc = 0;
@@ -150,7 +150,8 @@ public class ArticleRSSReader
 						if (countTitle > 1)
 						{
 							titles.add(text);
-							title = text;
+							String cleanedTitle = android.text.Html.fromHtml(text).toString();
+							title = cleanedTitle;
 						}
 					}
 					else if (name.equals("link"))
@@ -175,6 +176,7 @@ public class ArticleRSSReader
 					}
 					else if (name.equals("pubDate"))
 					{
+						//problems encountering the new date format
 						pubs.add(text);
 						pubDate = text;
 					}
@@ -237,6 +239,7 @@ public class ArticleRSSReader
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			parsingComplete = false;
 		}
 
 	}
@@ -348,26 +351,26 @@ public class ArticleRSSReader
 	{
 
 		Bitmap img = null;
-		// Element image =
-		// Jsoup.parse(desc).select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
+		 Element image =
+		 Jsoup.parse(desc).select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
 
 		// Element image =
 		// doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first();
-		// String imgURL = "";
+		 String imgURL = "";
 		// Bitmap img = null;
 
-		// if(image != null)
-		// {
+		 if(image != null)
+		 {
 
-		// imgURL = image.attr("src");
+		 imgURL = image.attr("src");
 
-		// String editedImgURL = imgURL.replace("/sites/",
-		// "https://www.").trim();
-		// img = ArticleRSSReader.grabImgFromURL(editedImgURL);
+		 //String editedImgURL = imgURL.replace("/sites/",
+		 //"https://www.").trim();
+		 img = ArticleRSSReader.grabImgFromURL(imgURL);
 
-		// }
-		// else
-		// {
+		 }
+		 else
+		 {
 		// in the event there is no image related to a description in the rss
 		// feed, just display
 		// the osc logo for now...
@@ -376,7 +379,7 @@ public class ArticleRSSReader
 		img = BitmapFactory.decodeStream(inputS);
 		inputS.close();
 		// no need to grab image from url, just return
-
+		 }
 		return img;
 	}
 
@@ -410,9 +413,10 @@ public class ArticleRSSReader
 			options.inSampleSize = 2;
 			options.inPurgeable = true;
 
-			resizedBit = Bitmap.createScaledBitmap(
-					BitmapFactory.decodeStream(inputStream, null, options),
-					100, 100, true);
+			//resizedBit = Bitmap.createScaledBitmap(
+					//BitmapFactory.decodeStream(inputStream, null, options),
+					//100, 100, true);
+			resizedBit = BitmapFactory.decodeStream(inputStream);
 			inputStream.close();
 
 		}
