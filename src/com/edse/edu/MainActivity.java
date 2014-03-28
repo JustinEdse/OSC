@@ -5,10 +5,12 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -74,23 +76,21 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static final String NEWSFRAG = "News";
 	private static final String CALFRAG = "Calendar";
 	private static final String STATUSFRAG = "System Status";
-	public static final String DATE_FORMAT = "MM/dd/yyyy";
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-	public static final String EXTENDED_DATE_FORMAT = "EEEEEE, MMMMM dd, yyyy";
-	public static final SimpleDateFormat extendeddateFormat = new SimpleDateFormat(EXTENDED_DATE_FORMAT);
-	public static SimpleDateFormat date_timeFormat = new SimpleDateFormat(
-			"EEE, dd MMM yyyy hh:mm:ss");
-
+	//public static final String DATE_FORMAT = "MM/dd/yyyy";
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+	//public static final String EXTENDED_DATE_FORMAT = "EEEEEE, MMMMM dd, yyyy";
+	public static final SimpleDateFormat extendeddateFormat = new SimpleDateFormat("EEEEEE, MMMMM dd, yyyy", Locale.US);
+	public static SimpleDateFormat date_timeFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss", Locale.US);
 	// for getting rss article feed.
 	static String urlArticles = "https://www.osc.edu/press-feed";
 	static String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private com.edse.network.EventRSSReader eventReaderObj;
 	public static Context globalTHIS = null;
-
-	GetEventsFromRSS task2;
 	
-
+	 //Maximum size of tables
+    public static final int ARTICLE_TABLE_SIZE = 30;
+    public static final int EVENT_TABLE_SIZE = 30;
 	// action bar
 	ActionBar actionBar;
 
@@ -99,60 +99,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 	{
 
 		globalTHIS = this;
-
-		// Hardcoded events for calendar testing
-//		Event test1 = new Event();
-//		test1.addTitle("Monthly HPC Tech Talk");
-//		test1.addEventDetails("Monthly HPC Tech Talk, conducted via WebEX. This call is intended for researchers actively using our systems to interact with OSC staff to learn about recent changes to our environment, ask questions, raise concerns, and learn about an advanced topic. This month's advanced topic will be the utilization of NVIDIA GPUs found on OSC's production HPC clusters for computational chemistry work.We are soliciting feedback on the format, topics, and suggestions for future advanced topics.Please register for the WebEX session here; a reminder email will be sent in advance of the event.");
-//		try {
-//			test1.addDate(MainActivity.dateFormat.parse("2/18/2014"));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		test1.addLocation("WebEX");
-//		test1.addTime("4:00pm to 5:00pm");
-//		Event test2 = new Event();
-//		test2.addTitle("HPC System Downtime");
-//		try {
-//			test2.addDate(MainActivity.dateFormat.parse("2/11/2014"));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		test2.addTime("(All Day)");
-//		Event test3 = new Event();
-//		test3.addTitle("XSEDE HPC Monthly Workshop - Big Data");
-//		test3.addTime("11:00am to 5:00pm");
-//		try {
-//			test3.addDate(MainActivity.dateFormat.parse("2/4/2014"));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		test3.addEventDetails("XSEDE along with the Pittsburgh Supercomputing Center are pleased to announce a one day Big Data workshop, to be held February 4, 2014.This workshop will focus on topics such as Hadoop and SPARQL.Due to demand, this workshop will be telecast to several satellite sites.This workshop is NOT available via a webcast.The site list, registration pages and agenda will be available soon.Register by following the link to View Session Details of your preferred location.Please address any questions to Tom Maiden at tmaiden@psc.edu\nVisit https://portal.xsede.org/course-calendar/-/training-user/class/161 for more information");
-//		test3.addLocation("Ohio Supercomputer Center- Bale Conference Room");
-//
-//		/**
-//		 * In the future, we check to see if the date of the event already
-//		 * exists in the map. If so, we add the event to the list of events for
-//		 * the date. If not, we create a new array list, throw the event into
-//		 * the list and then add the list to the map.
-//		 */
-//		ArrayList<Event> temp = new ArrayList<Event>();
-//		temp.add(test1);
-//		MainActivity.calendarMap.put(test1.getDate(), temp);
-//		temp = new ArrayList<Event>();
-//		temp.add(test2);
-//		MainActivity.calendarMap.put(test2.getDate(), temp);
-//		temp = new ArrayList<Event>();
-//		temp.add(test3);
-//		MainActivity.calendarMap.put(test3.getDate(), temp);
 		super.onCreate(savedInstanceState);
-		/**
-		 * Testing the reader.
-		 */
-		new GetEventsFromRSS().execute();
+		
 		
 		// Get the view from drawer_main.xml
 
@@ -471,72 +419,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	}
 	
-
-	private class GetEventsFromRSS extends
-			AsyncTask<Void, Void, ArrayList<ArrayList<Event>>>
-	{
-
-		ArrayList<ArrayList<Event>> retEventLists= new ArrayList<ArrayList<Event>>();
-
-		@Override
-		protected ArrayList<ArrayList<Event>> doInBackground(Void... v)
-		{
-
-			// TODO Auto-generated method stub
-			eventReaderObj = new EventRSSReader(urlEvents);
-
-			
-			try
-			{
-				eventReaderObj.fetchXML();
-			}
-			catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			while (eventReaderObj.parsingComplete)
-				;
-			retEventLists = eventReaderObj.getEvents();
-			
-
-			return retEventLists;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<ArrayList<Event>> result)
-		{
-			returnEvents(result);
-
-		}
-
-	}
-
-	public void returnEvents(ArrayList<ArrayList<Event>> result)
-	{
-	//I have to sort the array list by the dates before adding to the map
-		//calendarMap.clear();
-		for (Event ev : result.get(0))
-		{
-			ArrayList<Event> events = new ArrayList<Event>();
-			if (calendarMap.containsKey(ev.getDate()))
-			{
-				events = calendarMap.remove((ev.getDate()));
-				events.add(ev);
-				calendarMap.put(ev.getDate(), events);
-			}
-			else 
-			{
-				events.add(ev);
-				calendarMap.put(ev.getDate(), events);
-			}
-		}
-		
-		events = result.get(1);
-		Log.d("Obinna", "Two arraylists returned");
-	}
-
 	@Override
 	public void onStart()
 	{
@@ -562,6 +444,94 @@ public class MainActivity extends SherlockFragmentActivity implements
 		task.setOnResultsListener(this);
 		task.execute();
 
+		AsyncEvent task2 = new AsyncEvent(MainActivity.globalTHIS);
+		task2.setOnResultsListener(new EventsResultsListener() {
+			
+			@Override
+			public void onResultSuccess(ArrayList<Event> result) {
+				// TODO Auto-generated method stub
+				//This first for loop creates the necessary multiple event instances for events that span multiple days
+				ArrayList<Event> eventinstances = new ArrayList<Event>();
+				for (Event ev : result)
+				{
+					ArrayList<Date> eventDates = parseDate(ev.getDateAndTime());
+					if(eventDates.size() > 1)
+					{
+						//Event runs on multiple dates
+						Date temp1 = eventDates.get(0);
+						Date temp2 = eventDates.get(1);
+						if (temp1.before(temp2))
+						{
+							
+							int diff = temp2.getDate() - temp1.getDate();
+							for (int y = 0; y<= diff; y++)
+							{
+								Date tempDate = new Date();
+								Calendar cal = Calendar.getInstance();    
+								cal.setTime(temp1);    
+								cal.add(Calendar.DATE, y);
+								Event createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+								//Log.d("Date", cal.getTime().toString());
+								eventinstances.add(createdEvent);
+							}
+						}
+						else 
+						{
+							int diff = temp1.getDate() - temp2.getDate();
+							for (int y = 0; y<= diff; y++)
+							{
+								Date tempDate = new Date();
+								Calendar cal = Calendar.getInstance();    
+								cal.setTime(temp2);    
+								cal.add(Calendar.DATE, y);
+								Event createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+								//Log.d("Date", cal.getTime().toString());
+								eventinstances.add(createdEvent);
+								
+							}
+						}
+					}
+					else if(eventDates.size() == 1)
+					{
+						//Event is only on one day
+						Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+						//Log.d("Date", eventDates.get(0).toString());
+						eventinstances.add(createdEvent);
+						
+					}
+				}
+				
+				/*
+				 * THis loop then adds the elements from the newly created arraylist containing multiple instances for events 
+				 * that span multiple days to the calendar Map, 
+				 */
+				for (Event ev : eventinstances)
+				{
+					ArrayList<Event> events = new ArrayList<Event>();
+					if (calendarMap.containsKey(ev.getDate()))
+					{
+						events = calendarMap.remove((ev.getDate()));
+						events.add(ev);
+						calendarMap.put(ev.getDate(), events);
+					}
+					else 
+					{
+						events.add(ev);
+						calendarMap.put(ev.getDate(), events);
+					}
+				}
+				//We can set the array for the list of all events now
+				events = eventinstances;
+				//Log.d("Obinna", "Two arraylists returned");
+			}
+			
+			@Override
+			public void onResultFail(int resultCode, String errorMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		task2.execute();
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
 
@@ -628,6 +598,77 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	}
 	
+	private static ArrayList<Date> parseDate(String input)
+	{
+		
+		ArrayList<Date> dates = new ArrayList<Date>();
+		
+		String cleanedHTML =input;
+		if (cleanedHTML.contains("to")  && !(cleanedHTML.contains("-")))//More than one date to get
+		{
+			String [] splits = cleanedHTML.split("to");
+			int start = 0;
+			for (int count = 0; count < splits.length; count++)
+			{
+				String date = splits[count].substring(0, splits[count].indexOf('(')).trim();
+				//Log.d("Date", date);
+				String date2 = date;
+				try 
+				{
+					Date tempDate = MainActivity.extendeddateFormat.parse(date);		
+					dates.add(tempDate);
+					//Log.d("Date", tempDate.toString());
+				} 
+				catch (ParseException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					//Log.d("Date", "Error");
+				}
+				
+			}
+			
+		}
+		//If its just one date
+		else if(cleanedHTML.contains("-"))
+		{
+			//Log.d("Obinna", "Else case, one date");
+			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('-')).trim();
+			//Log.d("Date", date1);
+			try 
+			{
+				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
+				dates.add(tempDate);
+				//Log.d("Date", tempDate.toString());
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		else if(cleanedHTML.contains("("))
+		{
+			//Log.d("Obinna", "Else case, one date");
+			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('(')).trim();
+		//	Log.d("Date", date1);
+			try 
+			{
+				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
+				dates.add(tempDate);
+				//Log.d("Date", tempDate.toString());
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		return dates;
 	
+	}
 
 }

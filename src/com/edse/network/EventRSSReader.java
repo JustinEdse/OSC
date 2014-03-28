@@ -8,10 +8,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
-
-
-
+import org.w3c.dom.Node;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -32,7 +37,7 @@ public class EventRSSReader
 	
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
-	private ArrayList<Event> fullevents = new ArrayList<Event>();
+	private ArrayList<Event> listevents = new ArrayList<Event>();
 //	private ArrayList<String> locs = new ArrayList<String>();
 	private ArrayList<String> descriptions = new ArrayList<String>();
 	private ArrayList<String> pubs = new ArrayList<String>();
@@ -53,12 +58,12 @@ public class EventRSSReader
 		this.urlString = url;
 	}
 
-	public ArrayList<ArrayList<Event>> getEvents(){
+	public ArrayList<Event> getEvents(){
 	
-		lists.add(events);
-		lists.add(fullevents);
+		//lists.add(events);
+		//lists.add(fullevents);
 		//Log.d("Obinna", lists.coun)
-		return lists;
+		return listevents;
 	}
 	
 	public void parseXMLAndStoreIt(XmlPullParser myParser)
@@ -131,66 +136,73 @@ public class EventRSSReader
 						String type = "unknown";
 						//Log.d("Parse Check", description);
 					
-						//Log.d("Parse Check", cleanedDesc);
-						//String fulldesc = parseDescription(description);
-						String dateTime = parseDateTime(description);
-						dateTime = trimDateTime(dateTime);
-						//Log.d("Link", link);
-						ArrayList<Date> eventDates = new ArrayList<Date>();
-						eventDates = parseDate(dateTime);
 						
+						String fulldesc = parseDescription(description);
+						String dateTime = parseDateTime(description);
+						int endpoint = trimDateTime(dateTime);
+						//Log.d("Link", link);
+						String extratext = dateTime.substring(endpoint);
+						fulldesc = extratext + fulldesc;
+						dateTime = dateTime.substring(0,endpoint);
+						//ArrayList<Date> eventDates = new ArrayList<Date>();
+						//eventDates = parseDate(dateTime);
+						Log.d("Parse Check", "1" + dateTime);
+						Log.d("Parse Check", "2" + fulldesc);
 						Date pubDate2 = MainActivity.date_timeFormat.parse(pubDate);
 						String tittextString = Html.fromHtml(title).toString();
+						//Date object will be created from dateTime String in Main Activity
+						Event tempEvent = new Event(tittextString,null, dateTime, link, pubDate2);
+						listevents.add(tempEvent);
 						//Log.d("Title", tittextString + " and date is " + dateTime);
-						if(eventDates.size() > 0 )
-						{
-							Event tempEvent = new Event(tittextString,eventDates.get(0), dateTime, link, pubDate2);
-							fullevents.add(tempEvent);
-						}
-						if(eventDates.size() > 1)
-						{
-							//Event runs on multiple dates
-							Date temp1 = eventDates.get(0);
-							Date temp2 = eventDates.get(1);
-							if (temp1.before(temp2))
-							{
-								
-								int diff = temp2.getDate() - temp1.getDate();
-								for (int y = 0; y<= diff; y++)
-								{
-									Date tempDate = new Date();
-									Calendar cal = Calendar.getInstance();    
-									cal.setTime(temp1);    
-									cal.add(Calendar.DATE, y);
-									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
-									Log.d("Date", cal.getTime().toString());
-									events.add(createdEvent);
-								}
-							}
-							else 
-							{
-								int diff = temp1.getDate() - temp2.getDate();
-								for (int y = 0; y<= diff; y++)
-								{
-									Date tempDate = new Date();
-									Calendar cal = Calendar.getInstance();    
-									cal.setTime(temp2);    
-									cal.add(Calendar.DATE, y);
-									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
-									Log.d("Date", cal.getTime().toString());
-									events.add(createdEvent);
-									
-								}
-							}
-						}
-						else if(eventDates.size() == 1)
-						{
-							//Event is only on one day
-							Event createdEvent = new Event(tittextString, eventDates.get(0), dateTime, link,pubDate2);
-							Log.d("Date", eventDates.get(0).toString());
-							events.add(createdEvent);
-							
-						}
+//						if(eventDates.size() > 0 )
+//						{
+//							Event tempEvent = new Event(tittextString,eventDates.get(0), dateTime, link, pubDate2);
+//							listevents.add(tempEvent);
+//						}
+//						if(eventDates.size() > 1)
+//						{
+//							//Event runs on multiple dates
+//							Date temp1 = eventDates.get(0);
+//							Date temp2 = eventDates.get(1);
+//							if (temp1.before(temp2))
+//							{
+//								
+//								int diff = temp2.getDate() - temp1.getDate();
+//								for (int y = 0; y<= diff; y++)
+//								{
+//									Date tempDate = new Date();
+//									Calendar cal = Calendar.getInstance();    
+//									cal.setTime(temp1);    
+//									cal.add(Calendar.DATE, y);
+//									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
+//									//Log.d("Date", cal.getTime().toString());
+//									events.add(createdEvent);
+//								}
+//							}
+//							else 
+//							{
+//								int diff = temp1.getDate() - temp2.getDate();
+//								for (int y = 0; y<= diff; y++)
+//								{
+//									Date tempDate = new Date();
+//									Calendar cal = Calendar.getInstance();    
+//									cal.setTime(temp2);    
+//									cal.add(Calendar.DATE, y);
+//									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
+//									//Log.d("Date", cal.getTime().toString());
+//									events.add(createdEvent);
+//									
+//								}
+//							}
+//						}
+//						else if(eventDates.size() == 1)
+//						{
+//							//Event is only on one day
+//							Event createdEvent = new Event(tittextString, eventDates.get(0), dateTime, link,pubDate2);
+//							//Log.d("Date", eventDates.get(0).toString());
+//							events.add(createdEvent);
+//							
+//						}
 						//Event createdEvent = new Event();
 						//createdEvent.addEventDetails(fulldesc);
 						//events.add(createdEvent);
@@ -246,8 +258,32 @@ public class EventRSSReader
 			myparser.setFeature(
 					XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			myparser.setInput(stream, null);
-			//Log.d("Obinna", "XML Fetched, now to parse");
 			parseXMLAndStoreIt(myparser);
+//			DocumentBuilderFactory dFactory =DocumentBuilderFactory.newInstance();
+//			
+//			try 
+//			{
+//				DocumentBuilder builder = dFactory.newDocumentBuilder();
+//				Document doc = builder.parse(stream);
+//				XPath xPath = XPathFactory.newInstance().newXPath();
+//				NodeList ndList  = (NodeList) xPath.evaluate("/item/link", doc,XPathConstants.NODE);
+//				if (ndList!= null && ndList.getLength() >0)
+//				{
+//					for (int y = 0; y<ndList.getLength(); y++)
+//					{
+//						Log.d("Obinna", ndList.item(y).getNodeValue());
+//					}
+//				}
+//				/*
+//				 * Log.d("Obinna", node.getNodeValue());
+//				 */
+//			}
+//			catch (Exception e) 
+//			{
+//				// TODO: handle exception
+//				e.printStackTrace();
+//			}
+//			
 			stream.close();
 			
 		}
@@ -267,7 +303,7 @@ public class EventRSSReader
 		String cleanedHTML = android.text.Html.fromHtml(finalStr).toString();
 		return cleanedHTML;
 	}
-	private String trimDateTime(String input) 
+	private int trimDateTime(String input) 
 	{
 		int end = 0;
 		if (input.contains("to")  && !(input.contains("-")))
@@ -297,10 +333,10 @@ public class EventRSSReader
 			end = input.indexOf(')');
 			end = end + 1;
 		}
-		String t2 = input.substring(0, end);
+		//String t2 = input.substring(0, end);
 //		Log.d("Trim", input);
 //		Log.d("Trim", t2);
-		return t2;
+		return end;
 		
 	}
 	private static ArrayList<Date> parseDate(String input)
@@ -396,5 +432,10 @@ public class EventRSSReader
 	}
 	
 	
-	
+//	private class XMLParser
+//	{
+//		public static ArrayList<Event> ParseXML() {
+//			
+//		}
+//	}
 }
