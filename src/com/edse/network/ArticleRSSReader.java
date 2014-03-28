@@ -275,7 +275,7 @@ public class ArticleRSSReader
 			// "catch all scenarios" type
 			// way.
 
-			artList = UsableAsync.db.getAllArticles();
+			artList = MainActivity.db.getAllArticles();
 
 			// going through pub dates that were returned. For each pub date, is
 			// it new than any of the dates already in cache?

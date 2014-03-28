@@ -89,6 +89,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public static Context globalTHIS = null;
 	
 	 //Maximum size of tables
+	public static Database db;
     public static final int ARTICLE_TABLE_SIZE = 30;
     public static final int EVENT_TABLE_SIZE = 30;
 	// action bar

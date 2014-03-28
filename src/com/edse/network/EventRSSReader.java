@@ -1,5 +1,6 @@
 package com.edse.network;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,6 +8,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -431,11 +434,18 @@ public class EventRSSReader
 		
 	}
 	
-	
-//	private class XMLParser
-//	{
-//		public static ArrayList<Event> ParseXML() {
-//			
-//		}
-//	}
+   private static boolean isNewEvent(Event ev)
+   {
+	   Set<Date> pubdateSet = new TreeSet<Date>();
+	   try {
+		ArrayList<Event> evs = MainActivity.db.getAllEvents();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   return pubdateSet.contains(ev.getPubDate());
+   }
 }

@@ -18,7 +18,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private String urlArticles = "https://www.osc.edu/press-feed";
 	private Context context;
-	public static Database db;
+	
 
 	public UsableAsync(Context context)
 	{
@@ -50,7 +50,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		ArrayList<Article> modifiedList = new ArrayList<Article>();
 		ArrayList<Article> retArtList = new ArrayList<Article>();
 		artReaderObj = new ArticleRSSReader(urlArticles);
-		db = new Database(MainActivity.globalTHIS);
+		MainActivity.db = new Database(MainActivity.globalTHIS);
 
 		try
 		{
@@ -82,7 +82,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			ArrayList<Article> cacheInfo = null;
 			try
 			{
-				cacheInfo = db.getAllArticles();
+				cacheInfo = MainActivity.db.getAllArticles();
 			}
 			catch (IOException e)
 			{
@@ -107,7 +107,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			{
 				try
 				{
-					db.addArticle(art);
+					MainActivity.db.addArticle(art);
 				}
 				catch (IOException e)
 				{
@@ -121,7 +121,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			try
 			{
 				//Database afterAdd = new Database(MainActivity.globalTHIS);
-				modifiedList = db.getAllArticles();
+				modifiedList = MainActivity.db.getAllArticles();
 			}
 			catch (IOException e)
 			{
@@ -130,7 +130,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			}// get articles from cache
 
 		}
-		db.close();
+		MainActivity.db.close();
 		return modifiedList;
 	}
 
