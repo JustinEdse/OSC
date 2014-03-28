@@ -452,6 +452,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 				// TODO Auto-generated method stub
 				//This first for loop creates the necessary multiple event instances for events that span multiple days
 				ArrayList<Event> eventinstances = new ArrayList<Event>();
+				events.clear();
 				for (Event ev : result)
 				{
 					ArrayList<Date> eventDates = parseDate(ev.getDateAndTime());
@@ -497,7 +498,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 						Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
 						//Log.d("Date", eventDates.get(0).toString());
 						eventinstances.add(createdEvent);
-						
+					}
+					if(eventDates.size() > 0)
+					{
+						Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+						events.add(createdEvent);
 					}
 				}
 				
@@ -521,7 +526,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					}
 				}
 				//We can set the array for the list of all events now
-				events = eventinstances;
+				//events = eventinstances;
 				//Log.d("Obinna", "Two arraylists returned");
 			}
 			
@@ -554,6 +559,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// SQLite.
 		// Delete the X oldest things in the table if there are new updates from
 		// either RSS feed.....
+		FragmentManager manager = this.getSupportFragmentManager();
+		for (int i =0; i<manager.getBackStackEntryCount(); i++)
+		{
+			manager.popBackStack();
+		}
+		MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(true);
+		MainActivity.movesCount = 0;
 	}
 
 	@Override

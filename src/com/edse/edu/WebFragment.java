@@ -85,6 +85,10 @@ public class WebFragment extends Fragment
 	
 	 @Override
 	    public void onDetach() {
+		 if(MainActivity.selectedFrag == 1)
+	    	{
+	    		getActivity().setTitle("Calendar");
+	    	}
 	        super.onDetach();
 	        try {
 	            Field childFragmentManager = Fragment.class

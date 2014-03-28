@@ -380,7 +380,7 @@ public class Database extends SQLiteOpenHelper {
     
     public Date convertDate(String str)
     {
-    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss yyyy", Locale.US);
+    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.US);
     	Date retDate = null;
 		try
 		{

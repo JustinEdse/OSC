@@ -130,7 +130,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			}// get articles from cache
 
 		}
-
+		db.close();
 		return modifiedList;
 	}
 
