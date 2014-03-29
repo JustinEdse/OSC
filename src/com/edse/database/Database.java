@@ -13,7 +13,6 @@ import java.util.Locale;
 
 import com.edse.edu.*;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -21,12 +20,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.renderscript.ProgramFragmentFixedFunction.Builder.Format;
  
 public class Database extends SQLiteOpenHelper {
  
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 22;
  
     // Database Name
     private static final String DATABASE_NAME = "articlesManager";
@@ -110,7 +110,15 @@ public class Database extends SQLiteOpenHelper {
     	ContentValues values = new ContentValues();
     	values.put(EVENT_TITLE, event.getEventName());
     	values.put(EVENT_DESC, event.getDescription());
-    	values.put(EVENT_DATE, event.getDate().toString());	
+    	Date temp = event.getDate();
+    	if (temp != null)
+    	{
+    		values.put(EVENT_DATE, event.getDate().toString());	
+    	}
+    	else 
+    	{
+    		values.put(EVENT_DATE, "");	
+		}
     	values.put(EVENT_LOCATION, event.getLocation());
     	values.put(EVENT_DATE_TIME, event.getDateAndTime());
     	values.put(EVENT_LINK, event.getEventLink());
@@ -151,15 +159,20 @@ public class Database extends SQLiteOpenHelper {
 //	    		MainActivity.extendeddateFormat.parse(cursor.getString(3)), 
 //	    		cursor.getString(4), cursor.getString(5), cursor.getString(6),
 //	    		MainActivity.date_timeFormat.parse(cursor.getString(7)));
+	    SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.US);
 	    Event event = new Event();
 		event.addID(cursor.getInt(0));
 		event.addTitle(cursor.getString(1));
 		event.addDescription(cursor.getString(2));
-		event.addDate(MainActivity.extendeddateFormat.parse(cursor.getString(3)));
+		String datetext = cursor.getString(3);
+		if (datetext.length() > 0)
+		{
+			event.addDate(format.parse(datetext));
+		}
 		event.addLocation(cursor.getString(4));
 		event.addDateAndTime(cursor.getString(5));
 		event.addLink(cursor.getString(6));
-		event.addPubDate(MainActivity.date_timeFormat.parse(cursor.getString(7)));  
+		event.addPubDate(format.parse(cursor.getString(7)));  
 	    return event;
     }
      
@@ -209,7 +222,7 @@ public class Database extends SQLiteOpenHelper {
 //    	values.put(EVENT_DATE_TIME, event.getDateAndTime());
 //    	values.put(EVENT_LINK, event.getEventLink());
 //    	values.put(EVENT_PUBDATE, event.getPubDate().toString());
-    	
+    	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.US);
     	if(cursor.moveToFirst())
     	{
     		do {
@@ -217,11 +230,15 @@ public class Database extends SQLiteOpenHelper {
 				event.addID(cursor.getInt(0));
 				event.addTitle(cursor.getString(1));
 				event.addDescription(cursor.getString(2));
-				event.addDate(MainActivity.extendeddateFormat.parse(cursor.getString(3)));
+				String datetext = cursor.getString(3);
+				if (datetext.length() > 0)
+				{
+					event.addDate(format.parse(datetext));
+				}
 				event.addLocation(cursor.getString(4));
 				event.addDateAndTime(cursor.getString(5));
 				event.addLink(cursor.getString(6));
-				event.addPubDate(MainActivity.date_timeFormat.parse(cursor.getString(7)));
+				event.addPubDate(format.parse(cursor.getString(7)));
 				events.add(event);
 			} while (cursor.moveToNext());
     	}
@@ -328,6 +345,15 @@ public class Database extends SQLiteOpenHelper {
         return count;
     }
     
+    public void ResetEventTable()
+    {
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        String CREATE_EVENTS_TABLE = "CREATE TABLE " + TABLE_EVENTS + "("
+                + EVENT_ID+ " INTEGER PRIMARY KEY," + EVENT_TITLE + " TEXT,"
+                + EVENT_DESC + " TEXT," + EVENT_DATE + " TEXT," + EVENT_LOCATION + " TEXT," +  EVENT_DATE_TIME+ " TEXT," +  EVENT_LINK + " TEXT," + EVENT_PUBDATE + " TEXT" + ")";
+        db.execSQL(CREATE_EVENTS_TABLE);
+    }
     public byte[] convertToByteArr(Bitmap bitmap)
     {
     	ByteArrayOutputStream stream = new ByteArrayOutputStream();

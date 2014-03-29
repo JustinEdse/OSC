@@ -25,6 +25,7 @@ import com.edse.network.EventRSSReader;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -440,11 +441,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// task1.execute();
 
 		// task2.execute();
-
+		//MainActivity.db.ResetEventTable();
 		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
 		task.setOnResultsListener(this);
 		task.execute();
-
+		
 		AsyncEvent task2 = new AsyncEvent(MainActivity.globalTHIS);
 		task2.setOnResultsListener(new EventsResultsListener() {
 			
@@ -452,65 +453,55 @@ public class MainActivity extends SherlockFragmentActivity implements
 			public void onResultSuccess(ArrayList<Event> result) {
 				// TODO Auto-generated method stub
 				//This first for loop creates the necessary multiple event instances for events that span multiple days
-				ArrayList<Event> eventinstances = new ArrayList<Event>();
-				events.clear();
-				for (Event ev : result)
+				ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
+				if (result.size() > 0)
 				{
-					ArrayList<Date> eventDates = parseDate(ev.getDateAndTime());
-					if(eventDates.size() > 1)
+					for(Event ev : result)//No duplicates List
 					{
-						//Event runs on multiple dates
-						Date temp1 = eventDates.get(0);
-						Date temp2 = eventDates.get(1);
-						if (temp1.before(temp2))
-						{
-							
-							int diff = temp2.getDate() - temp1.getDate();
-							for (int y = 0; y<= diff; y++)
-							{
-								Date tempDate = new Date();
-								Calendar cal = Calendar.getInstance();    
-								cal.setTime(temp1);    
-								cal.add(Calendar.DATE, y);
-								Event createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-								//Log.d("Date", cal.getTime().toString());
-								eventinstances.add(createdEvent);
-							}
-						}
-						else 
-						{
-							int diff = temp1.getDate() - temp2.getDate();
-							for (int y = 0; y<= diff; y++)
-							{
-								Date tempDate = new Date();
-								Calendar cal = Calendar.getInstance();    
-								cal.setTime(temp2);    
-								cal.add(Calendar.DATE, y);
-								Event createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-								//Log.d("Date", cal.getTime().toString());
-								eventinstances.add(createdEvent);
-								
-							}
+						Log.d("List1","Title is " +  ev.getEventName());// + "and date is " + ev.getDate().toString());
+					}
+					lists = generateLists(result);
+					Log.d("List1","Size of list returned is " +  Integer.toString(lists.get(1).size()));
+					for(Event ev : lists.get(1))//No duplicates List
+					{
+						Log.d("List1","Title is " +  ev.getEventName() + "and date is ");// + ev.getDate().toString());
+						try {
+							MainActivity.db.addEvent(ev);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
-					else if(eventDates.size() == 1)
-					{
-						//Event is only on one day
-						Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-						//Log.d("Date", eventDates.get(0).toString());
-						eventinstances.add(createdEvent);
-					}
-					if(eventDates.size() > 0)
-					{
-						Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-						events.add(createdEvent);
-					}
+					
 				}
+				try {
+					events = MainActivity.db.getAllEvents();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d("List1","Size of db is " + Integer.toString(MainActivity.db.getEventsCount()));
+				for (Event eV: events)
+				{
+					Log.d("List1","Title is " +  eV.getEventName());// + "and date is " + eV.getDate().toString());
+				}
+				ArrayList<Event> eventinstances = new ArrayList<Event>();
+				lists = generateLists(events);
+				eventinstances = lists.get(0);
+				//events = lists.get(1);
+				
+				
+				
 				
 				/*
 				 * THis loop then adds the elements from the newly created arraylist containing multiple instances for events 
 				 * that span multiple days to the calendar Map, 
 				 */
+				//Clear the map first
+				calendarMap.clear();
 				for (Event ev : eventinstances)
 				{
 					ArrayList<Event> events = new ArrayList<Event>();
@@ -682,6 +673,77 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		return dates;
 	
+	}
+	public ArrayList<ArrayList<Event>> generateLists(ArrayList<Event> result)
+	{
+		ArrayList<Event> eventinstances = new ArrayList<Event>();
+		ArrayList<Event> noduplicatesList = new ArrayList<Event>();
+		for (Event ev : result)
+		{
+			ArrayList<Date> eventDates = parseDate(ev.getDateAndTime());
+			//No date field
+			if (eventDates.size() == 0) 
+			{
+				Event createdEvent = new Event(ev.getEventName(),null, ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+				noduplicatesList.add(createdEvent);	
+			}
+			//If there is a date field
+			if(eventDates.size() > 0)
+			{
+				//Add it to the no duplicates list
+				Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+				noduplicatesList.add(createdEvent);
+				//Then generate more event instances if needed
+				if(eventDates.size() > 1)
+				{
+					//Event runs on multiple dates
+					Date temp1 = eventDates.get(0);
+					Date temp2 = eventDates.get(1);
+					if (temp1.before(temp2))
+					{
+						
+						int diff = temp2.getDate() - temp1.getDate();
+						for (int y = 0; y<= diff; y++)
+						{
+							Date tempDate = new Date();
+							Calendar cal = Calendar.getInstance();    
+							cal.setTime(temp1);    
+							cal.add(Calendar.DATE, y);
+							createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+							//Log.d("Date", cal.getTime().toString());
+							eventinstances.add(createdEvent);
+						}
+					}
+					else 
+					{
+						int diff = temp1.getDate() - temp2.getDate();
+						for (int y = 0; y<= diff; y++)
+						{
+							Date tempDate = new Date();
+							Calendar cal = Calendar.getInstance();    
+							cal.setTime(temp2);    
+							cal.add(Calendar.DATE, y);
+							createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+							//Log.d("Date", cal.getTime().toString());
+							eventinstances.add(createdEvent);
+							
+						}
+					}
+					
+				}
+				else 
+				{
+					createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+					eventinstances.add(createdEvent);
+				}
+			}
+			
+		}
+		
+		ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
+		lists.add(eventinstances);
+		lists.add(noduplicatesList);
+		return lists;
 	}
 
 }

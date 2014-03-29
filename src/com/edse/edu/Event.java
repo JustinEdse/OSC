@@ -121,11 +121,11 @@ public class Event implements Comparable<Event>
 	public int compareTo(Event rhs) {
 		// TODO Auto-generated method stub
 		int val = 10000;
-		if (this.date.before(rhs.getDate()))
+		if (this.pubDate.before(rhs.getPubDate()))
 		{
 			val = -1;
 		}
-		else if (this.date.after(rhs.getDate()))
+		else if (this.pubDate.after(rhs.getPubDate()))
 		{
 			val = 1;
 		}

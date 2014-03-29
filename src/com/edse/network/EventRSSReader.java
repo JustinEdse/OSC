@@ -27,6 +27,7 @@ import com.edse.edu.Article;
 import com.edse.edu.Event;
 import com.edse.edu.MainActivity;
 
+import android.R.bool;
 import android.R.integer;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -149,13 +150,21 @@ public class EventRSSReader
 						dateTime = dateTime.substring(0,endpoint);
 						//ArrayList<Date> eventDates = new ArrayList<Date>();
 						//eventDates = parseDate(dateTime);
-						Log.d("Parse Check", "1" + dateTime);
-						Log.d("Parse Check", "2" + fulldesc);
+						
 						Date pubDate2 = MainActivity.date_timeFormat.parse(pubDate);
 						String tittextString = Html.fromHtml(title).toString();
+						Log.d("Parse Check", "1" + tittextString);
+						Log.d("Parse Check", "2" + dateTime);
+						Log.d("Parse Check", "3" + fulldesc);
+						Log.d("Parse Check", "4" + pubDate);
 						//Date object will be created from dateTime String in Main Activity
 						Event tempEvent = new Event(tittextString,null, dateTime, link, pubDate2);
-						listevents.add(tempEvent);
+						if(isNewEvent(tempEvent))
+						{
+							Log.d("Obinna", "Event: " + tittextString + " added");
+							listevents.add(tempEvent);
+							//Log.d("Obinna", Integer.toString(listevents.size()));
+						}
 						//Log.d("Title", tittextString + " and date is " + dateTime);
 //						if(eventDates.size() > 0 )
 //						{
@@ -436,16 +445,32 @@ public class EventRSSReader
 	
    private static boolean isNewEvent(Event ev)
    {
-	   Set<Date> pubdateSet = new TreeSet<Date>();
-	   try {
-		ArrayList<Event> evs = MainActivity.db.getAllEvents();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	   return pubdateSet.contains(ev.getPubDate());
+	   boolean ans;
+	   if (ev.getPubDate().toString() == "")
+	   {
+		  ans =  false;
+	   }
+	   else 
+	   {
+		   Set<Date> pubdateSet = new TreeSet<Date>();
+		   Set<String> titlesetSet = new TreeSet<String>();
+		   try {
+			ArrayList<Event> evs = MainActivity.db.getAllEvents();
+			for (Event ev1 : evs)
+			{
+				pubdateSet.add(ev1.getPubDate());
+				titlesetSet.add(ev1.getEventName());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		    ans = pubdateSet.contains(ev.getPubDate()) && titlesetSet.contains(ev.getEventName());
+	   }
+	   //Log.d("Obinna", Boolean.toString(ans));
+	   return !ans;
    }
 }

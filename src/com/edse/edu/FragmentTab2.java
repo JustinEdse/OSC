@@ -175,7 +175,7 @@ public class FragmentTab2 extends SherlockFragment
     		for (Event ev: MainActivity.events)
     		{
     			eventTitles.add(ev.getEventName());
-    			Log.d("List sort", ev.getEventName() + "Evdate is" + ev.getDate().toString());
+    			//Log.d("List sort", ev.getEventName() + "Evdate is" + ev.getDate().toString());
     			eventDateTimes.add(ev.getDateAndTime());
     			eventLinks.add(ev.getEventLink());
     		}
