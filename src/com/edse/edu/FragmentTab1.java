@@ -48,7 +48,6 @@ import android.support.v4.view.PagerTabStrip;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-
 public class FragmentTab1 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
@@ -56,13 +55,11 @@ public class FragmentTab1 extends SherlockFragment
 
 	private FragmentTransaction t = null;
 	private CaldroidFragment caldroidFragment = null;
-<<<<<<< HEAD
-	//private FragmentTransaction eventFragmentTransaction = null;
-	
-=======
+
+	// private FragmentTransaction eventFragmentTransaction = null;
+
 	private FragmentTransaction eventFragmentTransaction = null;
 
->>>>>>> cf6ed14d1003ba0ab6ebd06cdb20ece65f5fdd4d
 	private ListView listView = null;
 	static String categoryChosen = "";
 	View view = null;
@@ -90,12 +87,13 @@ public class FragmentTab1 extends SherlockFragment
 
 			NewsTabCategories(view, inflater, container);
 		}
-		else if(MainActivity.selectedFrag == 1) {
+		else if(MainActivity.selectedFrag == 1) 
+		{
 			/*
 			 * Anurag. Trying out the Caldroid Calendar 
 			 */
 			view = inflater.inflate(R.layout.calendar_view_host, container, false);
-<<<<<<< HEAD
+
 			caldroidFragment = new CaldroidFragment();
 			Bundle args = new Bundle();
 			Calendar cal = Calendar.getInstance();
@@ -119,16 +117,19 @@ public class FragmentTab1 extends SherlockFragment
 			t.commit();
 			
 			// setting up Listener
-			final CaldroidListener listener = new CaldroidListener() {
+			final CaldroidListener listener = new CaldroidListener() 
+			{
 
 				@Override
-				public void onSelectDate(Date date, View view) {
+				public void onSelectDate(Date date, View view) 
+				{
 					//String strDate = MainActivity.dateFormat.format(date);
 					//Log.d("anurag", "After formatting Date: " + strDate);
 					Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
 					//strDate = hackFirstZero(strDate);
 					//Log.d("What string key is", strDate);
-					if (MainActivity.calendarMap.containsKey(date)) {
+					if (MainActivity.calendarMap.containsKey(date)) 
+					{
 						Log.d("anurag", "The date has events assiciated with it.");
 						
 //						t.remove(caldroidFragment);
@@ -156,12 +157,14 @@ public class FragmentTab1 extends SherlockFragment
 						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 					}
 					
-				}
-=======
-			CalendarFragmentSetup(view, inflater, container);
->>>>>>> cf6ed14d1003ba0ab6ebd06cdb20ece65f5fdd4d
+				
 
-		}
+					CalendarFragmentSetup(view, inflater, container);
+
+
+				}
+			};}
+			
 
 		else if(MainActivity.selectedFrag == 2)
 		{
@@ -183,51 +186,52 @@ public class FragmentTab1 extends SherlockFragment
 	}
 
 	@Override
-	public void onHiddenChanged(boolean hidden) {
+	public void onHiddenChanged(boolean hidden)
+	{
 		super.onHiddenChanged(hidden);
 		Log.d("testing", "Entering into onHiddenChanged. hidden: " + hidden);
 	}
 
-
-	public void NewsTabCategories(View viewOuter, LayoutInflater inflater, ViewGroup container)
+	public void NewsTabCategories(View viewOuter, LayoutInflater inflater,
+			ViewGroup container)
 	{
-		//articles = MainActivity.articlesReturned;
+		// articles = MainActivity.articlesReturned;
 
-		ArrayAdapter<CharSequence> catListAdapter = ArrayAdapter.createFromResource(getActivity().getBaseContext(),
-				R.array.categories, R.layout.custom_list_view);
-
+		ArrayAdapter<CharSequence> catListAdapter = ArrayAdapter
+				.createFromResource(getActivity().getBaseContext(),
+						R.array.categories, R.layout.custom_list_view);
 
 		listView = (ListView) view.findViewById(R.id.listViewCategories);
 		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
 
 		listView.setAdapter(catListAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id)
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
 			{
-				//One list should be used to display all news article items.
-				//when each category is selected the article objects within the list will
-				//change.
+				// One list should be used to display all news article items.
+				// when each category is selected the article objects within the
+				// list will
+				// change.
 
-
-
-				//During this switch the type of article wanted should be set for each choice.
-				//Then at the end of the switch statement we make one call to the client component
-				//class in the networking package to interact with the server.
+				// During this switch the type of article wanted should be set
+				// for each choice.
+				// Then at the end of the switch statement we make one call to
+				// the client component
+				// class in the networking package to interact with the server.
 				String type = "";
-				switch(position)
+				switch (position)
 				{
 
 				case 0:
-					//supercomputing
+					// supercomputing
 					type = "Supercomputing";
 					break;
 
 				case 1:
-					//research
+					// research
 					type = "Research";
 					break;
 				case 2:
@@ -251,7 +255,7 @@ public class FragmentTab1 extends SherlockFragment
 					type = "Cyberinfrastructure";
 					break;
 				case 7:
-					//blue collar computing
+					// blue collar computing
 					type = "Blue Collar Computing";
 					break;
 				case 8:
@@ -262,22 +266,18 @@ public class FragmentTab1 extends SherlockFragment
 					break;
 				}
 
-
-
-
-				//we now have articles in the list that are the same category the user chose.
+				// we now have articles in the list that are the same category
+				// the user chose.
 
 				categoryChosen = type;
-				//iterate through the list to see which type of article type is needed...
-
-
-
-
+				// iterate through the list to see which type of article type is
+				// needed...
 
 				DisplayFragment.modifiedListArt.clear();
-				////////////CHANGES HERE////////////////////////////////
+				// //////////CHANGES HERE////////////////////////////////
 				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				FragmentTransaction ft = getActivity()
+						.getSupportFragmentManager().beginTransaction();
 				// Locate Position
 				// new fragment replaces older material.
 
@@ -287,23 +287,24 @@ public class FragmentTab1 extends SherlockFragment
 				ft.replace(R.id.content_frame, newFrag);
 				ft.addToBackStack(null);
 
-
-
-
 				ft.commit();
-
 
 			}
 
 		});
 
 	}
+
 	/*
-	 * Note: Later, we can modify the code for optimization, to call caldroidFragment.setBackgroundResourceForDates(backgroundForDateMap);
-	 * method. Also we may want to set different colors for events - say to differentiate between past and new events.
+	 * Note: Later, we can modify the code for optimization, to call
+	 * caldroidFragment.setBackgroundResourceForDates(backgroundForDateMap);
+	 * method. Also we may want to set different colors for events - say to
+	 * differentiate between past and new events.
 	 */
 
-	private void CalendarFragmentSetup (View viewOuter, LayoutInflater inflater, ViewGroup container) {
+	private void CalendarFragmentSetup(View viewOuter, LayoutInflater inflater,
+			ViewGroup container)
+	{
 
 		getActivity().setTitle("Calendar");
 		caldroidFragment = new CaldroidFragment();
@@ -320,74 +321,87 @@ public class FragmentTab1 extends SherlockFragment
 		// Attach to the activity
 
 		t = this.getChildFragmentManager().beginTransaction();
-//		t = getActivity().getSupportFragmentManager().beginTransaction();			
+		// t = getActivity().getSupportFragmentManager().beginTransaction();
 		t.replace(R.id.calendar1, caldroidFragment);
 		Log.d("testing", "Trying to do the addtobackstack thing");
 		t.addToBackStack(null);
 		// What does this mDrawerToggle and movesCount do ????????????????
 
-		//MainActivity.movesCount++;
+		// MainActivity.movesCount++;
 		t.commit();
 
 		// setting up Listener
-		final CaldroidListener listener = new CaldroidListener() {
+		final CaldroidListener listener = new CaldroidListener()
+		{
 
 			@Override
-			public void onSelectDate(Date date, View view) {
-				//String strDate = MainActivity.dateFormat.format(date);
-				//Log.d("anurag", "After formatting Date: " + strDate);
+			public void onSelectDate(Date date, View view)
+			{
+				// String strDate = MainActivity.dateFormat.format(date);
+				// Log.d("anurag", "After formatting Date: " + strDate);
 				Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
-				//strDate = hackFirstZero(strDate);
-				//Log.d("What string key is", strDate);
-				if (MainActivity.calendarMap.containsKey(date)) {
+				// strDate = hackFirstZero(strDate);
+				// Log.d("What string key is", strDate);
+				if (MainActivity.calendarMap.containsKey(date))
+				{
 					Log.d("anurag", "The date has events assiciated with it.");
 
-					//					t.remove(caldroidFragment);
+					// t.remove(caldroidFragment);
 					t.detach(caldroidFragment);
 					// I have no idea why I did the decrement thing
-					//MainActivity.movesCount--;
+					// MainActivity.movesCount--;
 					MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+					FragmentTransaction ft = getActivity()
+							.getSupportFragmentManager().beginTransaction();
 					// Launsh fragment showing the list of events on that day.
 
 					MainActivity.movesCount++;
-					EventDisplayFragment newFrag= new EventDisplayFragment();
+					EventDisplayFragment newFrag = new EventDisplayFragment();
 					Bundle bunds = new Bundle();
-					bunds.putString("date", MainActivity.date_timeFormat.format(date));
+					bunds.putString("date",
+							MainActivity.date_timeFormat.format(date));
 					newFrag.setArguments(bunds);
-					//Log.d("Obinna", "Date sent to event display fragement");
+					// Log.d("Obinna", "Date sent to event display fragement");
 					ft.replace(R.id.content_frame, newFrag);
 					ft.addToBackStack(null);
 					ft.commit();
 
 				}
-				else 
+				else
 				{
-					//int id = view.getId();
-					Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
+					// int id = view.getId();
+					Toast.makeText(getActivity().getApplicationContext(),
+							"There is no event on that day", Toast.LENGTH_SHORT)
+							.show();
 				}
 
 			}
 
 			/**
-			 * The String date received from onSelectDate callback method contains date in format: mm/dd/yyyy. For months like Feb, the mm part
-			 * contains: 02. But the String key entered by us in test data does not contain 02 (it contains just 2). This causes string mismatch.
-			 *  This method will check to see if the Date string starts with a 0, if yes, it will remove it.
+			 * The String date received from onSelectDate callback method
+			 * contains date in format: mm/dd/yyyy. For months like Feb, the mm
+			 * part contains: 02. But the String key entered by us in test data
+			 * does not contain 02 (it contains just 2). This causes string
+			 * mismatch. This method will check to see if the Date string starts
+			 * with a 0, if yes, it will remove it.
+			 * 
 			 * @param strDate
 			 * @return
 			 */
-			private String hackFirstZero(String strDate) {
-				if (strDate.startsWith("0")) {
+			private String hackFirstZero(String strDate)
+			{
+				if (strDate.startsWith("0"))
+				{
 					strDate = strDate.substring(1);
 				}
 				return strDate;
 			}
 
 			@Override
-			public void onLongClickDate(Date date, View view) {
+			public void onLongClickDate(Date date, View view)
+			{
 				onSelectDate(date, view);
 			}
-
 
 		};
 
@@ -395,51 +409,44 @@ public class FragmentTab1 extends SherlockFragment
 		caldroidFragment.setCaldroidListener(listener);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
-	private void setColorToEvents(CaldroidFragment caldroidFragment) {
+
+	private void setColorToEvents(CaldroidFragment caldroidFragment)
+	{
 		Date dateObj = null;
-		for (Date strDate : MainActivity.calendarMap.keySet()) {
-			//			try {
-			//				dateObj = MainActivitydateFormat.parse(strDate);
-			//			} catch (ParseException e) {
-			//				Log.e("anurag", "Error when parsing date: " + strDate, e);
-			//				continue;
-			//			}
-			caldroidFragment.setBackgroundResourceForDate(R.color.green, strDate);
+		for (Date strDate : MainActivity.calendarMap.keySet())
+		{
+			// try {
+			// dateObj = MainActivitydateFormat.parse(strDate);
+			// } catch (ParseException e) {
+			// Log.e("anurag", "Error when parsing date: " + strDate, e);
+			// continue;
+			// }
+			caldroidFragment.setBackgroundResourceForDate(R.color.green,
+					strDate);
 			caldroidFragment.setTextColorForDate(R.color.white, strDate);
 		}
 
 	}
-<<<<<<< HEAD
-	
-public void ChangeLogs(View cView, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
-{
-		
-}
-public void KnownIssues(View kView, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
-{
-		
-}
-public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
-{
-	
-	//set glenn status images in matrix....
-	//top row = cpu report, load report.
-	//bottom row = memory report, network report
-}
-	
-	 
-	 
-	
-=======
 
-	public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
+	public void ChangeLogs(View cView, LayoutInflater inflaterGStatus,
+			ViewGroup containerGStatus)
 	{
 
-		//set glenn status images in matrix....
-		//top row = cpu report, load report.
-		//bottom row = memory report, network report
 	}
 
+	public void KnownIssues(View kView, LayoutInflater inflaterGStatus,
+			ViewGroup containerGStatus)
+	{
 
->>>>>>> cf6ed14d1003ba0ab6ebd06cdb20ece65f5fdd4d
+	}
+
+	public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus,
+			ViewGroup containerGStatus)
+	{
+
+		// set glenn status images in matrix....
+		// top row = cpu report, load report.
+		// bottom row = memory report, network report
+	}
+
 }
