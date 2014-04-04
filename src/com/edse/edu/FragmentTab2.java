@@ -65,7 +65,7 @@ public class FragmentTab2 extends SherlockFragment
 			DisplayAllEvents(view, inflater, container);
 			
 		}
-		else if(MainActivity.selectedFrag == 2)
+		else if(MainActivity.selectedFrag == 4)
 		{
 			view = inflater.inflate(R.layout.status_matrix_oakley, container, false);
 		}

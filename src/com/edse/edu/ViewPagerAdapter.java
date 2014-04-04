@@ -58,7 +58,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	{
     		temp = (CharSequence)calendartitles[position];
     	}
-    	else if(MainActivity.selectedFrag == 2)
+    	else if(MainActivity.selectedFrag == 4)
     	{
     		temp = (CharSequence)systemTitles[position];
     	}
@@ -77,7 +77,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	{
     		count = EVENT_PAGE_COUNT;
     	}
-    	else if(MainActivity.selectedFrag == 2)
+    	else if(MainActivity.selectedFrag == 4)
     	{
     		count = SYSTEM_INFO_COUNT;
     	}

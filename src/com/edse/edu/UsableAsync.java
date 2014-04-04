@@ -18,14 +18,14 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private String urlArticles = "https://www.osc.edu/press-feed";
 	private Context context;
-	
+	ProgressDialog dialog;
 
 	public UsableAsync(Context context)
 	{
 		this.context = context;
 	}
 
-	ProgressDialog dialog;
+	
 
 	public void setOnResultsListener(ResultsListener listener)
 	{
@@ -35,10 +35,11 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 	@Override
 	protected void onPreExecute()
 	{
+		super.onPreExecute();
 		dialog = new ProgressDialog(context);
 		dialog.setMessage("Loading...");
-		dialog.setIndeterminate(true);
-		dialog.setCancelable(false);
+		dialog.setIndeterminate(false);
+		dialog.setCancelable(true);
 		dialog.show();
 	}
 
@@ -56,6 +57,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		{
 
 			artReaderObj.fetchXML();
+			MainActivity.networkStatus = true;
 		}
 		catch (InterruptedException e)
 		{
@@ -65,11 +67,17 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		catch (IOException ioe)
 		{
 			ioe.printStackTrace();
+			//MainActivity.networkStatus = false;
 
 		}
 
 		while (artReaderObj.parsingComplete)
 			;
+		
+		ArrayList<Article> cacheInfo = null;
+		
+		if(MainActivity.networkStatus != false)
+		{
 		retArtList = artReaderObj.getArticles();
 		// right now just doing articles. in the future will worry about
 		// events....
@@ -79,7 +87,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			// If list size is zero then that means no new articles were
 			// published. get articles from
 			// the sqlite database.
-			ArrayList<Article> cacheInfo = null;
+			
 			try
 			{
 				cacheInfo = MainActivity.db.getAllArticles();
@@ -88,6 +96,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				MainActivity.networkStatus = false;
 			}
 			modifiedList = cacheInfo;
 
@@ -130,6 +139,19 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			}// get articles from cache
 
 		}
+		}
+		else
+		{
+			try
+			{
+				modifiedList = MainActivity.db.getAllArticles();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		MainActivity.db.close();
 		return modifiedList;
 	}
@@ -137,25 +159,33 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 	@Override
 	protected void onPostExecute(ArrayList<Article> result)
 	{
-		dialog.dismiss();
+		super.onPostExecute(result); 
+		if(dialog != null && dialog.isShowing())
+		{
+			dialog.dismiss();
+		}
 
+		
+		
 		if (result.size() > 0)
 		{
 			if (listener != null)
 			{
 				listener.onResultSuccess(result);
-				MainActivity.networkStatus = true;
+				
 			}
 
 			Toast.makeText(context, "Ok", Toast.LENGTH_LONG).show();
 		}
-		else
+		
+		if(MainActivity.networkStatus == false)
 		{
 			if (listener != null || result.size() == 0)
 			{
 
-				listener.onResultFail(1, "No Internet Connection");
+				//listener.onResultFail(1, "No Internet Connection");
 				// set xml layout to recent fragment to indicate something.
+				dialog.dismiss();
 			}
 			Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG)
 					.show();

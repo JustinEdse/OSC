@@ -69,7 +69,7 @@ public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
 			;
 		retEventList = eventReaderObj.getEvents();
 		
-
+		MainActivity.db.close();
 		return retEventList;
 
 	}

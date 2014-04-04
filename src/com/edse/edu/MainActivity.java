@@ -70,29 +70,37 @@ public class MainActivity extends SherlockFragmentActivity implements
 	int[] icon;
 	Fragment fragment1 = new NewsFragment();
 	Fragment fragment2 = new CalendarFragment();
-	Fragment fragment3 = new StatusFragment();
+	Fragment fragment3 = new ChangeLgsFragment();
+	Fragment fragment4 = new KnownIssFragment();
+	Fragment fragment5 = new StatusFragment();
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private int backCount = 0;
 	private static final String NEWSFRAG = "News";
 	private static final String CALFRAG = "Calendar";
 	private static final String STATUSFRAG = "System Status";
-	//public static final String DATE_FORMAT = "MM/dd/yyyy";
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-	//public static final String EXTENDED_DATE_FORMAT = "EEEEEE, MMMMM dd, yyyy";
-	public static final SimpleDateFormat extendeddateFormat = new SimpleDateFormat("EEEEEE, MMMMM dd, yyyy", Locale.US);
-	public static SimpleDateFormat date_timeFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss", Locale.US);
+	private static final String ISSUESFRAG = "Known Issues";
+	private static final String CHANGES = "Change Logs";
+	// public static final String DATE_FORMAT = "MM/dd/yyyy";
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"MM/dd/yyyy", Locale.US);
+	// public static final String EXTENDED_DATE_FORMAT =
+	// "EEEEEE, MMMMM dd, yyyy";
+	public static final SimpleDateFormat extendeddateFormat = new SimpleDateFormat(
+			"EEEEEE, MMMMM dd, yyyy", Locale.US);
+	public static SimpleDateFormat date_timeFormat = new SimpleDateFormat(
+			"EEE, dd MMM yyyy hh:mm:ss", Locale.US);
 	// for getting rss article feed.
 	static String urlArticles = "https://www.osc.edu/press-feed";
 	static String urlEvents = "https://osc.edu/feeds/events/all";
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private com.edse.network.EventRSSReader eventReaderObj;
 	public static Context globalTHIS = null;
-	
-	 //Maximum size of tables
+
+	// Maximum size of tables
 	public static Database db;
-    public static final int ARTICLE_TABLE_SIZE = 30;
-    public static final int EVENT_TABLE_SIZE = 30;
+	public static final int ARTICLE_TABLE_SIZE = 30;
+	public static final int EVENT_TABLE_SIZE = 30;
 	// action bar
 	ActionBar actionBar;
 
@@ -102,8 +110,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		globalTHIS = this;
 		super.onCreate(savedInstanceState);
-		
-		
+
 		// Get the view from drawer_main.xml
 
 		// this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -116,10 +123,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mTitle = mDrawerTitle = getTitle();
 
 		// Generate title
-		title = new String[] { "News", "Calendar", "System Status" };
+		title = new String[] { "News", "Calendar", "Change Log", "Known Issues", "System Status" };
 
 		// Generate icon
-		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2, R.drawable.info };
+		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2,
+				R.drawable.comp, R.drawable.attention,R.drawable.info };
 
 		// Locate DrawerLayout in drawer_main.xml
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -227,8 +235,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 		{
 			setTitle("Calendar");
 		}
-		
-		if(MainActivity.movesCount == 0 && selectedFrag == 2)
+
+		if (MainActivity.movesCount == 0 && selectedFrag == 4)
 		{
 			setTitle("System Status");
 		}
@@ -236,6 +244,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 		if (MainActivity.movesCount == 0 && selectedFrag == 0)
 		{
 			setTitle("News");
+		}
+		
+		if(MainActivity.movesCount == 0 && selectedFrag == 2)
+		{
+			setTitle("Change Log");
+		}
+		if(MainActivity.movesCount == 0 && selectedFrag == 3)
+		{
+			setTitle("Known Issues");
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -263,7 +280,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		ft = getSupportFragmentManager().beginTransaction();
 		// Locate Position
 		FragmentManager manager = getSupportFragmentManager();
-		
+
 		// new fragment replaces older material.
 		switch (position)
 		{
@@ -299,7 +316,23 @@ public class MainActivity extends SherlockFragmentActivity implements
 			{
 				manager.popBackStack();
 			}
-			ft.replace(R.id.content_frame, fragment3, STATUSFRAG);
+			ft.replace(R.id.content_frame, fragment3, CHANGES);
+			break;
+		case 3:// calendar
+			manager = this.getSupportFragmentManager();
+			for (int i = 0; i < manager.getBackStackEntryCount(); ++i)
+			{
+				manager.popBackStack();
+			}
+			ft.replace(R.id.content_frame, fragment4, ISSUESFRAG);
+			break;
+		case 4:// calendar
+			manager = this.getSupportFragmentManager();
+			for (int i = 0; i < manager.getBackStackEntryCount(); ++i)
+			{
+				manager.popBackStack();
+			}
+			ft.replace(R.id.content_frame, fragment5, STATUSFRAG);
 			break;
 
 		}
@@ -343,7 +376,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onBackPressed()
 	{
 
-		FragmentManager manager = getSupportFragmentManager();
+		FragmentManager manager = this.getSupportFragmentManager();
 		if (manager.getBackStackEntryCount() > 0)
 		{
 			// If there are back-stack entries, leave the FragmentActivity
@@ -406,21 +439,30 @@ public class MainActivity extends SherlockFragmentActivity implements
 			{
 				setTitle("Calendar");
 			}
-			
-			if(MainActivity.movesCount == 0 && selectedFrag == 2)
+
+			if (MainActivity.movesCount == 0 && selectedFrag == 2)
 			{
-				setTitle("System Status");
+				setTitle("Change Log");
 			}
 
 			if (MainActivity.movesCount == 0 && selectedFrag == 0)
 			{
 				setTitle("News");
 			}
+			
+			if(MainActivity.movesCount == 0 && selectedFrag == 3)
+			{
+				setTitle("Known Issues");
+			}
+			if(MainActivity.movesCount == 0 && selectedFrag == 4)
+			{
+				setTitle("System Status");
+			}
 
 		}
 
 	}
-	
+
 	@Override
 	public void onStart()
 	{
@@ -441,66 +483,89 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// task1.execute();
 
 		// task2.execute();
-		//MainActivity.db.ResetEventTable();
+		// MainActivity.db.ResetEventTable();
 		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
 		task.setOnResultsListener(this);
 		task.execute();
-		
+
 		AsyncEvent task2 = new AsyncEvent(MainActivity.globalTHIS);
-		task2.setOnResultsListener(new EventsResultsListener() {
-			
+		
+		
+		task2.setOnResultsListener(new EventsResultsListener()
+		{
+
 			@Override
-			public void onResultSuccess(ArrayList<Event> result) {
+			public void onResultSuccess(ArrayList<Event> result)
+			{
 				// TODO Auto-generated method stub
-				//This first for loop creates the necessary multiple event instances for events that span multiple days
+				// This first for loop creates the necessary multiple event
+				// instances for events that span multiple days
 				ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
 				if (result.size() > 0)
 				{
-					for(Event ev : result)//No duplicates List
+					for (Event ev : result)// No duplicates List
 					{
-						Log.d("List1","Title is " +  ev.getEventName());// + "and date is " + ev.getDate().toString());
+						Log.d("List1", "Title is " + ev.getEventName());// +
+																		// "and date is "
+																		// +
+																		// ev.getDate().toString());
 					}
 					lists = generateLists(result);
-					Log.d("List1","Size of list returned is " +  Integer.toString(lists.get(1).size()));
-					for(Event ev : lists.get(1))//No duplicates List
+					Log.d("List1",
+							"Size of list returned is "
+									+ Integer.toString(lists.get(1).size()));
+					for (Event ev : lists.get(1))// No duplicates List
 					{
-						Log.d("List1","Title is " +  ev.getEventName() + "and date is ");// + ev.getDate().toString());
-						try {
+						Log.d("List1", "Title is " + ev.getEventName()
+								+ "and date is ");// + ev.getDate().toString());
+						try
+						{
 							MainActivity.db.addEvent(ev);
-						} catch (IOException e) {
+						}
+						catch (IOException e)
+						{
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
-					
+
 				}
-				try {
-					events = MainActivity.db.getAllEvents();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Log.d("List1","Size of db is " + Integer.toString(MainActivity.db.getEventsCount()));
-				for (Event eV: events)
+				try
 				{
-					Log.d("List1","Title is " +  eV.getEventName());// + "and date is " + eV.getDate().toString());
+					events = MainActivity.db.getAllEvents();
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (ParseException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d("List1",
+						"Size of db is "
+								+ Integer.toString(MainActivity.db
+										.getEventsCount()));
+				for (Event eV : events)
+				{
+					Log.d("List1", "Title is " + eV.getEventName());// +
+																	// "and date is "
+																	// +
+																	// eV.getDate().toString());
 				}
 				ArrayList<Event> eventinstances = new ArrayList<Event>();
 				lists = generateLists(events);
 				eventinstances = lists.get(0);
-				//events = lists.get(1);
-				
-				
-				
-				
+				// events = lists.get(1);
+
 				/*
-				 * THis loop then adds the elements from the newly created arraylist containing multiple instances for events 
-				 * that span multiple days to the calendar Map, 
+				 * THis loop then adds the elements from the newly created
+				 * arraylist containing multiple instances for events that span
+				 * multiple days to the calendar Map,
 				 */
-				//Clear the map first
+				// Clear the map first
 				calendarMap.clear();
 				for (Event ev : eventinstances)
 				{
@@ -511,29 +576,52 @@ public class MainActivity extends SherlockFragmentActivity implements
 						events.add(ev);
 						calendarMap.put(ev.getDate(), events);
 					}
-					else 
+					else
 					{
 						events.add(ev);
 						calendarMap.put(ev.getDate(), events);
 					}
 				}
-				//We can set the array for the list of all events now
-				//events = eventinstances;
-				//Log.d("Obinna", "Two arraylists returned");
-			}
-			
-			@Override
-			public void onResultFail(int resultCode, String errorMessage) {
-				// TODO Auto-generated method stub
+				// We can set the array for the list of all events now
+				// events = eventinstances;
+				// Log.d("Obinna", "Two arraylists returned");
 				
+				Fragment currentFragment = getSupportFragmentManager()
+						.findFragmentByTag(CALFRAG);
+				FragmentTransaction fragTransaction = getSupportFragmentManager()
+						.beginTransaction();
+				
+				
+				
+				if(currentFragment != null)
+				{
+				fragTransaction.detach(currentFragment);
+				}
+				
+				if(currentFragment!= null)
+				{
+				fragTransaction.attach(currentFragment);
+				}
+				fragTransaction.commit();
+				
+				MainActivity.db.close();
 			}
+
+			@Override
+			public void onResultFail(int resultCode, String errorMessage)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
 		});
+
 		task2.execute();
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
 
 		mDrawerLayout.openDrawer(mDrawerList);
-		
+
 		mDrawerLayout.setFocusableInTouchMode(false);
 
 	}
@@ -552,7 +640,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// Delete the X oldest things in the table if there are new updates from
 		// either RSS feed.....
 		FragmentManager manager = this.getSupportFragmentManager();
-		for (int i =0; i<manager.getBackStackEntryCount(); i++)
+		for (int i = 0; i < manager.getBackStackEntryCount(); i++)
 		{
 			manager.popBackStack();
 		}
@@ -580,17 +668,22 @@ public class MainActivity extends SherlockFragmentActivity implements
 		ArticleAdapter.artCount = result.size();
 		ArticleAdapter.savedCount = result.size();
 
-		
-		
-		
-		
 		Fragment currentFragment = getSupportFragmentManager()
 				.findFragmentByTag(NEWSFRAG);
 		FragmentTransaction fragTransaction = getSupportFragmentManager()
 				.beginTransaction();
+		
+		
+		
+		if(currentFragment != null)
+		{
 		fragTransaction.detach(currentFragment);
+		}
+		
+		if(currentFragment!= null)
+		{
 		fragTransaction.attach(currentFragment);
-
+		}
 		fragTransaction.commit();
 
 	}
@@ -601,79 +694,87 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private static ArrayList<Date> parseDate(String input)
 	{
-		
+
 		ArrayList<Date> dates = new ArrayList<Date>();
-		
-		String cleanedHTML =input;
-		if (cleanedHTML.contains("to")  && !(cleanedHTML.contains("-")))//More than one date to get
+
+		String cleanedHTML = input;
+		if (cleanedHTML.contains("to") && !(cleanedHTML.contains("-")))// More
+																		// than
+																		// one
+																		// date
+																		// to
+																		// get
 		{
-			String [] splits = cleanedHTML.split("to");
+			String[] splits = cleanedHTML.split("to");
 			int start = 0;
 			for (int count = 0; count < splits.length; count++)
 			{
-				String date = splits[count].substring(0, splits[count].indexOf('(')).trim();
-				//Log.d("Date", date);
+				String date = splits[count].substring(0,
+						splits[count].indexOf('(')).trim();
+				// Log.d("Date", date);
 				String date2 = date;
-				try 
+				try
 				{
-					Date tempDate = MainActivity.extendeddateFormat.parse(date);		
+					Date tempDate = MainActivity.extendeddateFormat.parse(date);
 					dates.add(tempDate);
-					//Log.d("Date", tempDate.toString());
-				} 
-				catch (ParseException e) 
+					// Log.d("Date", tempDate.toString());
+				}
+				catch (ParseException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					//Log.d("Date", "Error");
+					// Log.d("Date", "Error");
 				}
-				
+
 			}
-			
+
 		}
-		//If its just one date
-		else if(cleanedHTML.contains("-"))
+		// If its just one date
+		else if (cleanedHTML.contains("-"))
 		{
-			//Log.d("Obinna", "Else case, one date");
-			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('-')).trim();
-			//Log.d("Date", date1);
-			try 
+			// Log.d("Obinna", "Else case, one date");
+			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('-'))
+					.trim();
+			// Log.d("Date", date1);
+			try
 			{
 				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
 				dates.add(tempDate);
-				//Log.d("Date", tempDate.toString());
-			} 
-			catch (ParseException e) 
+				// Log.d("Date", tempDate.toString());
+			}
+			catch (ParseException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
+
 		}
-		else if(cleanedHTML.contains("("))
+		else if (cleanedHTML.contains("("))
 		{
-			//Log.d("Obinna", "Else case, one date");
-			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('(')).trim();
-		//	Log.d("Date", date1);
-			try 
+			// Log.d("Obinna", "Else case, one date");
+			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('('))
+					.trim();
+			// Log.d("Date", date1);
+			try
 			{
 				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
 				dates.add(tempDate);
-				//Log.d("Date", tempDate.toString());
-			} 
-			catch (ParseException e) 
+				// Log.d("Date", tempDate.toString());
+			}
+			catch (ParseException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
+
 		}
 		return dates;
-	
+
 	}
+
 	public ArrayList<ArrayList<Event>> generateLists(ArrayList<Event> result)
 	{
 		ArrayList<Event> eventinstances = new ArrayList<Event>();
@@ -681,65 +782,74 @@ public class MainActivity extends SherlockFragmentActivity implements
 		for (Event ev : result)
 		{
 			ArrayList<Date> eventDates = parseDate(ev.getDateAndTime());
-			//No date field
-			if (eventDates.size() == 0) 
+			// No date field
+			if (eventDates.size() == 0)
 			{
-				Event createdEvent = new Event(ev.getEventName(),null, ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-				noduplicatesList.add(createdEvent);	
-			}
-			//If there is a date field
-			if(eventDates.size() > 0)
-			{
-				//Add it to the no duplicates list
-				Event createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+				Event createdEvent = new Event(ev.getEventName(), null,
+						ev.getDateAndTime(), ev.getEventLink(), ev.getPubDate());
 				noduplicatesList.add(createdEvent);
-				//Then generate more event instances if needed
-				if(eventDates.size() > 1)
+			}
+			// If there is a date field
+			if (eventDates.size() > 0)
+			{
+				// Add it to the no duplicates list
+				Event createdEvent = new Event(ev.getEventName(),
+						eventDates.get(0), ev.getDateAndTime(),
+						ev.getEventLink(), ev.getPubDate());
+				noduplicatesList.add(createdEvent);
+				// Then generate more event instances if needed
+				if (eventDates.size() > 1)
 				{
-					//Event runs on multiple dates
+					// Event runs on multiple dates
 					Date temp1 = eventDates.get(0);
 					Date temp2 = eventDates.get(1);
 					if (temp1.before(temp2))
 					{
-						
+
 						int diff = temp2.getDate() - temp1.getDate();
-						for (int y = 0; y<= diff; y++)
+						for (int y = 0; y <= diff; y++)
 						{
 							Date tempDate = new Date();
-							Calendar cal = Calendar.getInstance();    
-							cal.setTime(temp1);    
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(temp1);
 							cal.add(Calendar.DATE, y);
-							createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-							//Log.d("Date", cal.getTime().toString());
+							createdEvent = new Event(ev.getEventName(),
+									cal.getTime(), ev.getDateAndTime(),
+									ev.getEventLink(), ev.getPubDate());
+							// Log.d("Date", cal.getTime().toString());
 							eventinstances.add(createdEvent);
 						}
 					}
-					else 
+					else
 					{
 						int diff = temp1.getDate() - temp2.getDate();
-						for (int y = 0; y<= diff; y++)
+						for (int y = 0; y <= diff; y++)
 						{
 							Date tempDate = new Date();
-							Calendar cal = Calendar.getInstance();    
-							cal.setTime(temp2);    
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(temp2);
 							cal.add(Calendar.DATE, y);
-							createdEvent = new Event(ev.getEventName(), cal.getTime(), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
-							//Log.d("Date", cal.getTime().toString());
+							createdEvent = new Event(ev.getEventName(),
+									cal.getTime(), ev.getDateAndTime(),
+									ev.getEventLink(), ev.getPubDate());
+							// Log.d("Date", cal.getTime().toString());
 							eventinstances.add(createdEvent);
-							
+
 						}
 					}
-					
+
 				}
-				else 
+				else
 				{
-					createdEvent = new Event(ev.getEventName(),eventDates.get(0), ev.getDateAndTime(), ev.getEventLink(),ev.getPubDate());
+					createdEvent = new Event(ev.getEventName(),
+							eventDates.get(0), ev.getDateAndTime(),
+							ev.getEventLink(), ev.getPubDate());
 					eventinstances.add(createdEvent);
 				}
 			}
-			
+
 		}
-		
+
 		ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
 		lists.add(eventinstances);
 		lists.add(noduplicatesList);

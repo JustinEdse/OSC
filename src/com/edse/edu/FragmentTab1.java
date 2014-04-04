@@ -55,7 +55,7 @@ public class FragmentTab1 extends SherlockFragment
 	
 	private FragmentTransaction t = null;
 	private CaldroidFragment caldroidFragment = null;
-	private FragmentTransaction eventFragmentTransaction = null;
+	//private FragmentTransaction eventFragmentTransaction = null;
 	
 	private ListView listView = null;
 	static String categoryChosen = "";
@@ -111,7 +111,8 @@ public class FragmentTab1 extends SherlockFragment
 			
 			t = getActivity().getSupportFragmentManager().beginTransaction();			
 			t.replace(R.id.calendar1, caldroidFragment);
-//			t.addToBackStack(null);
+//			
+			t.addToBackStack(null);
 			// What does this mDrawerToggle and movesCount do ????????????????
 			
 			//MainActivity.movesCount++;
@@ -185,6 +186,16 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		
 		else if(MainActivity.selectedFrag == 2)
+		{
+			view = inflater.inflate(R.layout.changelogs, container, false);
+			ChangeLogs(view, inflater, container);
+		}
+		else if(MainActivity.selectedFrag == 3)
+		{
+			view = inflater.inflate(R.layout.knownissues, container, false);
+			KnownIssues(view, inflater, container);
+		}
+		else if(MainActivity.selectedFrag == 4)
 		{
 			view = inflater.inflate(R.layout.status_matrix_glenn, container, false);
 			GlennStatus(view, inflater, container);
@@ -321,6 +332,14 @@ public class FragmentTab1 extends SherlockFragment
 
 	}
 	
+public void ChangeLogs(View cView, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
+{
+		
+}
+public void KnownIssues(View kView, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
+{
+		
+}
 public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus, ViewGroup containerGStatus)
 {
 	
