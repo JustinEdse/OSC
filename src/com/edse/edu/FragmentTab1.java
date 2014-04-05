@@ -89,87 +89,15 @@ public class FragmentTab1 extends SherlockFragment
 		}
 		else if(MainActivity.selectedFrag == 1) 
 		{
-			/*
-			 * Anurag. Trying out the Caldroid Calendar 
-			 */
 			view = inflater.inflate(R.layout.calendar_view_host, container, false);
+			CalendarFragmentSetup(view, inflater, container);
+		}
 
-			caldroidFragment = new CaldroidFragment();
-			Bundle args = new Bundle();
-			Calendar cal = Calendar.getInstance();
-			args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
-			args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
-			args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
-			args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true);
-			caldroidFragment.setArguments(args);
-
-			setColorToEvents(caldroidFragment);
-
-			// Attach to the activity
-			
-			t = getActivity().getSupportFragmentManager().beginTransaction();			
-			t.replace(R.id.calendar1, caldroidFragment);
-//			
-			t.addToBackStack(null);
-			// What does this mDrawerToggle and movesCount do ????????????????
-			
-			//MainActivity.movesCount++;
-			t.commit();
-			
-			// setting up Listener
-			final CaldroidListener listener = new CaldroidListener() 
-			{
-
-				@Override
-				public void onSelectDate(Date date, View view) 
-				{
-					//String strDate = MainActivity.dateFormat.format(date);
-					//Log.d("anurag", "After formatting Date: " + strDate);
-					Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
-					//strDate = hackFirstZero(strDate);
-					//Log.d("What string key is", strDate);
-					if (MainActivity.calendarMap.containsKey(date)) 
-					{
-						Log.d("anurag", "The date has events assiciated with it.");
-						
-//						t.remove(caldroidFragment);
-						t.detach(caldroidFragment);
-						// I have no idea why I did the decrement thing
-						//MainActivity.movesCount--;
-						MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-						// Launsh fragment showing the list of events on that day.
-						
-						MainActivity.movesCount++;
-						EventDisplayFragment newFrag= new EventDisplayFragment();
-						Bundle bunds = new Bundle();
-						bunds.putString("date", MainActivity.date_timeFormat.format(date));
-						newFrag.setArguments(bunds);
-						//Log.d("Obinna", "Date sent to event display fragement");
-						ft.replace(R.id.content_frame, newFrag);
-						ft.addToBackStack(null);
-						ft.commit();
-						
-					}
-					else 
-					{
-						//int id = view.getId();
-						Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
-					}
-					
-				
-
-					CalendarFragmentSetup(view, inflater, container);
-
-
-				}
-			};}
-			
 
 		else if(MainActivity.selectedFrag == 2)
 		{
-			view = inflater.inflate(R.layout.changelogs, container, false);
-			ChangeLogs(view, inflater, container);
+			view = inflater.inflate(R.layout.calendar_view_host, container, false);
+			CalendarFragmentSetup(view, inflater, container);
 		}
 		else if(MainActivity.selectedFrag == 3)
 		{
@@ -305,7 +233,6 @@ public class FragmentTab1 extends SherlockFragment
 	private void CalendarFragmentSetup(View viewOuter, LayoutInflater inflater,
 			ViewGroup container)
 	{
-
 		getActivity().setTitle("Calendar");
 		caldroidFragment = new CaldroidFragment();
 		Bundle args = new Bundle();
@@ -321,94 +248,80 @@ public class FragmentTab1 extends SherlockFragment
 		// Attach to the activity
 
 		t = this.getChildFragmentManager().beginTransaction();
-		// t = getActivity().getSupportFragmentManager().beginTransaction();
+		//		t = getActivity().getSupportFragmentManager().beginTransaction();			
 		t.replace(R.id.calendar1, caldroidFragment);
 		Log.d("testing", "Trying to do the addtobackstack thing");
 		t.addToBackStack(null);
 		// What does this mDrawerToggle and movesCount do ????????????????
 
-		// MainActivity.movesCount++;
+		//MainActivity.movesCount++;
 		t.commit();
 
 		// setting up Listener
-		final CaldroidListener listener = new CaldroidListener()
-		{
+		final CaldroidListener listener = new CaldroidListener() {
 
 			@Override
-			public void onSelectDate(Date date, View view)
-			{
-				// String strDate = MainActivity.dateFormat.format(date);
-				// Log.d("anurag", "After formatting Date: " + strDate);
+			public void onSelectDate(Date date, View view) {
+				//String strDate = MainActivity.dateFormat.format(date);
+				//Log.d("anurag", "After formatting Date: " + strDate);
 				Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
-				// strDate = hackFirstZero(strDate);
-				// Log.d("What string key is", strDate);
-				if (MainActivity.calendarMap.containsKey(date))
-				{
+				//strDate = hackFirstZero(strDate);
+				//Log.d("What string key is", strDate);
+				if (MainActivity.calendarMap.containsKey(date)) {
 					Log.d("anurag", "The date has events assiciated with it.");
 
-					// t.remove(caldroidFragment);
+					//					t.remove(caldroidFragment);
 					t.detach(caldroidFragment);
 					// I have no idea why I did the decrement thing
-					// MainActivity.movesCount--;
+					//MainActivity.movesCount--;
 					MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
-					FragmentTransaction ft = getActivity()
-							.getSupportFragmentManager().beginTransaction();
+					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 					// Launsh fragment showing the list of events on that day.
 
 					MainActivity.movesCount++;
-					EventDisplayFragment newFrag = new EventDisplayFragment();
+					EventDisplayFragment newFrag= new EventDisplayFragment();
 					Bundle bunds = new Bundle();
-					bunds.putString("date",
-							MainActivity.date_timeFormat.format(date));
+					bunds.putString("date", MainActivity.date_timeFormat.format(date));
 					newFrag.setArguments(bunds);
-					// Log.d("Obinna", "Date sent to event display fragement");
+					//Log.d("Obinna", "Date sent to event display fragement");
 					ft.replace(R.id.content_frame, newFrag);
 					ft.addToBackStack(null);
 					ft.commit();
 
 				}
-				else
+				else 
 				{
-					// int id = view.getId();
-					Toast.makeText(getActivity().getApplicationContext(),
-							"There is no event on that day", Toast.LENGTH_SHORT)
-							.show();
+					//int id = view.getId();
+					Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 				}
 
 			}
 
 			/**
-			 * The String date received from onSelectDate callback method
-			 * contains date in format: mm/dd/yyyy. For months like Feb, the mm
-			 * part contains: 02. But the String key entered by us in test data
-			 * does not contain 02 (it contains just 2). This causes string
-			 * mismatch. This method will check to see if the Date string starts
-			 * with a 0, if yes, it will remove it.
-			 * 
+			 * The String date received from onSelectDate callback method contains date in format: mm/dd/yyyy. For months like Feb, the mm part
+			 * contains: 02. But the String key entered by us in test data does not contain 02 (it contains just 2). This causes string mismatch.
+			 *  This method will check to see if the Date string starts with a 0, if yes, it will remove it.
 			 * @param strDate
 			 * @return
 			 */
-			private String hackFirstZero(String strDate)
-			{
-				if (strDate.startsWith("0"))
-				{
+			private String hackFirstZero(String strDate) {
+				if (strDate.startsWith("0")) {
 					strDate = strDate.substring(1);
 				}
 				return strDate;
 			}
 
 			@Override
-			public void onLongClickDate(Date date, View view)
-			{
+			public void onLongClickDate(Date date, View view) {
 				onSelectDate(date, view);
 			}
+
 
 		};
 
 		// Setup Caldroid
 		caldroidFragment.setCaldroidListener(listener);
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);	}
 
 	private void setColorToEvents(CaldroidFragment caldroidFragment)
 	{
