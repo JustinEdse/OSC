@@ -244,6 +244,8 @@ public class EventRSSReader
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			//anurag. 6 Apr. Added this to avoid getting trapped in infinite loop in AsyncEvent class  
+			parsingComplete = false;
 		}
 		
 		
@@ -302,6 +304,8 @@ public class EventRSSReader
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			//anurag. 6 Apr. Added this to avoid getting trapped in infinite loop in AsyncEvent class 
+			parsingComplete = false;
 		}
 	}
 	private static String parseDateTime(String input)

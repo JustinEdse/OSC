@@ -10,6 +10,7 @@ import com.edse.network.EventRSSReader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 /*
@@ -41,7 +42,7 @@ public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
 	protected void onPreExecute()
 	{
 		dialog = new ProgressDialog(context);
-		dialog.setMessage("Loading...");
+		dialog.setMessage("Loading ...");
 		dialog.setIndeterminate(true);
 		dialog.setCancelable(false);
 		dialog.show();
@@ -63,6 +64,8 @@ public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		while (eventReaderObj.parsingComplete)
@@ -77,6 +80,7 @@ public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
 	@Override
 	protected void onPostExecute(ArrayList<Event> result)
 	{
+		Log.d("testing", "Entering into onPostExecute of AsyncEvent");
 		dialog.dismiss();
 			if (listener != null)
 			{

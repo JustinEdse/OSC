@@ -37,7 +37,7 @@ public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 	{
 		super.onPreExecute();
 		dialog = new ProgressDialog(context);
-		dialog.setMessage("Loading...");
+		dialog.setMessage("Loading ...");
 		dialog.setIndeterminate(false);
 		dialog.setCancelable(true);
 		dialog.show();
