@@ -1,6 +1,7 @@
 package com.edse.edu;
 
 import java.util.Date;
+import java.util.Set;
 
 import android.R.integer;
 
@@ -121,17 +122,32 @@ public class Event implements Comparable<Event>
 	public int compareTo(Event rhs) {
 		// TODO Auto-generated method stub
 		int val = 10000;
-		if (this.pubDate.before(rhs.getPubDate()))
+		//Set to use date because of the event 
+		if(this.date != null && rhs.date!= null)
 		{
-			val = -1;
+			if (this.date.before(rhs.date))
+			{
+				val = -1;
+			}
+			else if (this.date.after(rhs.date))
+			{
+				val = 1;
+			}
+			else
+			{
+				 val = 0;
+			}
 		}
-		else if (this.pubDate.after(rhs.getPubDate()))
+		else 
 		{
-			val = 1;
-		}
-		else
-		{
-			 val = 0;
+			if (this.date == null)
+			{
+				val = 1;
+			}
+			else if(rhs.date == null)
+			{
+				val = -1;
+			}
 		}
 		return val;
 	}
