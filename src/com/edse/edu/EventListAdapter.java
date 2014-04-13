@@ -8,8 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * This class stores event details, and populates and event row, either a detailed view from event_detailed_row.xml, 
- * or basic view from event_row.xml(for upcoming and recent tabs)
+ * This class stores event details, and populates and event row basic view from event_row.xml(for all events tab)
  * @author Obinna Ngini
  *
  */
@@ -29,16 +28,6 @@ public class EventListAdapter extends BaseAdapter
 		this.eventdateTimes = eventdateTimes;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-//	public EventListAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventTimes, String[] eventLocations)
-//	{
-//		this.context = context;
-//		this.eventTitles = eventTitles;
-//		this.eventDescriptions = eventDescs;
-//		this.eventTimes = eventTimes;
-//		this.eventDates = eventDates;
-//		this.eventLocations = eventLocations;
-//		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//	}
 	@Override
 	public int getCount()
 	{

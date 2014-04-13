@@ -43,8 +43,6 @@ public class EventDisplayFragment extends SherlockFragment {
 		    	//GET THE STRING KEY FROM THE BUNDLE passed 
 		    	Bundle b = getArguments();
 		    	String date = b.getString("date");
-		    	Log.d("Obinna", date);
-		    	Log.d("Date check", date);
 		    	Date evDate = new Date();
 				try {
 					evDate = MainActivity.date_timeFormat.parse(date);
@@ -53,7 +51,6 @@ public class EventDisplayFragment extends SherlockFragment {
 					e.printStackTrace();
 				}
 		        View view = inflater.inflate(R.layout.article_display, container, false);
-		        Log.d("Obinna", evDate.toString());
 		        ArrayList<String> eventTitles = new ArrayList<String>();
 	            ArrayList<String> eventDateTimes = new ArrayList<String>();
 	            ArrayList<String> eventLinks = new ArrayList<String>();

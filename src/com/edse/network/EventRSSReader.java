@@ -64,9 +64,6 @@ public class EventRSSReader
 
 	public ArrayList<Event> getEvents(){
 	
-		//lists.add(events);
-		//lists.add(fullevents);
-		//Log.d("Obinna", lists.coun)
 		return listevents;
 	}
 	
@@ -134,91 +131,24 @@ public class EventRSSReader
 				
 				if(titles.size() > 0  && links.size() > 0 && descriptions.size() > 0 && pubs.size() > 0)
 				{
-					//Log.d("Obinna", "One event fouund");
 					if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
 					{
 						String type = "unknown";
-						//Log.d("Parse Check", description);
-					
-						
 						String fulldesc = parseDescription(description);
 						String dateTime = parseDateTime(description);
 						int endpoint = trimDateTime(dateTime);
-						//Log.d("Link", link);
 						String extratext = dateTime.substring(endpoint);
 						fulldesc = extratext + fulldesc;
 						dateTime = dateTime.substring(0,endpoint);
-						//ArrayList<Date> eventDates = new ArrayList<Date>();
-						//eventDates = parseDate(dateTime);
-						
 						Date pubDate2 = MainActivity.date_timeFormat.parse(pubDate);
 						String tittextString = Html.fromHtml(title).toString();
-						Log.d("Parse Check", "1" + tittextString);
-						Log.d("Parse Check", "2" + dateTime);
-						Log.d("Parse Check", "3" + fulldesc);
-						Log.d("Parse Check", "4" + pubDate);
 						//Date object will be created from dateTime String in Main Activity
 						Event tempEvent = new Event(tittextString,null, dateTime, link, pubDate2);
 						if(isNewEvent(tempEvent))
 						{
-							Log.d("Obinna", "Event: " + tittextString + " added");
+							Log.d("Obinna", "New Event: " + tittextString + " added");
 							listevents.add(tempEvent);
-							//Log.d("Obinna", Integer.toString(listevents.size()));
 						}
-						//Log.d("Title", tittextString + " and date is " + dateTime);
-//						if(eventDates.size() > 0 )
-//						{
-//							Event tempEvent = new Event(tittextString,eventDates.get(0), dateTime, link, pubDate2);
-//							listevents.add(tempEvent);
-//						}
-//						if(eventDates.size() > 1)
-//						{
-//							//Event runs on multiple dates
-//							Date temp1 = eventDates.get(0);
-//							Date temp2 = eventDates.get(1);
-//							if (temp1.before(temp2))
-//							{
-//								
-//								int diff = temp2.getDate() - temp1.getDate();
-//								for (int y = 0; y<= diff; y++)
-//								{
-//									Date tempDate = new Date();
-//									Calendar cal = Calendar.getInstance();    
-//									cal.setTime(temp1);    
-//									cal.add(Calendar.DATE, y);
-//									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
-//									//Log.d("Date", cal.getTime().toString());
-//									events.add(createdEvent);
-//								}
-//							}
-//							else 
-//							{
-//								int diff = temp1.getDate() - temp2.getDate();
-//								for (int y = 0; y<= diff; y++)
-//								{
-//									Date tempDate = new Date();
-//									Calendar cal = Calendar.getInstance();    
-//									cal.setTime(temp2);    
-//									cal.add(Calendar.DATE, y);
-//									Event createdEvent = new Event(tittextString, cal.getTime(), dateTime, link,pubDate2);
-//									//Log.d("Date", cal.getTime().toString());
-//									events.add(createdEvent);
-//									
-//								}
-//							}
-//						}
-//						else if(eventDates.size() == 1)
-//						{
-//							//Event is only on one day
-//							Event createdEvent = new Event(tittextString, eventDates.get(0), dateTime, link,pubDate2);
-//							//Log.d("Date", eventDates.get(0).toString());
-//							events.add(createdEvent);
-//							
-//						}
-						//Event createdEvent = new Event();
-						//createdEvent.addEventDetails(fulldesc);
-						//events.add(createdEvent);
-						
 					titles.clear();
 					links.clear();
 					descriptions.clear();
@@ -233,10 +163,6 @@ public class EventRSSReader
 				event = myParser.next();
 			}
 			parsingComplete = false;
-
-			//collectArticles.add(titles);
-			//collectArticles.add(descriptions);
-			//collectArticles.add(links);
 			
 			
 			
@@ -273,31 +199,6 @@ public class EventRSSReader
 					XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			myparser.setInput(stream, null);
 			parseXMLAndStoreIt(myparser);
-//			DocumentBuilderFactory dFactory =DocumentBuilderFactory.newInstance();
-//			
-//			try 
-//			{
-//				DocumentBuilder builder = dFactory.newDocumentBuilder();
-//				Document doc = builder.parse(stream);
-//				XPath xPath = XPathFactory.newInstance().newXPath();
-//				NodeList ndList  = (NodeList) xPath.evaluate("/item/link", doc,XPathConstants.NODE);
-//				if (ndList!= null && ndList.getLength() >0)
-//				{
-//					for (int y = 0; y<ndList.getLength(); y++)
-//					{
-//						Log.d("Obinna", ndList.item(y).getNodeValue());
-//					}
-//				}
-//				/*
-//				 * Log.d("Obinna", node.getNodeValue());
-//				 */
-//			}
-//			catch (Exception e) 
-//			{
-//				// TODO: handle exception
-//				e.printStackTrace();
-//			}
-//			
 			stream.close();
 			
 		}
@@ -314,7 +215,6 @@ public class EventRSSReader
 		String arr[] = new String[] {};
 		arr = input.split("<p>");
 		temp = arr[0];
-		ArrayList<Date> dates = new ArrayList<Date>();
 		String finalStr = temp.replaceAll("</p>", " ").trim();
 		String cleanedHTML = android.text.Html.fromHtml(finalStr).toString();
 		return cleanedHTML;
@@ -324,24 +224,12 @@ public class EventRSSReader
 		int end = 0;
 		if (input.contains("to")  && !(input.contains("-")))
 		{
-			//If there are two events
-//			for (int x = 0; x < input.length(); x++)
-//			{
-//				if (input.charAt(x) == ')')
-//				{
-//					timeCount++;
-//				}
-//				if(timeCount == 2)
-//				{
-//					end = x;
-//				}
-//			}
+
 			end = input.indexOf(')', input.indexOf(')') + 1);
 			end = end + 1;
 		}
 		else if(input.contains("-"))
 		{
-			//end = input.indexOf("pm", input.indexOf("pm") + 1);
 			end = input.length();
 		}
 		else if(input.contains("("))
@@ -349,85 +237,9 @@ public class EventRSSReader
 			end = input.indexOf(')');
 			end = end + 1;
 		}
-		//String t2 = input.substring(0, end);
-//		Log.d("Trim", input);
-//		Log.d("Trim", t2);
 		return end;
 		
 	}
-	private static ArrayList<Date> parseDate(String input)
-	{
-		
-		ArrayList<Date> dates = new ArrayList<Date>();
-		
-		String cleanedHTML =input;
-		if (cleanedHTML.contains("to")  && !(cleanedHTML.contains("-")))//More than one date to get
-		{
-			String [] splits = cleanedHTML.split("to");
-			int start = 0;
-			for (int count = 0; count < splits.length; count++)
-			{
-				String date = splits[count].substring(0, splits[count].indexOf('(')).trim();
-				//Log.d("Date", date);
-				String date2 = date;
-				try 
-				{
-					Date tempDate = MainActivity.extendeddateFormat.parse(date);		
-					dates.add(tempDate);
-					//Log.d("Date", tempDate.toString());
-				} 
-				catch (ParseException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					//Log.d("Date", "Error");
-				}
-				
-			}
-			
-		}
-		//If its just one date
-		else if(cleanedHTML.contains("-"))
-		{
-			//Log.d("Obinna", "Else case, one date");
-			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('-')).trim();
-			//Log.d("Date", date1);
-			try 
-			{
-				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
-				dates.add(tempDate);
-				//Log.d("Date", tempDate.toString());
-			} 
-			catch (ParseException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-		}
-		else if(cleanedHTML.contains("("))
-		{
-			//Log.d("Obinna", "Else case, one date");
-			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('(')).trim();
-		//	Log.d("Date", date1);
-			try 
-			{
-				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
-				dates.add(tempDate);
-				//Log.d("Date", tempDate.toString());
-			} 
-			catch (ParseException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		}
-		return dates;
-	
-	}
-	
 	private static String parseDescription(String input)
 	{
 
@@ -474,7 +286,6 @@ public class EventRSSReader
 		}
 		    ans = pubdateSet.contains(ev.getPubDate()) && titlesetSet.contains(ev.getEventName());
 	   }
-	   //Log.d("Obinna", Boolean.toString(ans));
 	   return !ans;
    }
 }
