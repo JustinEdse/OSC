@@ -7,7 +7,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/***
+ * This class extends the class BaseAdapter and represents the listView Corresponding to the <br>
+ * main menu that contains the following fields :
+ * 
+ * 1. News <br>
+ * 2. Calendar <br>
+ * 3. Change Log <br>
+ * 4. KnownIssues <br>
+ * 
+ * @author kaushikvelindla
+ *
+ */
 public class MenuListAdapter extends BaseAdapter
 {
 

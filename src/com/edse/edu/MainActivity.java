@@ -47,7 +47,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
-
+/***
+ * this class is instantiated when the startActivity method corresponding to the splash activity is called.<br>
+ * This class extends class SherlocFragmnetActivity and implements the results listener interface. <br>
+ * 
+ * This class is responsible to initializing urls for Article and Event RSS feeds, initializing the database for caching,
+ * setting the Table Size limits for Article_Table, Events_Table, ChangeLogs_Table and KnowIssues_Table.<br>
+ * 
+ * This is where the fragment instances corresponding to news,Calendar,ChangeLogs and Known Issues are created.<br>
+ *
+ * This has the following attributes: <br>
+ * boolean network Status <br>
+ * Map calendarMap <br>
+ * ArrayList<Event> events <br>
+ * int selectedFrag <br>
+ * int movesCount <br>
+ * static ActionBarDrawerToggle mDrawerToggle <br>
+ * MenuListAdapter mMenuAdapter <br>
+ * String[] title <br>
+ * 
+ * @author kaushikvelindla
+ *
+ */
 public class MainActivity extends SherlockFragmentActivity implements
 		ResultsListener
 {

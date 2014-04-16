@@ -14,7 +14,20 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
+/**
+ * The Article class includes 
+ * {@code 
+ * id of the article;
+ * title;
+ * subDesc;
+ * type;
+ * stored Image (for caching as stored Image);
+ * preview Image (in Bitmap format for thumbnails);
+ * date; 
+ * }
+ * @author kaushikvelindla
+ *
+ */
 public class Article implements Parcelable
 {
 	private int id;
@@ -31,11 +44,23 @@ public class Article implements Parcelable
 	
 	//don't want to store the actual text of articles. This could take up a lot of space.
 	//
-	
+	/***
+	 * Constructor of the article class
+	 */
 	public Article()
 	{
 		
 	}
+	
+	/***
+	 * Overloaded Constructor for the article class, initializes the following fields:
+	 * @param title
+	 * @param subDesc
+	 * @param type
+	 * @param bitmap
+	 * @param link
+	 * @param date
+	 */
 	public Article(String title, String subDesc, ArrayList<String> type, Bitmap bitmap, String link, Date date)
 	{
 		this.title = title;
@@ -47,7 +72,16 @@ public class Article implements Parcelable
 		//format of date coming from article???
 		this.date = date;
 	}
-	
+	/***
+	 * Overloaded Constructor which initializes 'id' in addition to rest of the fields with the exception of the byte array for the stored image
+	 * @param id
+	 * @param title
+	 * @param desc
+	 * @param types
+	 * @param link
+	 * @param date
+	 * @param bitmap
+	 */
 	public Article(int id,String title, String desc, ArrayList<String> types, String link, Date date,Bitmap bitmap)
 	{
 		this.id = id;
@@ -200,7 +234,9 @@ public class Article implements Parcelable
 
 	};
 	
-	// standard overriding of the toString() method.
+	/***
+	 * toString method of the article class prints out to standard output title of the article 
+	 */
 	@Override
 	public String toString()
 	{

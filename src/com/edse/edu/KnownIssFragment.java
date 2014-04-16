@@ -20,7 +20,12 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
-
+/***
+ * This class extends the class SherlockFragment and represents the fragment corresponding to <br> 
+ * the list of knownissues. KnownIssAdapter populates the ListView with the list of all knownissues.  
+ * @author kaushikvelindla
+ *
+ */
 public class KnownIssFragment extends SherlockFragment {
  
     @Override

@@ -4,7 +4,21 @@ import java.util.Date;
 import java.util.Set;
 
 import android.R.integer;
-
+/***
+ * This class includes metadata associated with an instance of type Event
+ * {@code
+ * id of the event;
+ * String title;
+ * Date date;
+ * String link;
+ * Date pubDate (published date);
+ * String dateTime (in-case of multi-day events);
+ * String description;
+ * String location;
+ * }
+ * @author kaushikvelindla
+ *
+ */
 public class Event implements Comparable<Event>
 {
 	private int id;
@@ -17,11 +31,24 @@ public class Event implements Comparable<Event>
 	
 	private String description;
 	private String location;
-
+/***
+ * default constructor for the class Event
+ */
 	public Event()
 	{
 		
 	}
+	/***
+	 * This Constructor of the class, Event creates an instance of type Event and initializes the following fields of the class<br>
+	 * String eventname <br>
+	 * Date date <br> 
+	 * String dateTime <br>
+	 * String url <br> 
+	 * @param eventname
+	 * @param date
+	 * @param dateTime
+	 * @param url
+	 */
 	public Event(String eventname, Date date, String dateTime,  String url)
 	{
 		this.title = eventname;
@@ -29,6 +56,19 @@ public class Event implements Comparable<Event>
 		this.dateTime = dateTime;
 		this.date = date;
 	}
+	/***
+	 * 2nd overloaded Constructor of the class Event, creates an instance of type Event and initializes the following fields <br>
+	 * String eventname <br>
+	 * Date date <br>
+	 * String dateTime <br>
+	 * String url <br>
+	 * Date pubDate <br>
+	 * @param eventname
+	 * @param date
+	 * @param dateTime
+	 * @param url
+	 * @param pubDate
+	 */
 	public Event(String eventname, Date date,String dateTime,  String url, Date pubDate)
 	{
 		this.title = eventname;
@@ -37,6 +77,17 @@ public class Event implements Comparable<Event>
 		this.date = date;
 		this.pubDate = pubDate;
 	}
+	/***
+	 * 3rd overloaded constructor of the Event class <br>
+	 * @param id
+	 * @param eventname
+	 * @param description
+	 * @param date
+	 * @param location
+	 * @param dateTime
+	 * @param url
+	 * @param pubDate
+	 */
 	public Event(int id, String eventname, String description,Date date,String location, String dateTime, String url, Date pubDate)
 	{
 		this.id = id;
@@ -119,6 +170,9 @@ public class Event implements Comparable<Event>
 	
 	
 	@Override
+	/***
+	 * compareTo method compares events and orders them by date.
+	 */
 	public int compareTo(Event rhs) {
 		// TODO Auto-generated method stub
 		int val = 10000;

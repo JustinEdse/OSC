@@ -21,7 +21,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.renderscript.ProgramFragmentFixedFunction.Builder.Format;
- 
+ /**
+  * Database class offers an SQLite Database, 
+  * which is used by the application to cache articles coming via RSS feeds.
+  * @author kaushikvelindla
+  *
+  */
 public class Database extends SQLiteOpenHelper {
  
     // All Static variables
@@ -73,7 +78,9 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(CREATE_EVENTS_TABLE);
     }
  
-    // Upgrading database
+    /***
+     * Database upgrade drops older articles and events from the respective tables and creates the tables again.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
@@ -88,7 +95,11 @@ public class Database extends SQLiteOpenHelper {
      * @throws IOException 
      */
  
-    // Adding new contact
+    /***
+     * Adds a new article to the database. 
+     * @param Article article
+     * @throws IOException
+     */
     public void addArticle(Article article) throws IOException {
         SQLiteDatabase db = this.getWritableDatabase();
  
@@ -104,6 +115,11 @@ public class Database extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
     
+    /***
+     * Adds a new event to the database.Checks for the EVENT_DATE, if it is null, the date is set to the empty string "".
+     * @param Event event
+     * @throws IOException
+     */
     public void addEvent(Event event) throws IOException{
     	SQLiteDatabase db = this.getWritableDatabase();
     	
@@ -127,7 +143,13 @@ public class Database extends SQLiteOpenHelper {
     	db.close();
     }
  
-    // Getting single article
+    /***
+     * Finds and returns an Article instance by its id (Integer)
+     * @param int id
+     * @return Article 
+     * @throws NumberFormatException
+     * @throws IOException
+     */
     Article getArticle(int id) throws NumberFormatException, IOException {
         SQLiteDatabase db = this.getReadableDatabase();
  
@@ -143,7 +165,14 @@ public class Database extends SQLiteOpenHelper {
         // return article
         return article;
     }
-    
+    /***
+     * Finds and returns an Event instance by its id(Integer)
+     * @param id
+     * @return Event event
+     * @throws NumberFormatException
+     * @throws IOException
+     * @throws ParseException
+     */
     public Event getEvent(int id) throws NumberFormatException, IOException, ParseException {
     	SQLiteDatabase db = this.getReadableDatabase();
     	
@@ -176,7 +205,11 @@ public class Database extends SQLiteOpenHelper {
 	    return event;
     }
      
-    // Getting All Articles
+    /***
+     * Returns an array list of all the articles currently in TABLE_ARTICLES
+     * @return ArrayList<Article>
+     * @throws IOException
+     */
     public ArrayList<Article> getAllArticles() throws IOException  {
         ArrayList<Article> artList = new ArrayList<Article>();
         // Select All Query
@@ -206,7 +239,12 @@ public class Database extends SQLiteOpenHelper {
         return artList;
     }
     
-    //Get All Events
+    /***
+     * Returns an array list of all the events in the TABLE_EVENTS
+     * @return ArrayList<Event>
+     * @throws IOException
+     * @throws ParseException
+     */
     public ArrayList<Event> getAllEvents() throws IOException, ParseException
     {
     	ArrayList<Event> events = new ArrayList<Event>();
@@ -246,7 +284,11 @@ public class Database extends SQLiteOpenHelper {
 		return events;
     }
  
-    // Updating single article
+    /***
+     * Updates a single article
+     * @param Article
+     * @return
+     */
     public int updateArticle(Article article) {
     	
     	//haven't called update yet.........
@@ -264,7 +306,10 @@ public class Database extends SQLiteOpenHelper {
                 new String[] { String.valueOf(article.getArtID()) });
     }
  
-    // Deleting single article
+    /***
+     * Deletes a single article 
+     * @param Article article
+     */
     public void deleteArticle(Article article) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ARTICLES, KEY_ID + " = ?",
@@ -272,16 +317,19 @@ public class Database extends SQLiteOpenHelper {
         db.close();
     }
  
-  //Deleting certain event
+    /***
+     * Deleting a certain event 
+     * @param Event event
+     */
     public void deleteEvent(Event event)
     {
     	SQLiteDatabase db = this.getWritableDatabase();
     	db.delete(TABLE_EVENTS, EVENT_ID + " = ?", new String [] {String.valueOf(event.getID())});
     	db.close();
     }
-    /*
-     * Use this function to keep the Article table at a certain size, 
-     * remove from the bottom until desired size is reached
+    /***
+     * Keeps the size of the Article Table at ARTCILE_TABLE_SIZE. When the articles count exceeds ARTCILE_TABLE_SIZE,
+     * articles are deleted from the table from the bottom until Size of the table = ARTCILE_TABLE_SIZE   
      */
     public void trimArticleTable()
     {
@@ -295,9 +343,9 @@ public class Database extends SQLiteOpenHelper {
     	db.close();
     }
     
-    /*
-     * Use this function to keep the Event table at a certain size, 
-     * remove from the bottom until desired size is reached
+    /***
+     * Keeps the size of the Event Table at EVENT_TABLE_SIZE. When the events count exceeds EVENT_TABLE_SIZE,
+     * events are deleted from the table from the bottom until Size of the table = EVENT_TABLE_SIZE   
      */
     public void trimEventTable()
     {
@@ -311,7 +359,10 @@ public class Database extends SQLiteOpenHelper {
     	db.close();
     }
  
-    // Getting articles Count
+    /***
+     * returns the current number of articles in the table TABLE_ARTICLES.
+     * @return
+     */
     public int getArticlesCount() {
     	
     	int count = 0;
@@ -328,7 +379,10 @@ public class Database extends SQLiteOpenHelper {
         return count;
     }
     
-    //Get amount of events
+    /***
+     * Returns the current number of events in the table TABLE_EVENTS.
+     * @return
+     */
     public int getEventsCount() {
     	
     	int count = 0;
@@ -344,7 +398,9 @@ public class Database extends SQLiteOpenHelper {
         
         return count;
     }
-    
+    /***
+     * Resets the Events Table by dropping all the entries and recreating it.
+     */
     public void ResetEventTable()
     {
     	SQLiteDatabase db = this.getWritableDatabase();
@@ -354,6 +410,11 @@ public class Database extends SQLiteOpenHelper {
                 + EVENT_DESC + " TEXT," + EVENT_DATE + " TEXT," + EVENT_LOCATION + " TEXT," +  EVENT_DATE_TIME+ " TEXT," +  EVENT_LINK + " TEXT," + EVENT_PUBDATE + " TEXT" + ")";
         db.execSQL(CREATE_EVENTS_TABLE);
     }
+    /***
+     * Converts a bitmap image to a byte array.
+     * @param bitmap
+     * @return
+     */
     public byte[] convertToByteArr(Bitmap bitmap)
     {
     	ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -363,7 +424,11 @@ public class Database extends SQLiteOpenHelper {
     	
     	return retArr;
     }
-    
+    /***
+     * Converts a byte array to a Bitmap image
+     * @param arr
+     * @return
+     */
     public Bitmap convertToBitmap(byte[] arr)
     {
     	Bitmap bitmap = BitmapFactory.decodeByteArray(arr, 0, arr.length);
@@ -371,7 +436,12 @@ public class Database extends SQLiteOpenHelper {
     	return bitmap;
     	
     }
-    
+    /***
+     * Converts an arrayList of Strings into a byte array.
+     * @param listOfString
+     * @return
+     * @throws IOException
+     */
     public byte[] arrLStringToByteArr(ArrayList<String> listOfString) throws IOException
     {
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -387,7 +457,12 @@ public class Database extends SQLiteOpenHelper {
     	
     	return bytes;
     }
-    
+    /***
+     * Converts a byte array to an array list of strings
+     * @param barr
+     * @return
+     * @throws IOException
+     */
     public ArrayList<String> byteArrToALOS(byte[] barr) throws IOException
     {
     	ArrayList<String> retList = new ArrayList<String>();
@@ -403,7 +478,11 @@ public class Database extends SQLiteOpenHelper {
     	
     	return retList;
     }
-    
+    /***
+     * Converts a string into a corresponding date instance using SimpleDateFormat.parse
+     * @param str
+     * @return
+     */
     public Date convertDate(String str)
     {
     	SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.US);

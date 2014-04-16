@@ -15,7 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
- 
+
+/***
+ * This class extends a SherlockFragment class and represents the calendar view <br> 
+ * @author kaushikvelindla
+ *
+ */
 public class CalendarFragment extends SherlockFragment {
  
     @Override

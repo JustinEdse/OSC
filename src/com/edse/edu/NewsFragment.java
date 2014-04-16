@@ -20,7 +20,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
-
+/***
+ * This class extends class SherlockFragment and represents the Fragment, FragmentTab1 <br>
+ * of which, shows the list of various News Categories and FragmentTab2 of which displays the list of <br>
+ * all the articles published. 
+ * @author kaushikvelindla
+ *
+ */
 public class NewsFragment extends SherlockFragment {
  
     @Override

@@ -47,7 +47,32 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 
 import com.actionbarsherlock.app.SherlockFragment;
-
+/***
+ * This class extends the class SherlockFragment and an instance of this class serves as the first tab of view for <br>
+ * for all the fragments in use through the application. Thus, Each fragment constitutes of its own version of <br>
+ * FragmentTab1, FragmentTab2 and FragmentTab3. <br>
+ * 
+ * This class contains the following attributes:<br>
+ * android.widget.ListView listView <br>
+ * String category chosen <br>
+ * View view <br>
+ * 
+ * 
+ * The list view, Main Activity contains the following fields ids and names: <br> 
+ * 1. News <br>
+ * 2. Calendar <br>
+ * 3. ChangeLogs <br>
+ * 4. Known Issues <br>
+ * 
+ * Thus this class performs the following activities based on the Fragment selected from MainActivity: <br>
+ * 
+ * 1. News -> Displays the list of News Tab categories <br>
+ * 2. Calendar -> Opens up the calendar fragment highlighting dates with events listed against them <br>
+ * 3. ChangeLogs -> Opens up the ChangeLgs Fragment (listAdapter of all the change logs )
+ * 4. KnownIssues -> Opens up the KnownIssFragment (listAdapter all the known issues)
+ * @author kaushikvelindla
+ *
+ */
 public class FragmentTab1 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
@@ -114,12 +139,15 @@ public class FragmentTab1 extends SherlockFragment
 	}
 
 	@Override
+	/***
+	 * Event handler for the flag 'hidden' for this particular fragment tab.
+	 */
 	public void onHiddenChanged(boolean hidden)
 	{
 		super.onHiddenChanged(hidden);
 		Log.d("testing", "Entering into onHiddenChanged. hidden: " + hidden);
 	}
-
+	
 	public void NewsTabCategories(View viewOuter, LayoutInflater inflater,
 			ViewGroup container)
 	{
@@ -133,6 +161,10 @@ public class FragmentTab1 extends SherlockFragment
 		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		listView.setAdapter(catListAdapter);
+		/***
+		 * This method overrides the functionality of the listView.setOnItemClickListener and <br>
+		 * handles the clicks based on the selectedFragment of the main activity.
+		 */
 		listView.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
@@ -229,7 +261,12 @@ public class FragmentTab1 extends SherlockFragment
 	 * method. Also we may want to set different colors for events - say to
 	 * differentiate between past and new events.
 	 */
-
+/***
+ * This method creates a new <a href="https://github.com/roomorama/Caldroid"> CaldroidFragment</a>
+ * @param viewOuter
+ * @param inflater
+ * @param container
+ */
 	private void CalendarFragmentSetup(View viewOuter, LayoutInflater inflater,
 			ViewGroup container)
 	{
@@ -320,7 +357,10 @@ public class FragmentTab1 extends SherlockFragment
 		// Setup Caldroid
 		caldroidFragment.setCaldroidListener(listener);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);	}
-
+	/***
+	 * This method sets the calendar cells with events a color of green. This method loops through all the events and highlights them with green
+	 * @param caldroidFragment
+	 */
 	private void setColorToEvents(CaldroidFragment caldroidFragment)
 	{
 		Date dateObj = null;

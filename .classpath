@@ -7,5 +7,10 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-io-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jsoup-1.7.3.jar"/>
+	<classpathentry kind="lib" path="/Users/kaushikvelindla/Downloads/date4j.jar"/>
+	<classpathentry kind="lib" path="/Users/kaushikvelindla/git/OSC-new/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/Users/kaushikvelindla/Downloads/JakeWharton-ActionBarSherlock-5a15d92/actionbarsherlock/libs/android-support-v4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CaldroidSampleActivity"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/library"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

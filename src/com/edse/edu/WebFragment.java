@@ -47,7 +47,11 @@ import android.widget.Toast;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 import android.graphics.Bitmap;
-
+/***
+ * Web Fragment class represents the View Fragment rendering the web-page corresponding to the url set for this particular view. 
+ * @author kaushikvelindla
+ *
+ */
 public class WebFragment extends Fragment
 {
 	View view = null;

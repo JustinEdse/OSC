@@ -10,7 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/***
+ * This class holds article details and populates the ListView(by implementing  list adapter interface) <br>
+ * with the articles.
+ * @author kaushikvelindla
+ *
+ */
 
 public class ArticleAdapter extends BaseAdapter
 {
@@ -30,7 +35,14 @@ public class ArticleAdapter extends BaseAdapter
 	
 	private static LayoutInflater inflater = null;
 	
-	// this ArticleAdapter constructor contains pieces of an Article object.
+	/***
+	 * This constructor of the article adapter class initializes arrays of select information about articles that would be a part of the listView.
+	 * @param varyingArtNum
+	 * @param context
+	 * @param specImg
+	 * @param artTitles
+	 * @param artDesc
+	 */
 	public ArticleAdapter(int varyingArtNum, Context context, Bitmap[] specImg, String[] artTitles, String[] artDesc)
 	{
 		this.varyingArtNum = varyingArtNum;
@@ -43,6 +55,9 @@ public class ArticleAdapter extends BaseAdapter
 	
 	
 	@Override
+	/**
+	 * Returns the number of articles to be displayed
+	 */
 	public int getCount()
 	{
 		// TODO Auto-generated method stub
@@ -50,6 +65,9 @@ public class ArticleAdapter extends BaseAdapter
 	}
 
 	@Override
+	/***
+	 * Returns the Article Object by position in the list of articles.
+	 */
 	public Object getItem(int position)
 	{
 		// TODO Auto-generated method stub
@@ -57,6 +75,9 @@ public class ArticleAdapter extends BaseAdapter
 	}
 
 	@Override
+	/***
+	 * Returns the article Id which is equal to the position ??
+	 */
 	public long getItemId(int position)
 	{
 		// TODO Auto-generated method stub
@@ -64,9 +85,11 @@ public class ArticleAdapter extends BaseAdapter
 	}
 
 	@Override
+	/***
+	 * Sets a view with the article's information and returns it 
+	 */
 	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		// Sets a view with the article's information and returns it.
+	{		
 		View view = convertView;
 		 
 		if(varyingArtNum == 0)

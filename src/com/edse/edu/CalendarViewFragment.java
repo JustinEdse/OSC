@@ -2,6 +2,7 @@ package com.edse.edu;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +15,12 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.Toast;
-
+/***
+ * This class extends the class SherlockFragment and represents the view that corresponds to the events listed against a <br>
+ * a particular calendar entry.
+ * @author kaushikvelindla
+ *
+ */
 public class CalendarViewFragment extends SherlockFragment {
 	
 

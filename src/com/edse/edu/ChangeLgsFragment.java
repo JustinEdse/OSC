@@ -20,7 +20,12 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
-
+/***
+ * This Class extends the class SherlockFragment and represents the Fragment corresponding to the <br>
+ * list of change logs. ChangeLgsAdapter populates this fragment with a list of all the change logs.
+ * @author kaushikvelindla
+ *
+ */
 public class ChangeLgsFragment extends SherlockFragment {
  
     @Override

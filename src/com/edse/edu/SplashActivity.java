@@ -11,7 +11,12 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
- 
+ /***
+  * This class is the first class to be instantiated as soon as the application opens up.<br>
+  * This then instantiates the class Mainactivity.
+  * @author kaushikvelindla
+  *
+  */
 public class SplashActivity extends Activity
 {
  
