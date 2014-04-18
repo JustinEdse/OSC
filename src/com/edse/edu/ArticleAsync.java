@@ -12,22 +12,22 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class UsableAsync extends AsyncTask<Object, Void, ArrayList<Article>>
+public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 {
-	ResultsListener listener;
+	ArticleResultsListener listener;
 	private com.edse.network.ArticleRSSReader artReaderObj;
 	private String urlArticles = "https://www.osc.edu/press-feed";
 	private Context context;
 	ProgressDialog dialog;
 
-	public UsableAsync(Context context)
+	public ArticleAsync(Context context)
 	{
 		this.context = context;
 	}
 
 	
 
-	public void setOnResultsListener(ResultsListener listener)
+	public void setOnArticleResultsListener(ArticleResultsListener listener)
 	{
 		this.listener = listener;
 	}

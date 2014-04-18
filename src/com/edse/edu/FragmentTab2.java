@@ -165,7 +165,7 @@ public class FragmentTab2 extends SherlockFragment
 	{
 		 ArrayList<String> eventTitles = new ArrayList<String>();
             ArrayList<String> eventDateTimes = new ArrayList<String>();
-            //ArrayList<String> eventDescs = new ArrayList<String>();
+            ArrayList<String> eventDescs = new ArrayList<String>();
             ArrayList<String> eventLinks = new ArrayList<String>();
            // ArrayList<String> eventLocations = new ArrayList<String>();
             
@@ -175,6 +175,7 @@ public class FragmentTab2 extends SherlockFragment
     		for (Event ev: MainActivity.events)
     		{
     			eventTitles.add(ev.getEventName());
+    			//Log.d("List sort", ev.getEventName() + "Evdate is" + ev.getDate().toString());
     			eventDateTimes.add(ev.getDateAndTime());
     			eventLinks.add(ev.getEventLink());
     		}

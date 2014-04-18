@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 /***
  * This class holds article details and populates the ListView(by implementing  list adapter interface) <br>
  * with the articles.
  * @author kaushikvelindla
  *
  */
-
 public class ArticleAdapter extends BaseAdapter
 {
 
@@ -27,7 +27,7 @@ public class ArticleAdapter extends BaseAdapter
 	private String[] artDesc;
 	
 	public static boolean done = false;
-	UsableAsync taskI = new UsableAsync(context);
+	ArticleAsync taskI = new ArticleAsync(context);
 	public static int artCount = 0;
 	public static int savedCount = 0;
 	
@@ -89,7 +89,8 @@ public class ArticleAdapter extends BaseAdapter
 	 * Sets a view with the article's information and returns it 
 	 */
 	public View getView(int position, View convertView, ViewGroup parent)
-	{		
+	{
+		// Sets a view with the article's information and returns it.
 		View view = convertView;
 		 
 		if(varyingArtNum == 0)

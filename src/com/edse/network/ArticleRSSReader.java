@@ -20,7 +20,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import com.edse.database.Database;
 import com.edse.edu.Article;
 import com.edse.edu.MainActivity;
-import com.edse.edu.UsableAsync;
+import com.edse.edu.ArticleAsync;
 
 import android.R;
 import android.graphics.Bitmap;

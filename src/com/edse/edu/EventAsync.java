@@ -16,7 +16,7 @@ import android.widget.Toast;
 /*
  * Move all code from main activity class to here and then implement a result listener. After that, start working on the databse.
  */
-public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
+public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 {
 	
 	EventsResultsListener listener;
@@ -26,7 +26,7 @@ public class AsyncEvent extends AsyncTask<Void, Void, ArrayList<Event>>
 	ArrayList<Event> retEventList= new ArrayList<Event>();
 	//public static EventDatabase db;
 
-	public AsyncEvent(Context context)
+	public EventAsync(Context context)
 	{
 		this.context = context;
 	}

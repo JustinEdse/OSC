@@ -105,6 +105,29 @@ public class StorageChecker
 		File dirPrev = null;
 		File dirCurr = null;
 
+		// 1. When writing of images is to take place we first check if
+		// an SD card is available. If it is then that's where we
+		// write. If it is not available then store the images in internal
+		// storage private to our app.
+
+		// 2. Next we need to check if there are already 4 system status images
+		// in place that need to be updated with the new four or there aren't
+		// any at all. First we need
+		// to read from either the SD card or internal storage and see if we in
+		// fact
+		// have 4 images already in the directory. If we do then replace them
+		// with the fresh
+		// images (CHECK THAT WE DEFINITIVELY HAVE THESE IMAGES BEFORE
+		// OVERWRITING). If not then just
+		// write the four images.
+
+		// 3. For reading our preferences are the same as before. First try to
+		// read from the SD card and if
+		// it's not there then go ahead and read from internal storage. At this
+		// point the BitmapFactory
+		// class is used to decode each byte array into a bitmap image. Theses
+		// bitmap images are added to
+		// an array list and ultimately returned.
 
 		try
 		{

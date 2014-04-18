@@ -13,9 +13,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     final int ARTICLE_PAGE_COUNT = 2;
     final int EVENT_PAGE_COUNT = 2;
     final int SYSTEM_INFO_COUNT = 2;
+    final int CHANGELOG_INFO_COUNT = 1;
+    final int ISSUE_INFO_COUNT = 1;
     private String newstitles[] = new String[] { "CATEGORIES", "RECENT"};
     private String calendartitles[] = new String[] {"FULL CALENDAR", "ALL EVENTS"};
     private String systemTitles[] = new String[]{"GLENN", "OAKLEY"};
+    private String logtitles[] = new String[]{"RECENT"};
+    private String issueTitles[] = new String[]{"RECENT"};
     
    
     public ViewPagerAdapter(FragmentManager fm) 
@@ -58,9 +62,17 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	{
     		temp = (CharSequence)calendartitles[position];
     	}
+    	else if(MainActivity.selectedFrag == 2)
+    	{
+    		temp = (CharSequence)logtitles[position];
+    	}
     	else if(MainActivity.selectedFrag == 4)
     	{
     		temp = (CharSequence)systemTitles[position];
+    	}
+    	else if(MainActivity.selectedFrag == 3)
+    	{
+    		temp = (CharSequence)issueTitles[position];
     	}
         
     	return temp;
@@ -81,6 +93,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     	{
     		count = SYSTEM_INFO_COUNT;
     	}
+    	else if(MainActivity.selectedFrag == 2)
+    	{
+    		count = CHANGELOG_INFO_COUNT;
+    	}
+    	else if(MainActivity.selectedFrag == 3)
+    	{
+    		count = ISSUE_INFO_COUNT;
+    	}
+    	
     	return count;
     }
     

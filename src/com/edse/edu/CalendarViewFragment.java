@@ -2,7 +2,6 @@ package com.edse.edu;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;

@@ -77,10 +77,17 @@ public class FragmentTab1 extends SherlockFragment
 {
 	public static ArrayList<Article> articles = new ArrayList<Article>();
 	public static ArrayList<Event> events = new ArrayList<Event>();
+	public static ArrayList<ChangeLog> logs = new ArrayList<ChangeLog>();
+	public static ArrayList<KnownIssue> issues = new ArrayList<KnownIssue>();
 
 	private FragmentTransaction t = null;
 	private CaldroidFragment caldroidFragment = null;
+	
+	ChangeLogAdapter logAdapter;
+	KnownIssueAdapter issueAdapter;
 
+	ListView listViewRecent;
+	ListView listViewRecent2;
 	// private FragmentTransaction eventFragmentTransaction = null;
 
 	private FragmentTransaction eventFragmentTransaction = null;
@@ -121,13 +128,18 @@ public class FragmentTab1 extends SherlockFragment
 
 		else if(MainActivity.selectedFrag == 2)
 		{
-			view = inflater.inflate(R.layout.calendar_view_host, container, false);
-			CalendarFragmentSetup(view, inflater, container);
+			 //should call a method to handle News fragment 1st tab
+			  
+			  view = inflater.inflate(R.layout.changelog_display, container, false);
+			  //display a list view of news article categories.
+			
+			  ChangeLogTabRecent(view, inflater, container);
+			
 		}
 		else if(MainActivity.selectedFrag == 3)
 		{
-			view = inflater.inflate(R.layout.knownissues, container, false);
-			KnownIssues(view, inflater, container);
+			view = inflater.inflate(R.layout.article_display, container, false);
+			KnownIssueTabRecent(view, inflater, container);
 		}
 		else if(MainActivity.selectedFrag == 4)
 		{
@@ -147,7 +159,7 @@ public class FragmentTab1 extends SherlockFragment
 		super.onHiddenChanged(hidden);
 		Log.d("testing", "Entering into onHiddenChanged. hidden: " + hidden);
 	}
-	
+
 	public void NewsTabCategories(View viewOuter, LayoutInflater inflater,
 			ViewGroup container)
 	{
@@ -261,12 +273,12 @@ public class FragmentTab1 extends SherlockFragment
 	 * method. Also we may want to set different colors for events - say to
 	 * differentiate between past and new events.
 	 */
-/***
- * This method creates a new <a href="https://github.com/roomorama/Caldroid"> CaldroidFragment</a>
- * @param viewOuter
- * @param inflater
- * @param container
- */
+	/***
+	* This method creates a new <a href="https://github.com/roomorama/Caldroid"> CaldroidFragment</a>
+	* @param viewOuter
+	* @param inflater
+	* @param container
+	*/
 	private void CalendarFragmentSetup(View viewOuter, LayoutInflater inflater,
 			ViewGroup container)
 	{
@@ -302,20 +314,25 @@ public class FragmentTab1 extends SherlockFragment
 				//String strDate = MainActivity.dateFormat.format(date);
 				//Log.d("anurag", "After formatting Date: " + strDate);
 				Log.d("anurag", "Keys: " + MainActivity.calendarMap.keySet());
+				//strDate = hackFirstZero(strDate);
+				//Log.d("What string key is", strDate);
 				if (MainActivity.calendarMap.containsKey(date)) {
 					Log.d("anurag", "The date has events assiciated with it.");
 
 					//					t.remove(caldroidFragment);
 					t.detach(caldroidFragment);
+					// I have no idea why I did the decrement thing
+					//MainActivity.movesCount--;
 					MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
 					FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-					// Launch fragment showing the list of events on that day.
+					// Launsh fragment showing the list of events on that day.
 
 					MainActivity.movesCount++;
 					EventDisplayFragment newFrag= new EventDisplayFragment();
 					Bundle bunds = new Bundle();
 					bunds.putString("date", MainActivity.date_timeFormat.format(date));
 					newFrag.setArguments(bunds);
+					//Log.d("Obinna", "Date sent to event display fragement");
 					ft.replace(R.id.content_frame, newFrag);
 					ft.addToBackStack(null);
 					ft.commit();
@@ -323,6 +340,7 @@ public class FragmentTab1 extends SherlockFragment
 				}
 				else 
 				{
+					//int id = view.getId();
 					Toast.makeText(getActivity().getApplicationContext(), "There is no event on that day", Toast.LENGTH_SHORT).show();
 				}
 
@@ -379,17 +397,6 @@ public class FragmentTab1 extends SherlockFragment
 
 	}
 
-	public void ChangeLogs(View cView, LayoutInflater inflaterGStatus,
-			ViewGroup containerGStatus)
-	{
-
-	}
-
-	public void KnownIssues(View kView, LayoutInflater inflaterGStatus,
-			ViewGroup containerGStatus)
-	{
-
-	}
 
 	public void GlennStatus(View vGStatus, LayoutInflater inflaterGStatus,
 			ViewGroup containerGStatus)
@@ -399,5 +406,160 @@ public class FragmentTab1 extends SherlockFragment
 		// top row = cpu report, load report.
 		// bottom row = memory report, network report
 	}
+	/***
+	 * This method displays the most recent changelogs
+	 */
+	public void ChangeLogTabRecent(View view, LayoutInflater inflater, ViewGroup container)
+	{
+		
+	    
+	   if(MainActivity.networkStatus == false)
+	   {
+		   //get arraylist of articles from cache/SQLite and rely upon that.
+	   }
+	   else
+	   {
+		   logs = MainActivity.logsReturned;
+	   }
+		
+		
+		getActivity().setTitle("ChangeLog");
+		
+		
+		//CHECK IF NOT DONE!!!!!!!!!!!!!!!!!!!
+	    ArrayList<String> testTitle = new ArrayList<String>();
+	    ArrayList<String> testDesc = new ArrayList<String>();
+	    
+	    for(ChangeLog log : logs)
+	    {
+	    	testTitle.add(log.getTitle());
+	    	testDesc.add(log.getsubDesc());
+	    }
+	    
+	    String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
+	    String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
+	    
+		//calling article adapter for list of articles in fragment 2.
+			logAdapter = new ChangeLogAdapter(1,getActivity().getApplicationContext(),specTitle,specDesc);
+			listViewRecent = (ListView) view.findViewById(R.id.listview);
+			listViewRecent.setAdapter(logAdapter);
+		
+		
+			listViewRecent.setOnItemClickListener(new OnItemClickListener(){
 
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
+			{
+				
+				// Replace whatever is in the fragment_container view with this fragment,
+				// and add the transaction to the back stack
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				WebFragment webFrag = new WebFragment();
+				String url = "";
+				
+				//get the url from each article
+				for(int i = 0; i < logs.size(); i++)
+				{
+					url = logs.get(position).getLink();
+				}
+				
+				// making a bundle and passing setting these arguments so another fragment can receive them.
+				// This is very similar with making a bundle and passing it to another activity via an
+				// intent.
+				 MainActivity.movesCount++;
+				Bundle urlExtras = new Bundle();
+				urlExtras.putString("url", url);
+				webFrag.setArguments(urlExtras);
+				
+				ft.replace(R.id.content_frame, webFrag);
+				ft.addToBackStack(null);
+				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+				ft.commit();
+				
+				
+				
+			}
+				
+			});
+
+	}
+	/***
+	 * This method displays the most recent knownissues
+	 */
+	public void KnownIssueTabRecent(View view, LayoutInflater inflater, ViewGroup container)
+	{
+		
+	    
+	   if(MainActivity.networkStatus == false)
+	   {
+		   //get arraylist of articles from cache/SQLite and rely upon that.
+	   }
+	   else
+	   {
+		   issues = MainActivity.issuesReturned;
+	   }
+		
+		
+		getActivity().setTitle("KnownIssue");
+		
+		
+		//CHECK IF NOT DONE!!!!!!!!!!!!!!!!!!!
+	    ArrayList<String> testTitle = new ArrayList<String>();
+	    ArrayList<String> testDesc = new ArrayList<String>();
+	    
+	    for(KnownIssue issue : issues)
+	    {
+	    	testTitle.add(issue.getTitle());
+	    	testDesc.add(issue.getsubDesc());
+	    }
+	    
+	    String[] specTitle = testTitle.toArray(new String[testTitle.size()]);
+	    String[] specDesc = testDesc.toArray(new String[testDesc.size()]);
+	    
+		//calling article adapter for list of articles in fragment 2.
+			issueAdapter = new KnownIssueAdapter(1,getActivity().getApplicationContext(),specTitle,specDesc);
+			listViewRecent2 = (ListView) view.findViewById(R.id.listview);
+			listViewRecent2.setAdapter(issueAdapter);
+		
+		
+			listViewRecent2.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
+			{
+				
+				// Replace whatever is in the fragment_container view with this fragment,
+				// and add the transaction to the back stack
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				WebFragment webFrag = new WebFragment();
+				String url = "";
+				
+				//get the url from each article
+				for(int i = 0; i < issues.size(); i++)
+				{
+					url = issues.get(position).getLink();
+				}
+				
+				// making a bundle and passing setting these arguments so another fragment can receive them.
+				// This is very similar with making a bundle and passing it to another activity via an
+				// intent.
+				 MainActivity.movesCount++;
+				Bundle urlExtras = new Bundle();
+				urlExtras.putString("url", url);
+				webFrag.setArguments(urlExtras);
+				
+				ft.replace(R.id.content_frame, webFrag);
+				ft.addToBackStack(null);
+				MainActivity.mDrawerToggle.setDrawerIndicatorEnabled(false);
+				ft.commit();
+				
+				
+				
+			}
+				
+			});
+
+	}
 }

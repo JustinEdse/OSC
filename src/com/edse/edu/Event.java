@@ -31,9 +31,9 @@ public class Event implements Comparable<Event>
 	
 	private String description;
 	private String location;
-/***
- * default constructor for the class Event
- */
+	/***
+	* default constructor for the class Event
+	*/
 	public Event()
 	{
 		
@@ -176,7 +176,7 @@ public class Event implements Comparable<Event>
 	public int compareTo(Event rhs) {
 		// TODO Auto-generated method stub
 		int val = 10000;
-		//Handling possible null date field
+		//Set to use date because of the event 
 		if(this.date != null && rhs.date!= null)
 		{
 			if (this.date.before(rhs.date))
@@ -207,5 +207,4 @@ public class Event implements Comparable<Event>
 	}
 
 }
-	
 	

@@ -8,7 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * This class stores event details, and populates and event row detailed view from event_detailed_row.xml, 
+ * This class stores event details, and populates and event row, showing a detailed view from event_detailed_row.xml, 
+ * This class was not used.
  * @author Obinna Ngini
  *
  */
@@ -23,16 +24,6 @@ public class EventAdapter extends BaseAdapter
 	
 	private static LayoutInflater inflater = null;
 	
-//	public EventListAdapter(Context context, String[] eventTitles, String[] eventDescs,String[] eventDates, String[] eventTimes, String[] eventLocations)
-//	{
-//		this.context = context;
-//		this.eventTitles = eventTitles;
-//		this.eventDescriptions = eventDescs;
-//		this.eventTimes = eventTimes;
-//		this.eventDates = eventDates;
-//		this.eventLocations = eventLocations;
-//		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//	}
 	public EventAdapter(Context context, String[] eventTitles, String[] eventDates, String[] eventdateTimes)
 	{
 		this.context = context;
@@ -70,7 +61,9 @@ public class EventAdapter extends BaseAdapter
 		// TODO Auto-generated method stub
 		return position;
 	}
-	//For detailed view
+
+	@Override
+	
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		// Sets a view with the article's information and returns it.

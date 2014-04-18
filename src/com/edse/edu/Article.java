@@ -51,7 +51,6 @@ public class Article implements Parcelable
 	{
 		
 	}
-	
 	/***
 	 * Overloaded Constructor for the article class, initializes the following fields:
 	 * @param title

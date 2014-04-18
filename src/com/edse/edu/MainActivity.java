@@ -70,12 +70,14 @@ import android.support.v4.view.PagerTabStrip;
  *
  */
 public class MainActivity extends SherlockFragmentActivity implements
-		ResultsListener
+		ArticleResultsListener
 {
 
 	// Declare Variables
 	public static ArrayList<Article> articlesReturned = new ArrayList<Article>();
 	public static ArrayList<Event> eventsReturned = new ArrayList<Event>();
+	public static ArrayList<ChangeLog> logsReturned = new ArrayList<ChangeLog>();
+	public static ArrayList<KnownIssue> issuesReturned = new ArrayList<KnownIssue>();
 	public static FragmentTransaction ft = null;
 
 	public static boolean networkStatus = false;
@@ -91,7 +93,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	int[] icon;
 	Fragment fragment1 = new NewsFragment();
 	Fragment fragment2 = new CalendarFragment();
-	Fragment fragment3 = new ChangeLgsFragment();
+	Fragment fragment3 = new ChangeLogFragment();
 	Fragment fragment4 = new KnownIssFragment();
 	Fragment fragment5 = new StatusFragment();
 	private CharSequence mDrawerTitle;
@@ -101,7 +103,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static final String CALFRAG = "Calendar";
 	private static final String STATUSFRAG = "System Status";
 	private static final String ISSUESFRAG = "Known Issues";
-	private static final String CHANGES = "Change Logs";
+	private static final String LOGFRAG = "Change Logs";
 	// public static final String DATE_FORMAT = "MM/dd/yyyy";
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"MM/dd/yyyy", Locale.US);
@@ -122,6 +124,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public static Database db;
 	public static final int ARTICLE_TABLE_SIZE = 30;
 	public static final int EVENT_TABLE_SIZE = 30;
+	public static final int CHANGELOG_TABLE_SIZE = 30;
+	public static final int ISSUE_TABLE_SIZE = 30;
 	// action bar
 	ActionBar actionBar;
 
@@ -337,7 +341,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			{
 				manager.popBackStack();
 			}
-			ft.replace(R.id.content_frame, fragment3, CHANGES);
+			ft.replace(R.id.content_frame, fragment3, LOGFRAG);
 			break;
 		case 3:// calendar
 			manager = this.getSupportFragmentManager();
@@ -505,11 +509,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		// task2.execute();
 		// MainActivity.db.ResetEventTable();
-		UsableAsync task = new UsableAsync(MainActivity.globalTHIS);
-		task.setOnResultsListener(this);
+		ArticleAsync task = new ArticleAsync(MainActivity.globalTHIS);
+		task.setOnArticleResultsListener(this);
 		task.execute();
 
-		AsyncEvent task2 = new AsyncEvent(MainActivity.globalTHIS);
+		EventAsync task2 = new EventAsync(MainActivity.globalTHIS);
 		
 		
 		task2.setOnResultsListener(new EventsResultsListener()
@@ -524,13 +528,21 @@ public class MainActivity extends SherlockFragmentActivity implements
 				ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
 				if (result.size() > 0)
 				{
-
+					for (Event ev : result)// No duplicates List
+					{
+						Log.d("List1", "Title is " + ev.getEventName());// +
+																		// "and date is "
+																		// +
+																		// ev.getDate().toString());
+					}
 					lists = generateLists(result);
 					Log.d("List1",
 							"Size of list returned is "
 									+ Integer.toString(lists.get(1).size()));
 					for (Event ev : lists.get(1))// No duplicates List
 					{
+						Log.d("List1", "Title is " + ev.getEventName()
+								+ "and date is ");// + ev.getDate().toString());
 						try
 						{
 							MainActivity.db.addEvent(ev);
@@ -561,6 +573,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 						"Size of db is "
 								+ Integer.toString(MainActivity.db
 										.getEventsCount()));
+				for (Event eV : events)
+				{
+					Log.d("List1", "Title is " + eV.getEventName());// +
+																	// "and date is "
+																	// +
+																	// eV.getDate().toString());
+				}
 				ArrayList<Event> eventinstances = new ArrayList<Event>();
 				lists = generateLists(events);
 				eventinstances = lists.get(0);
@@ -588,7 +607,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 						calendarMap.put(ev.getDate(), events);
 					}
 				}
-				
+				// We can set the array for the list of all events now
+				// events = eventinstances;
+				// Log.d("Obinna", "Two arraylists returned");
 				
 				Fragment currentFragment = getSupportFragmentManager()
 						.findFragmentByTag(CALFRAG);
@@ -621,6 +642,107 @@ public class MainActivity extends SherlockFragmentActivity implements
 		});
 
 		task2.execute();
+		ChangeLogAsync task3 = new ChangeLogAsync(MainActivity.globalTHIS);
+		task3.setOnResultsListener(new ChangeLogResultsListener() {
+			@Override
+			public void onResultSuccess(ArrayList<ChangeLog> result) {
+				MainActivity.logsReturned = result;
+				for(ChangeLog log : result)
+				{
+					Log.d("log checker", log.getTitle());
+				}
+				ChangeLogAdapter.done = true;
+				ChangeLogAdapter.logCount = result.size();
+				ChangeLogAdapter.savedCount = result.size();
+
+				
+				
+				
+				FragmentManager test = getSupportFragmentManager();
+	
+				Fragment currentFragment = 
+						test.findFragmentByTag(LOGFRAG);
+				if(currentFragment == null){Log.d("fragCheck", "logFrag is null");}
+				FragmentTransaction fragTransaction = 
+						test.beginTransaction();
+				
+				if(currentFragment != null)
+				{
+				fragTransaction.detach(currentFragment);
+				}
+				
+				if(currentFragment!= null)
+				{
+				fragTransaction.attach(currentFragment);
+				}
+				fragTransaction.commit();
+				
+				MainActivity.db.close();
+				
+				
+				
+			}
+
+			@Override
+			public void onResultFail(int resultCode, String errorMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		task3.execute();
+		
+		KnownIssueAsync task4 = new KnownIssueAsync(MainActivity.globalTHIS);
+		task4.setOnResultsListener(new KnownIssueResultsListener() {
+			@Override
+			public void onResultSuccess(ArrayList<KnownIssue> result) {
+				MainActivity.issuesReturned = result;
+				for(KnownIssue issue : issuesReturned)
+				{
+					Log.d("log checker", issue.getTitle());
+				}
+				KnownIssueAdapter.done = true;
+				KnownIssueAdapter.issueCount = result.size();
+				KnownIssueAdapter.savedCount = result.size();
+
+				
+				
+				
+				FragmentManager test = getSupportFragmentManager();
+	
+				Fragment currentFragment = 
+						test.findFragmentByTag(ISSUESFRAG);
+				if(currentFragment == null){Log.d("fragCheck", "issueFrag is null");}
+				FragmentTransaction fragTransaction = 
+						test.beginTransaction();
+				
+				if(currentFragment != null)
+				{
+				fragTransaction.detach(currentFragment);
+				}
+				
+				if(currentFragment!= null)
+				{
+				fragTransaction.attach(currentFragment);
+				}
+				fragTransaction.commit();
+				
+				MainActivity.db.close();
+				
+				
+				
+			}
+
+			@Override
+			public void onResultFail(int resultCode, String errorMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		task4.execute();
+		
+		
 		ListView lv = (ListView) findViewById(R.id.listview_drawer);
 		lv.setItemChecked(0, false);
 
@@ -658,7 +780,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// TODO Auto-generated method stub
 
 		// HERE WE NEED TO COMPARE THE SIZE OF THE SQLITE TABLE WITH SIZE
-		// OF THE ARTICES RETURNED. IF THERE IS NO DIFFERENCE THEN NOTHING HAS
+		// OF THE ARTICES RETURNED. IF THERE IS mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmNO DIFFERENCE THEN NOTHING HAS
 		// TO BE DONE.
 		// IF THE SIZE RETURNED FROM THE RSS FEED IS GREATER WE KNOW A NEW
 		// ARTICLE HAS
@@ -700,7 +822,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	}
 
 	private static ArrayList<Date> parseDate(String input)
-	{
+		{
 
 		ArrayList<Date> dates = new ArrayList<Date>();
 		
@@ -908,6 +1030,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 							createdEvent = new Event(ev.getEventName(),
 									cal.getTime(), ev.getDateAndTime(),
 									ev.getEventLink(), ev.getPubDate());
+							// Log.d("Date", cal.getTime().toString());
 							eventinstances.add(createdEvent);
 						}
 					}
@@ -923,7 +1046,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 							createdEvent = new Event(ev.getEventName(),
 									cal.getTime(), ev.getDateAndTime(),
 									ev.getEventLink(), ev.getPubDate());
-									eventinstances.add(createdEvent);
+							// Log.d("Date", cal.getTime().toString());
+							eventinstances.add(createdEvent);
 
 						}
 					}
