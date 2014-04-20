@@ -29,6 +29,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
  
+/**
+ * This fragment is used to display a list of events on a certain date.
+ * An item click listener is used to launch a web page showing complete event information
+ * from the OSC website
+ * @author Obinna Ngini
+ */
 public class EventDisplayFragment extends SherlockFragment {
  
 	    //Declare list view to store the event rows
@@ -43,17 +49,13 @@ public class EventDisplayFragment extends SherlockFragment {
 		    	//GET THE STRING KEY FROM THE BUNDLE passed 
 		    	Bundle b = getArguments();
 		    	String date = b.getString("date");
-		    	Log.d("Obinna", date);
-		    	Log.d("Date check", date);
 		    	Date evDate = new Date();
 				try {
 					evDate = MainActivity.date_timeFormat.parse(date);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		        View view = inflater.inflate(R.layout.article_display, container, false);
-		        Log.d("Obinna", evDate.toString());
 		        ArrayList<String> eventTitles = new ArrayList<String>();
 	            ArrayList<String> eventDateTimes = new ArrayList<String>();
 	            ArrayList<String> eventLinks = new ArrayList<String>();

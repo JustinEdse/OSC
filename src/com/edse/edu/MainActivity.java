@@ -502,20 +502,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// Would be weird to call async methods from
 		// fragments to the splash screen though. I also guess that splash
 		// activity's life would be over after the 3 seconds...
-		// task1 = new GetArticlesFromRSS();
-		// task2 = new GetEventsFromRSS();
-
-		// task1.execute();
-
-		// task2.execute();
 		// MainActivity.db.ResetEventTable();
 		ArticleAsync task = new ArticleAsync(MainActivity.globalTHIS);
 		task.setOnArticleResultsListener(this);
 		task.execute();
 
 		EventAsync task2 = new EventAsync(MainActivity.globalTHIS);
-		
-		
 		task2.setOnResultsListener(new EventsResultsListener()
 		{
 
@@ -528,21 +520,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 				ArrayList<ArrayList<Event>> lists = new ArrayList<ArrayList<Event>>();
 				if (result.size() > 0)
 				{
-					for (Event ev : result)// No duplicates List
-					{
-						Log.d("List1", "Title is " + ev.getEventName());// +
-																		// "and date is "
-																		// +
-																		// ev.getDate().toString());
-					}
 					lists = generateLists(result);
 					Log.d("List1",
 							"Size of list returned is "
 									+ Integer.toString(lists.get(1).size()));
 					for (Event ev : lists.get(1))// No duplicates List
 					{
-						Log.d("List1", "Title is " + ev.getEventName()
-								+ "and date is ");// + ev.getDate().toString());
 						try
 						{
 							MainActivity.db.addEvent(ev);
@@ -573,13 +556,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 						"Size of db is "
 								+ Integer.toString(MainActivity.db
 										.getEventsCount()));
-				for (Event eV : events)
-				{
-					Log.d("List1", "Title is " + eV.getEventName());// +
-																	// "and date is "
-																	// +
-																	// eV.getDate().toString());
-				}
 				ArrayList<Event> eventinstances = new ArrayList<Event>();
 				lists = generateLists(events);
 				eventinstances = lists.get(0);
@@ -607,10 +583,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 						calendarMap.put(ev.getDate(), events);
 					}
 				}
-				// We can set the array for the list of all events now
-				// events = eventinstances;
-				// Log.d("Obinna", "Two arraylists returned");
-				
 				Fragment currentFragment = getSupportFragmentManager()
 						.findFragmentByTag(CALFRAG);
 				FragmentTransaction fragTransaction = getSupportFragmentManager()
@@ -635,8 +607,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage)
 			{
-				// TODO Auto-generated method stub
-
+				Toast.makeText(getApplicationContext(), "Event fetch failed", Toast.LENGTH_SHORT).show();
 			}
 
 		});
@@ -686,7 +657,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage) {
 				// TODO Auto-generated method stub
-				
+				Toast.makeText(getApplicationContext(), "Change Log fetch failed", Toast.LENGTH_SHORT).show();
 			}
 			
 		});
@@ -736,7 +707,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage) {
 				// TODO Auto-generated method stub
-				
+				Toast.makeText(getApplicationContext(), "Known Issue fetch failed", Toast.LENGTH_SHORT).show();
 			}
 			
 		});
@@ -919,76 +890,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 				}
 			}
 		}
-//		if (cleanedHTML.contains("to") && !(cleanedHTML.contains("-")))
-//			//Multiple dates to get
-//		{
-//			String[] splits = cleanedHTML.split("to");
-//			int start = 0;
-//			for (int count = 0; count < splits.length; count++)
-//			{
-//				String date = splits[count].substring(0,
-//						splits[count].indexOf('(')).trim();
-//				// Log.d("Date", date);
-//				String date2 = date;
-//				try
-//				{
-//					Date tempDate = MainActivity.extendeddateFormat.parse(date);
-//					dates.add(tempDate);
-//					// Log.d("Date", tempDate.toString());
-//				}
-//				catch (ParseException e)
-//				{
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					// Log.d("Date", "Error");
-//				}
-//
-//			}
-//
-//		}
-//		// If its just one date
-//		else if (cleanedHTML.contains("-"))
-//		{
-//			// Log.d("Obinna", "Else case, one date");
-//			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('-'))
-//					.trim();
-//			// Log.d("Date", date1);
-//			try
-//			{
-//				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
-//				dates.add(tempDate);
-//				// Log.d("Date", tempDate.toString());
-//			}
-//			catch (ParseException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
-//		else if (cleanedHTML.contains("("))
-//		{
-//			// Log.d("Obinna", "Else case, one date");
-//			String date1 = cleanedHTML.substring(0, cleanedHTML.indexOf('('))
-//					.trim();
-//			// Log.d("Date", date1);
-//			try
-//			{
-//				Date tempDate = MainActivity.extendeddateFormat.parse(date1);
-//				dates.add(tempDate);
-//				// Log.d("Date", tempDate.toString());
-//			}
-//			catch (ParseException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
 		return dates;
 
 	}
-
+	/*
+	 * This method returns two lists, one containing duplicate events 
+	 * for multiple-day events. The second list has no duplicates, and is used
+	 * for the list of events shown on the second tab, as well as to populate the database. 
+	 */
 	public ArrayList<ArrayList<Event>> generateLists(ArrayList<Event> result)
 	{
 		ArrayList<Event> eventinstances = new ArrayList<Event>();

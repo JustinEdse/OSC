@@ -35,10 +35,15 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * This class fetches date from the RSS feed using a HTTP GET and then parses that data into a list of events.
+ * Only events not in the database will be returned.
+ * @author Obinna Ngini
+ *
+ */
 public class EventRSSReader
 {
 	ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-	
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
 	private ArrayList<Event> listevents = new ArrayList<Event>();
@@ -62,15 +67,16 @@ public class EventRSSReader
 		this.urlString = url;
 	}
 
-	public ArrayList<Event> getEvents(){
-	
+	public ArrayList<Event> getEvents()
+	{
 		return listevents;
 	}
 	
 	public void parseXMLAndStoreIt(XmlPullParser myParser)
 	{
-	
-
+		/*
+		 *Fetch all items from the list using the XML Pull parser and build an event  
+		 */
 		String title = null, description = null, link = null, pubDate = null;
 		int event;
 		String text = null;
@@ -133,7 +139,7 @@ public class EventRSSReader
 				{
 					if(titles.size() == links.size() && titles.size() == descriptions.size() && titles.size() == pubs.size())
 					{
-						String type = "unknown";
+						//String type = "unknown";
 						String fulldesc = parseDescription(description);
 						String dateTime = parseDateTime(description);
 						int endpoint = trimDateTime(dateTime);
@@ -146,7 +152,6 @@ public class EventRSSReader
 						Event tempEvent = new Event(tittextString,null, dateTime, link, pubDate2);
 						if(isNewEvent(tempEvent))
 						{
-							Log.d("Obinna", "New Event: " + tittextString + " added");
 							listevents.add(tempEvent);
 						}
 					titles.clear();
@@ -155,11 +160,7 @@ public class EventRSSReader
 					pubs.clear();
 						
 					}
-					
-				
 				}
-				
-				
 				event = myParser.next();
 			}
 			parsingComplete = false;
@@ -258,7 +259,10 @@ public class EventRSSReader
 		return fulltext;
 		
 	}
-	
+	/*
+	 * Check if an event with the same title and publication date already exists in the Database.
+	 * Return true or false 
+	 */
    private static boolean isNewEvent(Event ev)
    {
 	   boolean ans;

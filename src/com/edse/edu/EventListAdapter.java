@@ -8,8 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * This class stores event details, and populates and event row, either a detailed view from event_detailed_row.xml, 
- * or basic view from event_row.xml(for upcoming and recent tabs)
+ * This class stores event details, and populates and event row from event_row.xml(for list of all events)
  * @author Obinna Ngini
  *
  */
@@ -63,8 +62,6 @@ public class EventListAdapter extends BaseAdapter
 			TextView title = (TextView) convertView.findViewById(R.id.eventtitle);
 			TextView date_time = (TextView) convertView.findViewById(R.id.event_date_time);
 			convertView.setTag(holder);
-			
-			//image.setImageResource(artImages[position]);
 			title.setText(eventTitles[position]);
 			date_time.setText(eventdateTimes[position]);
 		

@@ -13,8 +13,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-/*
- * Move all code from main activity class to here and then implement a result listener. After that, start working on the databse.
+/**
+ * This class implements an asynchronous task used to fetch a list of events from the events RSS feed
  */
 public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 {
@@ -41,6 +41,9 @@ public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 	@Override
 	protected void onPreExecute()
 	{
+		/*
+		 *Show a loading screen while fetching the events 
+		 */
 		dialog = new ProgressDialog(context);
 		dialog.setMessage("Loading ...");
 		dialog.setIndeterminate(true);
@@ -51,7 +54,9 @@ public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 	@Override
 	protected ArrayList<Event> doInBackground(Void... v)
 	{
-
+		/*
+		 * Create an instance of the event rss reader class to fetch the list
+		 */
 		// TODO Auto-generated method stub
 		eventReaderObj = new EventRSSReader(urlEvents);
 
@@ -80,7 +85,7 @@ public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 	@Override
 	protected void onPostExecute(ArrayList<Event> result)
 	{
-		Log.d("testing", "Entering into onPostExecute of AsyncEvent");
+		//Log.d("testing", "Entering into onPostExecute of AsyncEvent");
 		dialog.dismiss();
 			if (listener != null)
 			{

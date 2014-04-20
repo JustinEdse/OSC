@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This layout shows a detailed view when an event is selected. This was not used. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/eventdetailedview"
     android:layout_width="fill_parent"
@@ -7,7 +8,6 @@
     android:background="@color/white"
     
      >
-     <!-- android:background="@drawable/selector" -->
     <!-- Title, Desc, Date, Time, Location -->
 
     <TextView

@@ -20,6 +20,7 @@ public class EventAdapter extends BaseAdapter
 	String[] eventDates;
 	String[] eventdateTimes;
 	String[] eventDescriptions;
+	String[] eventLocations;
 	//ViewHolder holder;
 	
 	private static LayoutInflater inflater = null;
@@ -39,6 +40,7 @@ public class EventAdapter extends BaseAdapter
 		this.eventDescriptions = eventDescs;
 		this.eventdateTimes= eventdateTimes;
 		this.eventDates = eventDates;
+		this.eventLocations = eventLocations;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	@Override
@@ -63,26 +65,25 @@ public class EventAdapter extends BaseAdapter
 	}
 
 	@Override
-	
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		// Sets a view with the article's information and returns it.
 			View view = convertView;
 			//ViewHolder holder = new ViewHolder(); 
-			if(view == null)
-			{
+			//if(view == null)
+			//{
 				view= inflater.inflate(R.layout.event_detailed_row, null);
 				TextView title = (TextView) view.findViewById(R.id.event_detailed_title);
 				TextView date_time = (TextView) view.findViewById(R.id.event_detailed_date_time);
-//				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
-//				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
+				TextView desc = (TextView) view.findViewById(R.id.event_detailed_desc);
+				TextView location = (TextView) view.findViewById(R.id.event_detailed_location);
 				
 				title.setText(eventTitles[position]);
 				date_time.setText(eventdateTimes[position]);
-//				desc.setText(eventDescriptions[position]);
-//				location.setText(eventLocations[position]);
+				desc.setText(eventDescriptions[position]);
+				location.setText(eventLocations[position]);
 	
-			}
+		//	}
 			return view;
 	}
 
