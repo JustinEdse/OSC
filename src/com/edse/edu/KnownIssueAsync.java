@@ -6,58 +6,58 @@ import java.util.Collections;
 
 import com.edse.database.Database;
 import com.edse.network.ArticleRSSReader;
+import com.edse.network.KnownIssueRSSReader;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
+public class KnownIssueAsync extends AsyncTask<Object, Void, ArrayList<KnownIssue>>
 {
-	ArticleResultsListener listener;
-	private com.edse.network.ArticleRSSReader artReaderObj;
-	private String urlArticles = "https://www.osc.edu/press-feed";
+	KnownIssueResultsListener listener;
+	private com.edse.network.KnownIssueRSSReader issueReaderObj;
+	private String urlKnownIssue = "https://osc.edu/feeds/known-issues.xml";
 	private Context context;
-	ProgressDialog dialog;
+	public static Database db;
 
-	public ArticleAsync(Context context)
+	public KnownIssueAsync(Context context)
 	{
 		this.context = context;
 	}
 
-	
+	ProgressDialog dialog;
 
-	public void setOnArticleResultsListener(ArticleResultsListener listener)
+	public void setOnResultsListener(KnownIssueResultsListener listener)
 	{
 		this.listener = listener;
 	}
-
+	
 	@Override
 	protected void onPreExecute()
 	{
-		super.onPreExecute();
 		dialog = new ProgressDialog(context);
-		dialog.setMessage("Loading ...");
-		dialog.setIndeterminate(false);
-		dialog.setCancelable(true);
+		dialog.setMessage("Loading...");
+		dialog.setIndeterminate(true);
+		dialog.setCancelable(false);
 		dialog.show();
 	}
 
 	@Override
-	protected ArrayList<Article> doInBackground(Object... params)
+	protected ArrayList<KnownIssue> doInBackground(Object... params)
 	{
 
 		// TODO Auto-generated method stub
-		ArrayList<Article> modifiedList = new ArrayList<Article>();
-		ArrayList<Article> retArtList = new ArrayList<Article>();
-		artReaderObj = new ArticleRSSReader(urlArticles);
+		ArrayList<KnownIssue> modifiedList = new ArrayList<KnownIssue>();
+		ArrayList<KnownIssue> retIssueList = new ArrayList<KnownIssue>();
+		issueReaderObj = new KnownIssueRSSReader(urlKnownIssue);
 		MainActivity.db = new Database(MainActivity.globalTHIS);
+		
 
 		try
 		{
 
-			artReaderObj.fetchXML();
-			MainActivity.networkStatus = true;
+		issueReaderObj.fetchXML();
 		}
 		catch (InterruptedException e)
 		{
@@ -67,44 +67,37 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		catch (IOException ioe)
 		{
 			ioe.printStackTrace();
-			//MainActivity.networkStatus = false;
 
 		}
 
-		while (artReaderObj.parsingComplete)
-			;
+		while (issueReaderObj.parsingComplete);
 		
-		ArrayList<Article> cacheInfo = null;
-		
-		if(MainActivity.networkStatus != false)
-		{
-		retArtList = artReaderObj.getArticles();
+		retIssueList = issueReaderObj.getKnownIssue();
 		// right now just doing articles. in the future will worry about
 		// events....
-
-		if (retArtList.size() == 0)
+		
+		if (retIssueList.size() == 0)
 		{
 			// If list size is zero then that means no new articles were
 			// published. get articles from
 			// the sqlite database.
-			
+			ArrayList<KnownIssue> cacheInfo = null;
 			try
 			{
-				cacheInfo = MainActivity.db.getAllArticles();
+				cacheInfo = MainActivity.db.getAllIssues();
 			}
 			catch (IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				MainActivity.networkStatus = false;
 			}
 			modifiedList = cacheInfo;
 
 		}
-		else if(retArtList.size() > 0)
+		else if(retIssueList.size() > 0)
 		{
 			
-			//int newArtSizeAdded = retArtList.size() - db.getArticlesCount();
+			//int newArtSizeAdded = retIssueLogList.size() - db.getKnownIssueCount();
 			
 			// while the size of number of articles is greater than zero, add
 			// those entries to our sqlite table.
@@ -112,11 +105,11 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			// updated article entries already.
 			
 			//MUST FIGURE OUT WHAT TO DO WHEN CACHE IS FULL OR AT A DESIRABLE LIMIT.
-			for(Article art : retArtList)
+			for(KnownIssue issue : retIssueList)
 			{
 				try
 				{
-					MainActivity.db.addArticle(art);
+					MainActivity.db.addIssue(issue);
 				}
 				catch (IOException e)
 				{
@@ -130,67 +123,46 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			try
 			{
 				//Database afterAdd = new Database(MainActivity.globalTHIS);
-				modifiedList = MainActivity.db.getAllArticles();
+				modifiedList = MainActivity.db.getAllIssues();
 			}
 			catch (IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}// get articles from cache
-
-		}
-		}
-		else
-		{
-			try
-			{
-				modifiedList = MainActivity.db.getAllArticles();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		MainActivity.db.close();
-		return modifiedList;
+		return retIssueList;
 	}
-
+	
 	@Override
-	protected void onPostExecute(ArrayList<Article> result)
+	protected void onPostExecute(ArrayList<KnownIssue> result)
 	{
-		super.onPostExecute(result); 
-		if(dialog != null && dialog.isShowing())
-		{
-			dialog.dismiss();
-		}
+		dialog.dismiss();
 
-		
-		
 		if (result.size() > 0)
 		{
 			if (listener != null)
 			{
 				listener.onResultSuccess(result);
-				
+				MainActivity.networkStatus = true;
 			}
-
-			//Toast.makeText(context, "Ok", Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, "Ok KnownIssue", Toast.LENGTH_LONG).show();
 		}
-		
-		if(MainActivity.networkStatus == false)
+		else
 		{
 			if (listener != null || result.size() == 0)
 			{
 
-				//listener.onResultFail(1, "No Internet Connection");
+				listener.onResultFail(1, "No Internet Connection");
 				// set xml layout to recent fragment to indicate something.
-				dialog.dismiss();
 			}
 			Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG)
 					.show();
 		}
 
 	}
+
+	
 
 }

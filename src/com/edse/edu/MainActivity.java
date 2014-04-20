@@ -148,11 +148,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mTitle = mDrawerTitle = getTitle();
 
 		// Generate title
-		title = new String[] { "News", "Calendar", "Change Log", "Known Issues", "System Status" };
+		title = new String[] { "News", "Calendar", "Change Log", "Known Issues"};//, "System Status" };
 
 		// Generate icon
 		icon = new int[] { R.drawable.doc_lines_stright, R.drawable.calendar_2,
-				R.drawable.comp, R.drawable.attention,R.drawable.info };
+				R.drawable.comp, R.drawable.attention};//,R.drawable.info };
 
 		// Locate DrawerLayout in drawer_main.xml
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

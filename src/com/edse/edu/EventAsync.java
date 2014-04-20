@@ -87,7 +87,7 @@ public class EventAsync extends AsyncTask<Void, Void, ArrayList<Event>>
 				listener.onResultSuccess(result);
 			}
 
-			Toast.makeText(context, "Ok Events", Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, "Ok Events", Toast.LENGTH_LONG).show();
 	}
 
 		
