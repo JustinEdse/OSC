@@ -545,7 +545,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 				catch (IOException e)
 				{
 					// TODO Auto-generated catch block
-					MainActivity.networkStatus =false;
 					e.printStackTrace();
 				}
 				catch (ParseException e)
@@ -608,6 +607,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage)
 			{
+				MainActivity.networkStatus =false;
 				Toast.makeText(getApplicationContext(), "Event RSS fetch failed", Toast.LENGTH_SHORT).show();
 			}
 
