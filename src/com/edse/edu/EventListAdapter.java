@@ -10,7 +10,6 @@ import android.widget.TextView;
 /**
  * This class stores event details, and populates and event row from event_row.xml(for list of all events)
  * @author Obinna Ngini
- *
  */
 public class EventListAdapter extends BaseAdapter
 {

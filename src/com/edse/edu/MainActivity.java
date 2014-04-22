@@ -545,6 +545,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 				catch (IOException e)
 				{
 					// TODO Auto-generated catch block
+					MainActivity.networkStatus =false;
 					e.printStackTrace();
 				}
 				catch (ParseException e)
@@ -607,7 +608,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage)
 			{
-				Toast.makeText(getApplicationContext(), "Event fetch failed", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Event RSS fetch failed", Toast.LENGTH_SHORT).show();
 			}
 
 		});
@@ -657,7 +658,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "Change Log fetch failed", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Change Log RSS fetch failed", Toast.LENGTH_SHORT).show();
 			}
 			
 		});
@@ -707,7 +708,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			@Override
 			public void onResultFail(int resultCode, String errorMessage) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "Known Issue fetch failed", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Known Issue RSS fetch failed", Toast.LENGTH_SHORT).show();
 			}
 			
 		});
@@ -789,7 +790,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onResultFail(int resultCode, String errorMessage)
 	{
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getApplicationContext(), "Article fetch RSS failed", Toast.LENGTH_SHORT).show();
 	}
 
 	private static ArrayList<Date> parseDate(String input)

@@ -180,7 +180,7 @@ public class EventRSSReader
 	}
 
 
-	public void fetchXML() throws InterruptedException
+	public void fetchXML() throws InterruptedException//, IOException
 	{
 		try
 		{
@@ -208,6 +208,7 @@ public class EventRSSReader
 			e.printStackTrace();
 			//anurag. 6 Apr. Added this to avoid getting trapped in infinite loop in AsyncEvent class 
 			parsingComplete = false;
+			//throw new IOException();
 		}
 	}
 	private static String parseDateTime(String input)
