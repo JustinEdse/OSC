@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.edse.database.Database;
 import com.edse.edu.Article;
+import com.edse.edu.ChangeLog;
 import com.edse.edu.KnownIssue;
 import com.edse.edu.MainActivity;
 import com.edse.edu.ArticleAsync;
@@ -210,9 +213,13 @@ public class KnownIssueRSSReader {
 						Log.d("Parse Check", link);
 						Log.d("Parse Check", pubDate);
 						KnownIssue createdIssue = new KnownIssue(title, subDesc, link, realDate);
-						knownIssue.add(createdIssue);
-
-						issuesFetched++;
+						
+						//Inserting check to see if knownIssue already exists in DB.
+						// code is similar to the one used in EventRSSReader
+						if (isIssueNewVersion2(createdIssue)) {
+							knownIssue.add(createdIssue);
+							issuesFetched++;	
+						}
 
 						if (numNeeded > 0)
 						{
@@ -249,6 +256,39 @@ public class KnownIssueRSSReader {
 
 	}
 	
+	private boolean isIssueNewVersion2(KnownIssue createdIssue) {
+		Log.d("KnownIssueRSSReader", "Entering into isIssueNewVersion2 method");
+		boolean ans = true;
+		if (createdIssue.getDate().toString() == "")
+		{
+			ans =  false;
+		}
+		else 
+		{
+			Set<Date> pubdateSet = new TreeSet<Date>();
+			Set<String> titlesetSet = new TreeSet<String>();
+			try {
+				ArrayList<KnownIssue> allIssues = MainActivity.db.getAllIssues();
+				for (KnownIssue issue1 : allIssues)
+				{
+					pubdateSet.add(issue1.getDate());
+					titlesetSet.add(issue1.getTitle());
+				}
+				Log.d("KnownIssueRSSReader", "Value of set containing dates of all known issues from DB: " + pubdateSet);
+				Log.d("KnownIssueRSSReader", "Value of set containing titles of all known issues from DB: " + titlesetSet);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ans = pubdateSet.contains(createdIssue.getDate()) && titlesetSet.contains(createdIssue.getTitle());
+			if (ans == true) {
+				Log.d("KnownIssueRSSReader", "The known issue entry: " + createdIssue.getTitle() + " is already present in DB");
+			}
+		}
+		Log.d("KnownIssueRSSReader", "Exiting from isIssueNewVersion2 method");
+		return !ans;
+	}
+
 	public void fetchXML() throws InterruptedException, IOException
 	{
 

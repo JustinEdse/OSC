@@ -135,7 +135,8 @@ public class ChangeLogAsync extends AsyncTask<Object, Void, ArrayList<ChangeLog>
 			}// get articles from cache
 		}
 		MainActivity.db.close();
-		return retLogList;
+//		return retLogList;
+		return modifiedList;
 	}
 	
 	@Override
@@ -160,8 +161,8 @@ public class ChangeLogAsync extends AsyncTask<Object, Void, ArrayList<ChangeLog>
 				listener.onResultFail(1, "No Internet Connection");
 				// set xml layout to recent fragment to indicate something.
 			}
-			Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG)
-					.show();
+			/*Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG)
+					.show();*/
 		}
 
 	}

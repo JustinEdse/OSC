@@ -25,7 +25,7 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 		this.context = context;
 	}
 
-	
+
 
 	public void setOnArticleResultsListener(ArticleResultsListener listener)
 	{
@@ -73,72 +73,72 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 
 		while (artReaderObj.parsingComplete)
 			;
-		
+
 		ArrayList<Article> cacheInfo = null;
-		
+
 		if(MainActivity.networkStatus != false)
 		{
-		retArtList = artReaderObj.getArticles();
-		// right now just doing articles. in the future will worry about
-		// events....
+			retArtList = artReaderObj.getArticles();
+			// right now just doing articles. in the future will worry about
+			// events....
 
-		if (retArtList.size() == 0)
-		{
-			// If list size is zero then that means no new articles were
-			// published. get articles from
-			// the sqlite database.
-			
-			try
+			if (retArtList.size() == 0)
 			{
-				cacheInfo = MainActivity.db.getAllArticles();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				MainActivity.networkStatus = false;
-			}
-			modifiedList = cacheInfo;
+				// If list size is zero then that means no new articles were
+				// published. get articles from
+				// the sqlite database.
 
-		}
-		else if(retArtList.size() > 0)
-		{
-			
-			//int newArtSizeAdded = retArtList.size() - db.getArticlesCount();
-			
-			// while the size of number of articles is greater than zero, add
-			// those entries to our sqlite table.
-			// Nothing needs to be done with retArtList since it should have the
-			// updated article entries already.
-			
-			//MUST FIGURE OUT WHAT TO DO WHEN CACHE IS FULL OR AT A DESIRABLE LIMIT.
-			for(Article art : retArtList)
-			{
 				try
 				{
-					MainActivity.db.addArticle(art);
+					cacheInfo = MainActivity.db.getAllArticles();
 				}
 				catch (IOException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					MainActivity.networkStatus = false;
 				}
+				modifiedList = cacheInfo;
 
-				// at some point establish a max number of articles that are
-				// allowed in the table/cache.
 			}
-			try
+			else if(retArtList.size() > 0)
 			{
-				//Database afterAdd = new Database(MainActivity.globalTHIS);
-				modifiedList = MainActivity.db.getAllArticles();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}// get articles from cache
 
-		}
+				//int newArtSizeAdded = retArtList.size() - db.getArticlesCount();
+
+				// while the size of number of articles is greater than zero, add
+				// those entries to our sqlite table.
+				// Nothing needs to be done with retArtList since it should have the
+				// updated article entries already.
+
+				//MUST FIGURE OUT WHAT TO DO WHEN CACHE IS FULL OR AT A DESIRABLE LIMIT.
+				for(Article art : retArtList)
+				{
+					try
+					{
+						MainActivity.db.addArticle(art);
+					}
+					catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					// at some point establish a max number of articles that are
+					// allowed in the table/cache.
+				}
+				try
+				{
+					//Database afterAdd = new Database(MainActivity.globalTHIS);
+					modifiedList = MainActivity.db.getAllArticles();
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}// get articles from cache
+
+			}
 		}
 		else
 		{
@@ -165,19 +165,19 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 			dialog.dismiss();
 		}
 
-		
-		
+
+
 		if (result.size() > 0)
 		{
 			if (listener != null)
 			{
 				listener.onResultSuccess(result);
-				
+
 			}
 
 			//Toast.makeText(context, "Ok", Toast.LENGTH_LONG).show();
 		}
-		
+
 		if(MainActivity.networkStatus == false)
 		{
 			if (listener != null || result.size() == 0)
@@ -188,7 +188,7 @@ public class ArticleAsync extends AsyncTask<Object, Void, ArrayList<Article>>
 				dialog.dismiss();
 			}
 			Toast.makeText(context, "No Network Connection.", Toast.LENGTH_LONG)
-					.show();
+			.show();
 		}
 
 	}

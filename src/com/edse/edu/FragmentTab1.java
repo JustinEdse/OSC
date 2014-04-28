@@ -416,6 +416,7 @@ public class FragmentTab1 extends SherlockFragment
 	   if(MainActivity.networkStatus == false)
 	   {
 		   //get arraylist of articles from cache/SQLite and rely upon that.
+		   logs = MainActivity.logsReturned;
 	   }
 	   else
 	   {
@@ -494,6 +495,7 @@ public class FragmentTab1 extends SherlockFragment
 	   if(MainActivity.networkStatus == false)
 	   {
 		   //get arraylist of articles from cache/SQLite and rely upon that.
+		   issues = MainActivity.issuesReturned;
 	   }
 	   else
 	   {

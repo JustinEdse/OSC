@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +22,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import com.edse.database.Database;
 import com.edse.edu.Article;
 import com.edse.edu.ChangeLog;
+import com.edse.edu.Event;
 import com.edse.edu.MainActivity;
 import com.edse.edu.ArticleAsync;
 
@@ -36,14 +39,14 @@ import org.jsoup.select.Elements;
 
 
 public class ChangeLogRSSReader {
-	
+
 	ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-    private boolean done = false;
+	private boolean done = false;
 	private ArrayList<String> titles = new ArrayList<String>();
 	private ArrayList<String> links = new ArrayList<String>();
 	private ArrayList<String> descriptions = new ArrayList<String>();
 	private ArrayList<String> pubs = new ArrayList<String>();
-    
+
 	private ArrayList<Date> checkPubs = new ArrayList<Date>();
 	private ArrayList<ChangeLog> changeLog = new ArrayList<ChangeLog>();
 	private static SimpleDateFormat format = new SimpleDateFormat(
@@ -53,7 +56,7 @@ public class ChangeLogRSSReader {
 	private int countDesc = 0;
 	private int countLink = 0;
 
-	
+
 	private static ArrayList<ChangeLog> logList = new ArrayList<ChangeLog>();
 	private String urlString = null;
 	private XmlPullParserFactory xmlFactoryObject;
@@ -63,12 +66,12 @@ public class ChangeLogRSSReader {
 	{
 		this.urlString = url;
 	}
-	
+
 	public ArrayList<ChangeLog> getChangeLog()
 	{
 		return changeLog;
 	}
-	
+
 	public int checkChangeLogStatus(XmlPullParser parser)
 	{
 
@@ -208,9 +211,13 @@ public class ChangeLogRSSReader {
 						Log.d("Parse Check", link);
 						Log.d("Parse Check", pubDate);
 						ChangeLog createdLog = new ChangeLog(title, subDesc, link, realDate);
-						changeLog.add(createdLog);
 
-						logsFetched++;
+						//anurag. Inserting check to see if changeLog already exists in DB.
+						// code is similar to the one used in EventRSSReader
+						if (isLogNewVersion2(createdLog)) {
+							changeLog.add(createdLog);
+							logsFetched++;	
+						}
 
 						if (numNeeded > 0)
 						{
@@ -246,7 +253,7 @@ public class ChangeLogRSSReader {
 		}
 
 	}
-	
+
 	public void fetchXML() throws InterruptedException, IOException
 	{
 
@@ -278,7 +285,7 @@ public class ChangeLogRSSReader {
 			// "catch all scenarios" type
 			// way.
 
-		//	logList = UsableAsync.db.getAllArticles();
+			//	logList = UsableAsync.db.getAllArticles();
 
 			// going through pub dates that were returned. For each pub date, is
 			// it new than any of the dates already in cache?
@@ -288,7 +295,7 @@ public class ChangeLogRSSReader {
 				int checkResult = checkChangeLogStatus(myparser);
 				if(checkResult > 0)
 				{
-				parseXMLAndStoreIt(myparser, checkResult);
+					parseXMLAndStoreIt(myparser, checkResult);
 				}
 				else
 				{
@@ -350,7 +357,7 @@ public class ChangeLogRSSReader {
 	}
 	public static ArrayList<String> parseForType(String desc)
 			throws IOException
-	{
+			{
 
 		// TODO Auto-generated method stub
 
@@ -371,13 +378,13 @@ public class ChangeLogRSSReader {
 		}
 
 		return cats;
-	}
+			}
 
 	public static boolean isLogNew(Date pubDate) throws IOException
 	{
-		
+
 		boolean isNew = false;
-		
+
 
 		ArrayList<Date> dates = new ArrayList<Date>();
 
@@ -399,7 +406,40 @@ public class ChangeLogRSSReader {
 
 	}
 
-
+	public static boolean isLogNewVersion2(ChangeLog createdLog) {
+		Log.d("ChangeLogRSSReader", "Entering into isLogNewVersion2 method");
+		boolean ans = true;
+		if (createdLog.getDate().toString() == "")
+		{
+			ans =  false;
+		}
+		else 
+		{
+			Set<Date> pubdateSet = new TreeSet<Date>();
+			Set<String> titlesetSet = new TreeSet<String>();
+			try {
+				ArrayList<ChangeLog> allChangeLogs = MainActivity.db.getAllLogs();
+				for (ChangeLog chLog1 : allChangeLogs)
+				{
+					pubdateSet.add(chLog1.getDate());
+					titlesetSet.add(chLog1.getTitle());
+				}
+				Log.d("ChangeLogRSSReader", "Value of set containing dates of all changeLogs: " + pubdateSet);
+				Log.d("ChangeLogRSSReader", "Value of set containing titles of all changeLogs: " + titlesetSet);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ans = pubdateSet.contains(createdLog.getDate()) && titlesetSet.contains(createdLog.getTitle());
+			if (ans == true) {
+				Log.d("ChangeLogRSSReader", "The changeLog: " + createdLog.getTitle() + " is already present in DB");
+			}
+		}
+		Log.d("ChangeLogRSSReader", "Exiting from isLogNewVersion2 method");
+		return !ans;
 	}
+
+
+}
 
 

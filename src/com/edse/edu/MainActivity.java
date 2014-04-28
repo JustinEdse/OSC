@@ -979,5 +979,20 @@ public class MainActivity extends SherlockFragmentActivity implements
 		lists.add(noduplicatesList);
 		return lists;
 	}
+	@Override
+	protected void onStop() {
+		MainActivity.db.trimChangeLogTable();
+		MainActivity.db.trimArticleTable();
+		MainActivity.db.trimEventTable();
+		MainActivity.db.trimIssueTable();
+		
+		Log.d("MainActivity", "After trimming, length of different tables is:");
+		Log.d("MainActivity", "Article Table: " + MainActivity.db.getArticlesCount());
+		Log.d("MainActivity", "Event Table: " + MainActivity.db.getEventsCount());
+		Log.d("MainActivity", "Change Log Table: " + MainActivity.db.getChangeLogCount());
+		Log.d("MainActivity", "Known Issue Table: " + MainActivity.db.getIssueCount());
+		super.onStop();
+		
+	}
 
 }

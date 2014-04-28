@@ -132,7 +132,7 @@ public class KnownIssueAsync extends AsyncTask<Object, Void, ArrayList<KnownIssu
 			}// get articles from cache
 		}
 		MainActivity.db.close();
-		return retIssueList;
+		return modifiedList;
 	}
 	
 	@Override
