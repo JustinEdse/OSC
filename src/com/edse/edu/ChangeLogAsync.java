@@ -79,6 +79,7 @@ public class ChangeLogAsync extends AsyncTask<Object, Void, ArrayList<ChangeLog>
 		
 		if (retLogList.size() == 0)
 		{
+			//Log.d("Obinna", "No new chenge logs, ");
 			// If list size is zero then that means no new articles were
 			// published. get articles from
 			// the sqlite database.
@@ -86,6 +87,7 @@ public class ChangeLogAsync extends AsyncTask<Object, Void, ArrayList<ChangeLog>
 			try
 			{
 				cacheInfo = MainActivity.db.getAllLogs();
+				//Log.d("Obinna", "Size of changelog db is " + Integer.toString(cacheInfo.size()));
 			}
 			catch (IOException e)
 			{

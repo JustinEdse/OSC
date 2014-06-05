@@ -347,7 +347,10 @@ public class ChangeLogRSSReader {
 		String arr[] = new String[] {};
 
 		arr = desc.split("<p>");
-		temp = arr[1];
+		if (arr.length > 1)
+		{
+			temp = arr[1];
+		}
 
 		String finalStr = temp.replaceAll("</p>", " ").trim();
 		String cleanedHTML = android.text.Html.fromHtml(finalStr).toString();
@@ -409,32 +412,32 @@ public class ChangeLogRSSReader {
 	public static boolean isLogNewVersion2(ChangeLog createdLog) {
 		Log.d("ChangeLogRSSReader", "Entering into isLogNewVersion2 method");
 		boolean ans = true;
-		if (createdLog.getDate().toString() == "")
-		{
-			ans =  false;
-		}
-		else 
-		{
-			Set<Date> pubdateSet = new TreeSet<Date>();
+//		if (createdLog.getDate().toString() == "")
+//		{
+//			ans =  false;
+//		}
+//		else 
+//		{
+			//Set<Date> pubdateSet = new TreeSet<Date>();
 			Set<String> titlesetSet = new TreeSet<String>();
 			try {
 				ArrayList<ChangeLog> allChangeLogs = MainActivity.db.getAllLogs();
 				for (ChangeLog chLog1 : allChangeLogs)
 				{
-					pubdateSet.add(chLog1.getDate());
+					//pubdateSet.add(chLog1.getDate());
 					titlesetSet.add(chLog1.getTitle());
 				}
-				Log.d("ChangeLogRSSReader", "Value of set containing dates of all changeLogs: " + pubdateSet);
+				//Log.d("ChangeLogRSSReader", "Value of set containing dates of all changeLogs: " + pubdateSet);
 				Log.d("ChangeLogRSSReader", "Value of set containing titles of all changeLogs: " + titlesetSet);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ans = pubdateSet.contains(createdLog.getDate()) && titlesetSet.contains(createdLog.getTitle());
+			ans =  titlesetSet.contains(createdLog.getTitle());// && pubdateSet.contains(createdLog.getDate())
 			if (ans == true) {
 				Log.d("ChangeLogRSSReader", "The changeLog: " + createdLog.getTitle() + " is already present in DB");
 			}
-		}
+		//}
 		Log.d("ChangeLogRSSReader", "Exiting from isLogNewVersion2 method");
 		return !ans;
 	}
